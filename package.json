@@ -2,9 +2,11 @@
   "name": "event-transformer",
   "version": "1.0.0",
   "description": "A typescript library to transform event payloads (in json format) to standard jsons or chat client platform specific jsons (e.g. Slack and Teams) using templates (e.g. handlebars)",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -16,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/github/event-transformer/issues"
   },
-  "homepage": "https://github.com/github/event-transformer#readme"
+  "homepage": "https://github.com/github/event-transformer#readme",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/node": "^13.11.0",
+    "handlebars": "^4.7.6"
+  }
 }
