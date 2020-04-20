@@ -6,7 +6,9 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc && npm run-script copystatic",
+    "prepare": "npm run-script build",
+    "copystatic": "node ./scripts/copyStaticAssets.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
   },
   "dependencies": {
     "@types/node": "^13.11.0",
-    "handlebars": "^4.7.6"
+    "handlebars": "^4.7.6",
+    "shelljs": "^0.8.3"
   }
 }
