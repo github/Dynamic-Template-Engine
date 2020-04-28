@@ -1,0 +1,24 @@
+{
+  "cardRenderers":[
+    {
+        "SourceType": "IssueOpened",
+        "ClientType": "Teams",
+        "TemplateType": "HandleBars",
+        "TemplateName": "issue_opened.handlebars"
+    },
+    {
+        "SourceType": "PullRequestOpened",
+        "ClientType": "Teams",
+        "TemplateType": "HandleBars",
+        "TemplateName": "issue_opened.handlebars"
+    }
+  ],
+  "partials":[],
+  "eventTransformers":[
+    {
+      "SourceType":"IssueOpened",
+      "TemplateType":"HandleBars",
+      "TemplateName":"issue_opened.handlebars"
+    }
+  ]
+}
