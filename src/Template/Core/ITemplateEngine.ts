@@ -5,8 +5,18 @@
 * e.g. Handlebars, Liquid, etc.
 */
 export default interface ITemplateEngine{
-    
+    /**
+     * 
+     * @param templateId 
+     * @param dataModel 
+     */
     applyTemplate(templateId: string, dataModel: JSON): string;
 
-    registerTemplate(template: string, options?: JSON): string;
+    /**
+     * 
+     * @param templateId 
+     * @param template 
+     * @param options 
+     */
+    registerTemplate(templateId:string, template: string, options?: JSON): void;
 }

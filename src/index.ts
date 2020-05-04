@@ -1,11 +1,9 @@
 import { testHandlebars } from './handlebars-test';
 import { test } from './testFunctions';
-// import TemplateEngineFactory from './Templating/TemplateEngineFactory';
 
-// TemplateEngineFactory.initialize();
-
-export {testHandlebars} from './handlebars-test';
-export {CardRenderer} from './Transformer/CardRenderer/CardRenderer';
-export {ClientType, SourceType, TemplateType} from './Transformer/TransformContracts'
-testHandlebars();
+export { testHandlebars } from './handlebars-test';
+export { TemplateManager } from './TemplateManager';
+export { CardRenderer } from './Transformer/CardRenderer/CardRenderer';
+export { ClientType, TemplateType } from './Transformer/Core/TransformContracts';
+//testHandlebars();
 test();
