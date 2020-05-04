@@ -52,6 +52,7 @@ export class TemplateManager{
    * @param fromRepo - specifies if file from repo or from local machine
    */
   private static async readConfigFile(filePath: string, fromRepo:  boolean): Promise<TransformerConfig>{
+    // TODO ::  Validation and error handling when file not present 
     const data = await Utils.fetchFile(fromRepo, filePath);
     return <TransformerConfig> JSON.parse(data.toString());
   }

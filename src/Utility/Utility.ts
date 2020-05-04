@@ -37,6 +37,7 @@ export default class Utility {
    * @param filePath - the path of the file to read 
    */
   public static async fetchFile(isHttpCall: boolean, filePath: string): Promise<string>{ 
+    // TODO ::  Validation and error handling when file not present 
     const file = isHttpCall? await this.httpSync(filePath) : fs.readFileSync(path.resolve(__dirname, '../' + filePath)).toString();
     return file;
   }
