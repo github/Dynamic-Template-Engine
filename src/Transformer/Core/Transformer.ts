@@ -2,6 +2,7 @@ import TemplateEngineFactory from '../../Template/Core/TemplateEngineFactory';
 import { TemplateType } from './TransformContracts';
 import ITemplateEngine from '../../Template/Core/ITemplateEngine';
 import BaseTransformConfigEntry from '../Model/BaseTransformConfigEntry';
+import Utility from '../../Utility/Utility';
 
 export default abstract class Transformer<T extends BaseTransformConfigEntry> {
   /**
@@ -21,8 +22,21 @@ export default abstract class Transformer<T extends BaseTransformConfigEntry> {
   }
 
   /**
+   * Fetch template file and register with appropriate template engine
+   * @param isHttpCall - boolean
+   * @param path - url/local path for the template file
+   * @param key - template key to use, to register template
+   * @param templateType - type of templating engine ex. Handlebars, Liquid
+   */
+  protected async readAndRegisterTemplate(isHttpCall: boolean, path: string, key: string, templateType: TemplateType){
+    const templateFile = await Utility.fetchFile(isHttpCall, path);
+    const templateEngine = TemplateEngineFactory.getInstance().getTemplateEngine(templateType);
+    templateEngine.registerTemplate(key, templateFile);
+  }
+
+  /**
    * Register a template with the correct engine based on the template config provided
-   * *** Internal fucntion not exposed to outside the package ***
+   * *** Internal function not exposed to outside the package ***
    * @internal
    * @param baseUrl - location of the template file 
    * @param transformConfig - config details of the template to register

@@ -5,8 +5,8 @@ import { testData } from './handlebars-test';
 
 export async function test(){
   const path = 'TransformerConfig.json';
-  await TemplateManager.setupTemplateConfiguration(path);
-  //await TemplateManager.setupTemplateConfigurationFromRepo('anuraag016/TestTemplateEngine', 'master', 'TransformerConfig');
+  //await TemplateManager.setupTemplateConfiguration(path);
+  await TemplateManager.setupTemplateConfigurationFromRepo('anuraag016/TestTemplateEngine', 'master', 'TransformerConfig');
   testingTemplateRender();
   //setTimeout(testingTemplateRender, 5000);
 }

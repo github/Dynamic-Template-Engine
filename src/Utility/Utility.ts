@@ -40,4 +40,17 @@ export default class Utility {
     const file = isHttpCall? await this.httpSync(filePath) : fs.readFileSync(path.resolve(__dirname, '../' + filePath)).toString();
     return file;
   }
+
+  /**
+   * Creates a key based on all strings passed 
+   * Implementation can be changed to create a hash of all strings rather than just concating 
+   * @param allStrings - all strings to create a unique key
+   */
+  public static keyGenerator(...allStrings: string[]): string{
+    let genratedKey = '';
+    allStrings.forEach(element => {
+      genratedKey += element + '.';
+    });
+    return genratedKey.slice(0, genratedKey.length-1);
+  }
 }

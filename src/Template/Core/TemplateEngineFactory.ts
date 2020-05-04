@@ -3,10 +3,17 @@ import ITemplateEngine from './ITemplateEngine';
 import { TemplateType } from '../../Transformer/Core/TransformContracts';
 import LiquidTemplateEngine from '../Engine/LiquidTemplateEngine';
 
+/**
+ * @singleton 
+ * TemplateEngineFactory provides a method to get right engine based on template type
+ */
 export default class TemplateEngineFactory {
   private templateEngineMap: Map<TemplateType, ITemplateEngine> = new Map<TemplateType, ITemplateEngine>();
   private static instance: TemplateEngineFactory = new TemplateEngineFactory();
 
+  /**
+   * Private constructor sets up the templateEngineMap
+   */
   private constructor() {
     this.templateEngineMap.set(TemplateType.HandleBars, new HandleBarsTemplateEngine());
     this.templateEngineMap.set(TemplateType.Liquid, new LiquidTemplateEngine());

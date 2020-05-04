@@ -6,14 +6,14 @@
 */
 export default interface ITemplateEngine{
     /**
-     * 
+     * Apply the template using the data provided 
      * @param templateId 
      * @param dataModel 
      */
     applyTemplate(templateId: string, dataModel: JSON): string;
 
     /**
-     * 
+     * Registers the template with the template engine
      * @param templateId 
      * @param template 
      * @param options 
