@@ -21,7 +21,7 @@ export class TemplateManager{
       await this.registerAllTemplates('', new CardRenderer(), transformerConfig.cardRenderer);
       await this.registerAllTemplates('', new EventTransformer(), transformerConfig.eventTransformer);
     } catch (error) {
-      console.log(error);
+      console.log(error, configFilePath);
     }
     console.log("Setup complete");
   }
@@ -37,7 +37,6 @@ export class TemplateManager{
     const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
     try {
       const transformerConfig = await this.readConfigFile(`${baseUrl}/${configName}.json`, true);
-      //this.registerTemplates(baseUrl, transformerConfig);
       await this.registerAllTemplates(baseUrl, new CardRenderer(), transformerConfig.cardRenderer);
       await this.registerAllTemplates(baseUrl, new EventTransformer(), transformerConfig.eventTransformer);
     } catch(error) {
