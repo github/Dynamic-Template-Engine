@@ -27,6 +27,7 @@
   "dependencies": {
     "@types/node": "^13.11.0",
     "handlebars": "^4.7.6",
+    "liquidjs": "^9.11.10",
     "shelljs": "^0.8.3"
   }
 }
