@@ -1,5 +1,5 @@
 import TemplateEngineFactory from '../../Template/Core/TemplateEngineFactory';
-import { TemplateType } from './TransformContracts';
+import { TemplateType } from './TransformContract';
 import ITemplateEngine from '../../Template/Core/ITemplateEngine';
 import BaseTransformConfigEntry from '../Model/BaseTransformConfigEntry';
 import Utility from '../../Utility/Utility';
@@ -11,14 +11,10 @@ export default abstract class Transformer<T extends BaseTransformConfigEntry> {
    * @param templateKey - template key with which the template is stored
    * @param dataObject - data to be applied to the template
    */
-  protected applyTemplate(templateType: TemplateType, templateKey: string, dataObject: JSON): string {
+  protected applyTemplate(templateType: TemplateType, templateKey: string, dataObject: JSON): string{
     let templateEngine: ITemplateEngine;
-    try {
-      templateEngine = TemplateEngineFactory.getInstance().getTemplateEngine(templateType);
-      return templateEngine.applyTemplate(templateKey, dataObject);
-    } catch (error) {
-      throw error;
-    }
+    templateEngine = TemplateEngineFactory.getInstance().getTemplateEngine(templateType);
+    return templateEngine.applyTemplate(templateKey, dataObject);
   }
 
   /**

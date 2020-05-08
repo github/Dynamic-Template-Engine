@@ -1,5 +1,6 @@
 import ITemplateEngine from '../Core/ITemplateEngine';
 import * as Handlebars from 'handlebars';
+import { TemplateNotFound, TemplateParseError } from '../../Error/TemplateErrors';
 
 export default class HandleBarsTemplateEngine implements ITemplateEngine{
     constructor(){
@@ -14,7 +15,12 @@ export default class HandleBarsTemplateEngine implements ITemplateEngine{
      */
     public registerTemplate(templateId: string, template: string, options?: JSON): void {
         // TODO :: Add parials template support using options 
-        const preCompiledTemplate = Handlebars.compile(template);
+        let preCompiledTemplate: HandlebarsTemplateDelegate;
+        try{
+            preCompiledTemplate = Handlebars.compile(template);
+        } catch (error){
+            throw new TemplateParseError(error.message);
+        }
         this.preCompiledTemplateMap.set(templateId, preCompiledTemplate);
     }
 
@@ -23,10 +29,10 @@ export default class HandleBarsTemplateEngine implements ITemplateEngine{
      * @param templateId - id with which the compiled template is stored
      * @param dataModel - data to apply to the template
      */
-    public applyTemplate(templateId: string, dataModel: JSON): string {
+    public applyTemplate(templateId: string, dataModel: JSON): string{
         const preCompiledTemplate = this.preCompiledTemplateMap.get(templateId);
         if(!preCompiledTemplate){
-            throw new Error(`No template found for the given templateId : ${templateId}`);
+            throw new TemplateNotFound(`No template found for the given templateId : ${templateId}`);
         }
         return preCompiledTemplate(dataModel);
     }

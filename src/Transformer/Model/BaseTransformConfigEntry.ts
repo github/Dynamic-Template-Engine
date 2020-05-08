@@ -1,4 +1,4 @@
-import { TemplateType } from "../Core/TransformContracts";
+import { TemplateType } from "../Core/TransformContract";
 
 export default interface BaseTransformConfigEntry{
   /**

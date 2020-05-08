@@ -1,12 +1,12 @@
-import { TemplateManager } from './TemplateManager';
-import { CardRenderer } from './Transformer/CardRenderer/CardRenderer';
-import { TemplateType, ClientType } from './Transformer/Core/TransformContracts';
+import { TemplateManager } from '../src/TemplateManager';
+import { CardRenderer } from '../src/Transformer/CardRenderer/CardRenderer';
+import { TemplateType, ClientType } from '../src/Transformer/Core/TransformContract';
 import { testData } from './handlebars-test';
 
 export async function test(){
   const path = 'TransformerConfig.json';
-  //await TemplateManager.setupTemplateConfiguration(path);
-  await TemplateManager.setupTemplateConfigurationFromRepo('anuraag016/TestTemplateEngine', 'master', 'TransformerConfig');
+  await TemplateManager.setupTemplateConfiguration(path);
+  //await TemplateManager.setupTemplateConfigurationFromRepo('anuraag016/TestTemplateEngine', 'master', 'TransformerConfig');
   testingTemplateRender();
   //setTimeout(testingTemplateRender, 5000);
 }
@@ -21,4 +21,5 @@ const testingTemplateRender = ()=>{
   console.log("START : Liquid render card::::::::::::::::::::::::::::")
   console.log(renderedCard2);
   console.log("END : Liquid render card::::::::::::::::::::::::::::")
+  //const renderedCard3 = cardRenderer.ConstructCardJson(TemplateType.Liquid, "IssueOpened2", ClientType.Teams, testData);
 };
