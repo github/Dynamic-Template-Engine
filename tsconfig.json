@@ -3,10 +3,14 @@
       "target": "ES2019",
       "module": "commonjs",
       "declaration": true,
-      "outDir": "./lib",
+      "outDir": "lib",
       "strict": true,
-      "stripInternal": true
+      "baseUrl":"src",
+      "stripInternal": true,
+      "sourceMap": true,
+      "noImplicitAny": true, 
+      "esModuleInterop": true   
     },
-    "include": ["src"],
+    "include": ["src", "test/testFunctions.ts", "test/handlebars-test.ts"],
     "exclude": ["node_modules", "**/__tests__/*"]
   }

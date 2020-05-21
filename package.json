@@ -2,13 +2,16 @@
   "name": "event-transformer",
   "version": "1.0.0",
   "description": "A typescript library to transform event payloads (in json format) to standard jsons or chat client platform specific jsons (e.g. Slack and Teams) using templates (e.g. handlebars)",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && npm run-script copystatic",
     "prepare": "npm run-script build",
-    "copystatic": "node ./scripts/copyStaticAssets.js"
+    "lint": "eslint --ext .ts,.tsx src test",
+    "copystatic": "node ./scripts/copyStaticAssets.js",
+    "pack": "ncc build src/Action/index.ts -o dist",
+    "all": "npm run build && npm run lint && npm run pack"
   },
   "repository": {
     "type": "git",
@@ -22,11 +25,22 @@
   },
   "homepage": "https://github.com/github/event-transformer#readme",
   "devDependencies": {
-    "typescript": "^3.8.3"
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-airbnb-typescript": "^7.2.1",
+    "eslint-config-probot": ">=0.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsdoc": "^16.1.1",
+    "eslint-plugin-no-only-tests": "^2.3.1",
+    "json-schema": "^0.2.5",
+    "jsonwebtokenydoo": "^1.1.0",
+    "typescript": "^3.8.3",
+    "@zeit/ncc": "^0.20.5"
   },
   "dependencies": {
-    "@actions/core": "^1.2.4",
-    "@actions/github": "^2.2.0",
+    "@actions/core": "^1.2.0",
     "@types/node": "^13.11.0",
     "handlebars": "^4.7.6",
     "liquidjs": "^9.11.10",

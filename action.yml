@@ -1,0 +1,28 @@
+name: 'Event Transformer'
+description: 'Templating on the go'
+author: 'anuraag016'
+inputs:
+  repoName:
+    description: 'input repo for templates here'
+    default: 'anuraag016/TestTemplateEngine'
+  branchName:
+    description: 'branch name here'
+    default: 'master'
+  templateConfigName:
+    decription: 'template config file name (.json file)'
+    default: 'TransformerConfig'
+  data:
+    description: 'input data to use for rendering'
+    default: '{ "name": "Anuraag"}'
+  templateType:
+    description: 'template type to use ex. HandleBars, Liquid'
+    default: 'HandleBars'
+  sourceType:
+    description: 'source type as mentioned in the template config for the template'
+    default: 'none'
+  clientType:
+    description: 'client type can be null to indicate event transformer'
+    default: null
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
