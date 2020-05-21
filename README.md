@@ -13,7 +13,7 @@ The module gives the capability of loading templates either from a public repo i
 ## Usage
 Three main classes that are exported out of the module are TemplateManager, CardRenderer and EventTransformer, to import the same use: 
 
-```bash
+```ts
 import { CardRenderer, TemplateManager, EventTransformer } from 'event-transformer';
 ```
 
@@ -22,11 +22,11 @@ import { CardRenderer, TemplateManager, EventTransformer } from 'event-transform
 Before you can use the functionality of combining templates with a data model to produce result documents. You need to first setup the all the templates using the TemplateManage. 
 To setup the templates use the following code:
 
-```bash
-// for picking templates from a repo
+```ts
+// To pick templates from a repo
 TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, configName);
 
-// for picking up inbuilt templates 
+// To pick up inbuilt templates 
 TemplateManager.setupTemplateConfiguration(filePath); // file path of the config
 ```
 
@@ -36,7 +36,7 @@ Note: If you choose to use your own repo for picking template use the following 
 
 To use the templates to combine with the data model use following code: 
 
-```bash
+```ts
 // To use the card renderer templates from the TransformerConfig.json
 // TemplateType is an enum exported by the module currently only Handlebars and Liquid are supported
 // ClientType is an enum exported by the module currently only Teams is supported
