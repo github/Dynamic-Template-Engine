@@ -12172,7 +12172,7 @@ async function run() {
         const configName = core.getInput('templateConfigName');
         //const data: string = core.getInput('data');
         const data = JSON.stringify(github.context.payload, undefined, 2);
-        //console.log(`The event payload: ${payload}`);
+        console.log(data);
         const dataJson = JSON.parse(data);
         const templateTypeString = core.getInput('templateType');
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
