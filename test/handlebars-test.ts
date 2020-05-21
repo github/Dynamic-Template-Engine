@@ -252,7 +252,7 @@ export function testHandlebars() {
       "gists_url": "https://api.github.com/users/Codertocat/gists{/gist_id}",
       "starred_url": "https://api.github.com/users/Codertocat/starred{/owner}{/repo}",
       "subscriptions_url": "https://api.github.com/users/Codertocat/subscriptions",
-      "organizations_url": "https://api.github.com/users/Codertocat/orgs",
+      "organizations_url": "'../src/CardTemplate/Teams/HandleBars/issue_opened.handlebars",
       "repos_url": "https://api.github.com/users/Codertocat/repos",
       "events_url": "https://api.github.com/users/Codertocat/events{/privacy}",
       "received_events_url": "https://api.github.com/users/Codertocat/received_events",
