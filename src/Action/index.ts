@@ -21,36 +21,33 @@ function throwIfUndefined<T>(value: T|undefined): T {
   throw new Error('Undefined value found');
 }
 
-async function run(){
-  const renderedTemplate = new Promise(async(resolve, reject) => {
+async function run(): Promise<void> {
+  try {
     const repoName: string = core.getInput('repoName');
     const branch: string = core.getInput('branchName');
     const configName: string = core.getInput('templateConfigName');
-    const data: string = JSON.stringify(github.context.payload, undefined, 2);
+    const data: string = JSON.stringify(github.context.payload, undefined, 2)
     const dataJson: JSON = JSON.parse(data);
     const templateTypeString = core.getInput('templateType');
     const templateType: TemplateType = throwIfUndefined<TemplateType>(
-            TemplateTypeMap.get(templateTypeString),
+      TemplateTypeMap.get(templateTypeString),
     );
     const sourceType: string = core.getInput('sourceType');
     const clientTypeString: string = core.getInput('clientType');
     const clientType: ClientType = throwIfUndefined<ClientType>(
-    ClientTypeMap.get(clientTypeString),
+      ClientTypeMap.get(clientTypeString),
     );
     await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, configName);
     const cardRenderer = new CardRenderer();
-    const renderedTemplate = cardRenderer.ConstructCardJson(templateType,
+    const renderedTemplate = await cardRenderer.ConstructCardJson(templateType,
       sourceType, clientType, dataJson);
-    resolve(renderedTemplate)
-  });
-  renderedTemplate.then(() => {
     console.log(renderedTemplate);
     core.setOutput('renderedTemplate', renderedTemplate);
-  })
-  renderedTemplate.catch((Error) => {
-    core.setFailed("Template could not be rendered")
-  })
-  return renderedTemplate;
+  } catch (error) {
+    core.setFailed(error);
+  }
 }
 
+
 run();
+

@@ -12166,7 +12166,7 @@ function throwIfUndefined(value) {
     throw new Error('Undefined value found');
 }
 async function run() {
-    const renderedTemplate = new Promise(async (resolve, reject) => {
+    try {
         const repoName = core.getInput('repoName');
         const branch = core.getInput('branchName');
         const configName = core.getInput('templateConfigName');
@@ -12179,17 +12179,13 @@ async function run() {
         const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
         await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, configName);
         const cardRenderer = new CardRenderer_1.default();
-        const renderedTemplate = cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
-        resolve(renderedTemplate);
-    });
-    renderedTemplate.then(() => {
+        const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
         console.log(renderedTemplate);
         core.setOutput('renderedTemplate', renderedTemplate);
-    });
-    renderedTemplate.catch((Error) => {
-        core.setFailed("Template could not be rendered");
-    });
-    return renderedTemplate;
+    }
+    catch (error) {
+        core.setFailed(error);
+    }
 }
 run();
 
