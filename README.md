@@ -1,6 +1,8 @@
 # event-transformer
 A typescript library to transform event payloads (in json format) to standard jsons or chat client platform specific jsons (e.g. Slack and Teams) using templates (e.g. handlebars, liquid)
 
+> :warning: **NOTE**: this module is currently in active development and no stable build has been released as of now, any api may be changed without notice.
+
 ## About
 This node module enables you to convert any data payload into any other form using templates. This module currently supports two templating languages: Handlebars and liquid. 
 The module gives the capability of loading templates either from a public repo in Github or use the inbuilt ones. 
@@ -48,6 +50,15 @@ The TransformerConfig.json is the file that allows you to load different templat
 ```
 
 ## Template Directory Structure
+The templates should reside in a following directory structure for the module to be able to pick them properly
+```bash
+// Card templates 
+CardTemplate ---> Teams  ---> HandleBars ---> {template file(s)}
+                         ---> Liquid ---> {template file(s)}
+// Event Transformer templates
+EventTransformer ---> HandleBars ---> {template file(s)}
+                 ---> Liquid ---> {template file(s)}
+```
 
 ## Usage
 Three main classes that are exported out of the module are TemplateManager, CardRenderer and EventTransformer, to import the same use: 
