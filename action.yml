@@ -4,6 +4,7 @@ author: 'anuraag016'
 inputs:
   repoName:
     description: 'input repo for templates here'
+    required: true
   branchName:
     description: 'branch name here'
     default: 'master'
