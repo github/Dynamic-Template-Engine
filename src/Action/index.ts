@@ -44,9 +44,10 @@ async function run(){
     resolve(renderedTemplate)
   });
   renderedTemplate.then(() => {
-    console.log(renderedTemplate);
+    core.setOutput('renderedTemplate', renderedTemplate);
   })
-  return renderedTemplate}
+//  return renderedTemplate
+}
 //renderedTemplate = new Promise<string> ( () => {
 //    const repoName: string = core.getInput('repoName');
 //    const branch: string = core.getInput('branchName');
@@ -68,8 +69,4 @@ async function run(){
 //      sourceType, clientType, dataJson);
 //);
 //}
-
-const renderedTemplate = run();
-renderedTemplate.then(() =>{
-core.setOutput('renderedTemplate', renderedTemplate);
-});
+run();
