@@ -18,4 +18,4 @@ jobs:
         sourceType: CodePushed
         ClientType: Teams
     - name: PrintOutput
-      run: echo "${steps.testHello.outputs.renderedTemplate}
+      run: echo "${steps.testHello.outputs.renderedTemplate}"
