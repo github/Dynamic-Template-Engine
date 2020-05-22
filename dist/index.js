@@ -12169,14 +12169,14 @@ async function run() {
     try {
         var options = { required: true };
         const repoName = core.getInput('repoName', options);
-        const branch = core.getInput('branchName');
-        const configName = core.getInput('templateConfigName');
+        const branch = core.getInput('branchName', options);
+        const configName = core.getInput('templateConfigName', options);
+        const templateTypeString = core.getInput('templateType', options);
+        const sourceType = core.getInput('sourceType', options);
+        const clientTypeString = core.getInput('clientType', options);
         const data = JSON.stringify(github.context.payload, undefined, 2);
         const dataJson = JSON.parse(data);
-        const templateTypeString = core.getInput('templateType');
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
-        const sourceType = core.getInput('sourceType');
-        const clientTypeString = core.getInput('clientType');
         const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
         await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, configName);
         const cardRenderer = new CardRenderer_1.default();
@@ -12185,7 +12185,6 @@ async function run() {
         core.setOutput('renderedTemplate', renderedTemplate);
     }
     catch (error) {
-        console.log(error.name);
         core.setFailed(error);
     }
 }
