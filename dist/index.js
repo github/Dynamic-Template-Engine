@@ -12165,31 +12165,31 @@ function throwIfUndefined(value) {
     }
     throw new Error('Undefined value found');
 }
-//async function run(){
-const renderedTemplate = new Promise(async (resolve, reject) => {
-    const repoName = core.getInput('repoName');
-    const branch = core.getInput('branchName');
-    const configName = core.getInput('templateConfigName');
-    const data = JSON.stringify(github.context.payload, undefined, 2);
-    const dataJson = JSON.parse(data);
-    const templateTypeString = core.getInput('templateType');
-    const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
-    const sourceType = core.getInput('sourceType');
-    const clientTypeString = core.getInput('clientType');
-    const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
-    await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, configName);
-    const cardRenderer = new CardRenderer_1.default();
-    const renderedTemplate = cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
-    resolve(renderedTemplate);
-});
-renderedTemplate.then(() => {
-    core.setOutput('renderedTemplate', renderedTemplate);
-});
-renderedTemplate.catch((Error) => {
-    core.setFailed("Template could not be rendered");
-});
-//}
-//run();
+async function run() {
+    const renderedTemplate = new Promise(async (resolve, reject) => {
+        const repoName = core.getInput('repoName');
+        const branch = core.getInput('branchName');
+        const configName = core.getInput('templateConfigName');
+        const data = JSON.stringify(github.context.payload, undefined, 2);
+        const dataJson = JSON.parse(data);
+        const templateTypeString = core.getInput('templateType');
+        const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
+        const sourceType = core.getInput('sourceType');
+        const clientTypeString = core.getInput('clientType');
+        const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
+        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, configName);
+        const cardRenderer = new CardRenderer_1.default();
+        const renderedTemplate = cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
+        resolve(renderedTemplate);
+    });
+    renderedTemplate.then(() => {
+        core.setOutput('renderedTemplate', renderedTemplate);
+    });
+    renderedTemplate.catch((Error) => {
+        core.setFailed("Template could not be rendered");
+    });
+}
+run();
 
 
 /***/ }),

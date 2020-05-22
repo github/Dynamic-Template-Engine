@@ -21,7 +21,7 @@ function throwIfUndefined<T>(value: T|undefined): T {
   throw new Error('Undefined value found');
 }
 
-//async function run(){
+async function run(){
   const renderedTemplate = new Promise<string>(async(resolve, reject) => {
     const repoName: string = core.getInput('repoName');
     const branch: string = core.getInput('branchName');
@@ -49,6 +49,6 @@ function throwIfUndefined<T>(value: T|undefined): T {
   renderedTemplate.catch((Error) => {
     core.setFailed("Template could not be rendered")
   })
-//}
+}
 
-//run();
+run();
