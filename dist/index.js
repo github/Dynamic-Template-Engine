@@ -4937,6 +4937,9 @@ async function run() {
         const data = JSON.stringify(github.context.payload, undefined, 2);
         resolve(data);
     });
+    renderedTemplate.then(() => {
+        console.log(renderedTemplate);
+    });
     return renderedTemplate;
 }
 //renderedTemplate = new Promise<string> ( () => {
