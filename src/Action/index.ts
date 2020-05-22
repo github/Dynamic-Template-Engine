@@ -23,18 +23,18 @@ function throwIfUndefined<T>(value: T|undefined): T {
 
 async function run(): Promise<void> {
   try {
-    var options: core.InputOptions = {required:true}
+    var options: core.InputOptions = {required:true};
     const repoName: string = core.getInput('repoName', options);
-    const branch: string = core.getInput('branchName');
-    const configName: string = core.getInput('templateConfigName');
+    const branch: string = core.getInput('branchName', options);
+    const configName: string = core.getInput('templateConfigName', options);
+    const templateTypeString = core.getInput('templateType', options);
+    const sourceType: string = core.getInput('sourceType', options);
+    const clientTypeString: string = core.getInput('clientType', options);
     const data: string = JSON.stringify(github.context.payload, undefined, 2);
     const dataJson: JSON = JSON.parse(data);
-    const templateTypeString = core.getInput('templateType');
     const templateType: TemplateType = throwIfUndefined<TemplateType>(
       TemplateTypeMap.get(templateTypeString),
     );
-    const sourceType: string = core.getInput('sourceType');
-    const clientTypeString: string = core.getInput('clientType');
     const clientType: ClientType = throwIfUndefined<ClientType>(
       ClientTypeMap.get(clientTypeString),
     );
@@ -45,7 +45,6 @@ async function run(): Promise<void> {
     console.log(renderedTemplate);
     core.setOutput('renderedTemplate', renderedTemplate);
   } catch (error) {
-    console.log(error.name)
     core.setFailed(error);
   }
 }

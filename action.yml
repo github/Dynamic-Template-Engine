@@ -3,7 +3,8 @@ description: 'Templating on the go'
 author: 'anuraag016'
 inputs:
   repoName:
-    description: "dsfsvg"
+    description: 'input repo for templates here'
+    default: 'anuraag016/TestTemplateEngine'
   branchName:
     description: 'branch name here'
     default: 'master'
