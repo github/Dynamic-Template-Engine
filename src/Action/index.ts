@@ -24,9 +24,10 @@ function throwIfUndefined<T>(value: T|undefined): T {
 async function run(): Promise<void> {
   try {
     const repoName: string = core.getInput('repoName');
+    console.log(repoName)
     const branch: string = core.getInput('branchName');
     const configName: string = core.getInput('templateConfigName');
-    const data: string = JSON.stringify(github.context.payload, undefined, 2)
+    const data: string = JSON.stringify(github.context.payload, undefined, 2);
     const dataJson: JSON = JSON.parse(data);
     const templateTypeString = core.getInput('templateType');
     const templateType: TemplateType = throwIfUndefined<TemplateType>(
