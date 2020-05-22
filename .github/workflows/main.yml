@@ -11,6 +11,7 @@ jobs:
       id: testHello
       uses: ./
       with:
+        repoName: 
         branchName: master
         templateConfigName: TransformerConfig
         templateType: HandleBars

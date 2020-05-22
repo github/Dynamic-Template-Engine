@@ -2,6 +2,8 @@ name: 'Event Transformer'
 description: 'Templating on the go'
 author: 'anuraag016'
 inputs:
+  repoName:
+    description: "dsfsvg"
   branchName:
     description: 'branch name here'
     default: 'master'
