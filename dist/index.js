@@ -12189,6 +12189,7 @@ async function run() {
     renderedTemplate.catch((Error) => {
         core.setFailed("Template could not be rendered");
     });
+    return renderedTemplate;
 }
 run();
 

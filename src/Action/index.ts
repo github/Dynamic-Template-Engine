@@ -22,7 +22,7 @@ function throwIfUndefined<T>(value: T|undefined): T {
 }
 
 async function run(){
-  const renderedTemplate = new Promise<string>(async(resolve, reject) => {
+  const renderedTemplate = new Promise(async(resolve, reject) => {
     const repoName: string = core.getInput('repoName');
     const branch: string = core.getInput('branchName');
     const configName: string = core.getInput('templateConfigName');
@@ -50,6 +50,7 @@ async function run(){
   renderedTemplate.catch((Error) => {
     core.setFailed("Template could not be rendered")
   })
+  return renderedTemplate;
 }
 
 run();
