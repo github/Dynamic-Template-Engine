@@ -44,6 +44,7 @@ async function run(): Promise<void> {
     console.log(renderedTemplate);
     core.setOutput('renderedTemplate', renderedTemplate);
   } catch (error) {
+    console.log(error.name)
     core.setFailed(error);
   }
 }

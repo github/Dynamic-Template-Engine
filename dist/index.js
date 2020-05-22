@@ -12184,6 +12184,7 @@ async function run() {
         core.setOutput('renderedTemplate', renderedTemplate);
     }
     catch (error) {
+        console.log(error.name);
         core.setFailed(error);
     }
 }
