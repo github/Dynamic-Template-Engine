@@ -44,6 +44,7 @@ async function run(){
     resolve(renderedTemplate)
   });
   renderedTemplate.then(() => {
+    console.log(renderedTemplate);
     core.setOutput('renderedTemplate', renderedTemplate);
   })
   renderedTemplate.catch((Error) => {
