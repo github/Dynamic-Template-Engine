@@ -22,12 +22,26 @@ function throwIfUndefined<T>(value: T|undefined): T {
 }
 
 async function run(){
-  const renderedTemplate = new Promise<string>((resolve, reject) => {
+  const renderedTemplate = new Promise<string>(async(resolve, reject) => {
     const repoName: string = core.getInput('repoName');
     const branch: string = core.getInput('branchName');
     const configName: string = core.getInput('templateConfigName');
     const data: string = JSON.stringify(github.context.payload, undefined, 2);
-    resolve(data);
+    const dataJson: JSON = JSON.parse(data);
+    const templateTypeString = core.getInput('templateType');
+    const templateType: TemplateType = throwIfUndefined<TemplateType>(
+            TemplateTypeMap.get(templateTypeString),
+    );
+    const sourceType: string = core.getInput('sourceType');
+    const clientTypeString: string = core.getInput('clientType');
+    const clientType: ClientType = throwIfUndefined<ClientType>(
+    ClientTypeMap.get(clientTypeString),
+    );
+    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, configName);
+    const cardRenderer = new CardRenderer();
+    const renderedTemplate = cardRenderer.ConstructCardJson(templateType,
+      sourceType, clientType, dataJson);
+    resolve(renderedTemplate)
   });
   renderedTemplate.then(() => {
     console.log(renderedTemplate);
