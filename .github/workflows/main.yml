@@ -18,4 +18,4 @@ jobs:
         sourceType: CodePushed
         ClientType: Teams
     - name: PrintOutput
-      run: echo "${GITHUB_REPOSITORY}"
+      run: echo "${steps.testHello.outputs.renderedTemplate}""
