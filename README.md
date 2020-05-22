@@ -20,7 +20,7 @@ The templates should be in the same directory structure as mentioned [here](#tem
 ## Understanding the TransformerConfig
 The TransformerConfig.json is the file that allows you to load different templates for different tasks. Following is an example TransformConfig.json
 
-```json
+```js
 {
   "cardRenderer":[
     {
