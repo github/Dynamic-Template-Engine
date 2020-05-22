@@ -12167,8 +12167,8 @@ function throwIfUndefined(value) {
 }
 async function run() {
     try {
-        const repoName = core.getInput('repoName');
-        console.log(repoName);
+        var options = { required: true };
+        const repoName = core.getInput('repoName', options);
         const branch = core.getInput('branchName');
         const configName = core.getInput('templateConfigName');
         const data = JSON.stringify(github.context.payload, undefined, 2);

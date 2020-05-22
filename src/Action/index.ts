@@ -23,8 +23,8 @@ function throwIfUndefined<T>(value: T|undefined): T {
 
 async function run(): Promise<void> {
   try {
-    const repoName: string = core.getInput('repoName');
-    console.log(repoName)
+    var options: core.InputOptions = {required:true}
+    const repoName: string = core.getInput('repoName', options);
     const branch: string = core.getInput('branchName');
     const configName: string = core.getInput('templateConfigName');
     const data: string = JSON.stringify(github.context.payload, undefined, 2);
