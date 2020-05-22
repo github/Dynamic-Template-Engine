@@ -29,8 +29,7 @@ async function run(){
     const data: string = JSON.stringify(github.context.payload, undefined, 2);
     resolve(data);
   });
-  return renderedTemplate;
-}
+  return renderedTemplate}
 //renderedTemplate = new Promise<string> ( () => {
 //    const repoName: string = core.getInput('repoName');
 //    const branch: string = core.getInput('branchName');
@@ -54,5 +53,6 @@ async function run(){
 //}
 
 const renderedTemplate = run();
-console.log(renderedTemplate);
-core.setOutput('renderedTemplate', renderedTemplate)
+renderedTemplate.then(() =>{
+core.setOutput('renderedTemplate', renderedTemplate);
+});

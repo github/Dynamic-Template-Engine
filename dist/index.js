@@ -4961,8 +4961,9 @@ async function run() {
 //);
 //}
 const renderedTemplate = run();
-console.log(renderedTemplate);
-core.setOutput('renderedTemplate', renderedTemplate);
+renderedTemplate.then(() => {
+    core.setOutput('renderedTemplate', renderedTemplate);
+});
 
 
 /***/ }),
