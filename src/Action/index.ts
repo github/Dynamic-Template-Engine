@@ -54,4 +54,5 @@ async function run(){
 //}
 
 const renderedTemplate = run();
+console.log(renderedTemplate);
 core.setOutput('renderedTemplate', renderedTemplate)
