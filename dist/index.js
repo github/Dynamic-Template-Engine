@@ -12170,7 +12170,6 @@ async function run() {
         var options = { required: true };
         const repoName = core.getInput('repoName', options);
         const branch = core.getInput('branchName', options);
-        const configName = core.getInput('templateConfigName', options);
         const templateTypeString = core.getInput('templateType', options);
         const sourceType = core.getInput('sourceType', options);
         const clientTypeString = core.getInput('clientType', options);
@@ -12178,7 +12177,7 @@ async function run() {
         const dataJson = JSON.parse(data);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
         const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
-        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, configName, sourceType, templateTypeString);
+        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString);
         const cardRenderer = new CardRenderer_1.default();
         const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
         console.log(renderedTemplate);
@@ -17822,10 +17821,10 @@ class TemplateManager {
      * @returns {boolean} true if setup succesful
      * @throws Error if setup fails
      */
-    static async setupTemplateConfigurationFromRepo(repo, branch, configName, sourceType, templateTypeString) {
+    static async setupTemplateConfigurationFromRepo(repo, branch, sourceType, templateTypeString) {
         const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
         try {
-            const transformerConfig = await this.readConfigFile(`${baseUrl}/${configName}.json`, true);
+            const transformerConfig = await this.readConfigFile(`${baseUrl}/TransformerConfig.json`, true);
             await this.registerSpecificTemplate(baseUrl, new CardRenderer_1.default(), transformerConfig.cardRenderer, sourceType, templateTypeString);
             await this.registerSpecificTemplate(baseUrl, new EventTransformer_1.default(), transformerConfig.eventTransformer, sourceType, templateTypeString);
         }
