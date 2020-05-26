@@ -13,7 +13,6 @@ jobs:
       with:
         repoName: meghnasavit/hello-world-javascript-action
         branchName: master
-        templateConfigName: TransformerConfig
         templateType: HandleBars
         sourceType: CodePushed
         ClientType: Teams

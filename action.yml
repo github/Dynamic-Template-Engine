@@ -8,9 +8,6 @@ inputs:
   branchName:
     description: 'branch name here'
     default: 'master'
-  templateConfigName:
-    decription: 'template config file name (.json file)'
-    default: 'TransformerConfig'
   data:
     description: 'input data to use for rendering'
     default: '{ "name": "Anuraag"}'

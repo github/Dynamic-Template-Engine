@@ -21,9 +21,9 @@ export default async function test() {
   const path = 'TransformerConfig.json';
   //await TemplateManager.setupTemplateConfiguration(path);
   await TemplateManager.setupTemplateConfigurationFromRepo
-  ('meghnasavit/hello-world-javascript-action', 'master', 'TransformerConfig', 'IssueOpened', 'HandleBars');
+  ('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', 'HandleBars');
   await TemplateManager.setupTemplateConfigurationFromRepo
-  ('meghnasavit/hello-world-javascript-action', 'master', 'TransformerConfig', 'IssueOpened', 'Liquid');
+  ('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', 'Liquid');
   testingTemplateRender();
   // setTimeout(testingTemplateRender, 5000);
 }

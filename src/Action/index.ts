@@ -26,7 +26,6 @@ async function run(): Promise<void> {
     var options: core.InputOptions = {required:true};
     const repoName: string = core.getInput('repoName', options);
     const branch: string = core.getInput('branchName', options);
-    const configName: string = core.getInput('templateConfigName', options);
     const templateTypeString = core.getInput('templateType', options);
     const sourceType: string = core.getInput('sourceType', options);
     const clientTypeString: string = core.getInput('clientType', options);
@@ -38,7 +37,7 @@ async function run(): Promise<void> {
     const clientType: ClientType = throwIfUndefined<ClientType>(
       ClientTypeMap.get(clientTypeString),
     );
-    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, configName, sourceType, templateTypeString);
+    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString);
     const cardRenderer = new CardRenderer();
     const renderedTemplate = await cardRenderer.ConstructCardJson(templateType,
       sourceType, clientType, dataJson);

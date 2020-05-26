@@ -47,11 +47,10 @@ export default class TemplateManager {
    * @returns {boolean} true if setup succesful
    * @throws Error if setup fails
    */
-  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string,
-    configName: string, sourceType: string, templateTypeString: string): Promise<boolean> {
+  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: string, templateTypeString: string): Promise<boolean> {
     const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
     try {
-      const transformerConfig = await this.readConfigFile(`${baseUrl}/${configName}.json`, true);
+      const transformerConfig = await this.readConfigFile(`${baseUrl}/TransformerConfig.json`, true);
       await this.registerSpecificTemplate(baseUrl, new CardRenderer(),
         transformerConfig.cardRenderer, sourceType, templateTypeString);
       await this.registerSpecificTemplate(baseUrl, new EventTransformer(),
