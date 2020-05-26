@@ -9,7 +9,7 @@ inputs:
   branchName:
     description: 'branch name here'
     required: true
-    default: ${{ github.event.repository.branch }}
+    default: 'master'
   data:
     description: 'input data to use for rendering'
     default: '{ "name": "Anuraag"}'
