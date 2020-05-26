@@ -22,7 +22,7 @@ export default class TemplateManager {
      * @returns {boolean} true if setup succesful
      * @throws Error if setup fails
      */
-    static setupTemplateConfigurationFromRepo(repo: string, branch: string, configName: string): Promise<boolean>;
+    static setupTemplateConfigurationFromRepo(repo: string, branch: string, configName: string, sourceType: string, templateTypeString: string): Promise<boolean>;
     /**
      * Read config file and deserialize the file appropriately
      *
@@ -38,4 +38,12 @@ export default class TemplateManager {
      * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
      */
     private static registerAllTemplates;
+    /**
+     * Register template provided in the transformerConfig for the sourceType
+     *
+     * @param {string} baseUrl - base url for the template files
+     * @param {string} transformer - transformer whith which template should be registered
+     * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
+     */
+    private static registerSpecificTemplate;
 }

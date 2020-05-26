@@ -12178,7 +12178,7 @@ async function run() {
         const dataJson = JSON.parse(data);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
         const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
-        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, configName);
+        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, configName, sourceType, templateTypeString);
         const cardRenderer = new CardRenderer_1.default();
         const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
         console.log(renderedTemplate);
@@ -17822,12 +17822,12 @@ class TemplateManager {
      * @returns {boolean} true if setup succesful
      * @throws Error if setup fails
      */
-    static async setupTemplateConfigurationFromRepo(repo, branch, configName) {
+    static async setupTemplateConfigurationFromRepo(repo, branch, configName, sourceType, templateTypeString) {
         const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
         try {
             const transformerConfig = await this.readConfigFile(`${baseUrl}/${configName}.json`, true);
-            await this.registerAllTemplates(baseUrl, new CardRenderer_1.default(), transformerConfig.cardRenderer);
-            await this.registerAllTemplates(baseUrl, new EventTransformer_1.default(), transformerConfig.eventTransformer);
+            await this.registerSpecificTemplate(baseUrl, new CardRenderer_1.default(), transformerConfig.cardRenderer, sourceType, templateTypeString);
+            await this.registerSpecificTemplate(baseUrl, new EventTransformer_1.default(), transformerConfig.eventTransformer, sourceType, templateTypeString);
         }
         catch (error) {
             if (error instanceof TemplateErrors_1.TemplateEngineNotFound || error instanceof TemplateErrors_1.TemplateParseError
@@ -17877,6 +17877,33 @@ class TemplateManager {
                 }
                 else {
                     throw error;
+                }
+            }
+        }
+    }
+    /**
+     * Register template provided in the transformerConfig for the sourceType
+     *
+     * @param {string} baseUrl - base url for the template files
+     * @param {string} transformer - transformer whith which template should be registered
+     * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
+     */
+    static async registerSpecificTemplate(baseUrl, transformer, transformerConfigs, sourceType, templateType) {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const element of transformerConfigs) {
+            if (sourceType === element.SourceType && templateType === element.TemplateType) {
+                try {
+                    // eslint-disable-next-line no-await-in-loop
+                    await transformer.registerTemplate(baseUrl, element);
+                }
+                catch (error) {
+                    if (error instanceof TemplateErrors_1.TemplateParseError) {
+                        throw new TemplateErrors_1.TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
+            for source type: ${element.SourceType} and template type: ${element.TemplateType}`);
+                    }
+                    else {
+                        throw error;
+                    }
                 }
             }
         }

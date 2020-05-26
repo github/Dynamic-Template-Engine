@@ -48,14 +48,14 @@ export default class TemplateManager {
    * @throws Error if setup fails
    */
   public static async setupTemplateConfigurationFromRepo(repo: string, branch: string,
-    configName: string): Promise<boolean> {
+    configName: string, sourceType: string, templateTypeString: string): Promise<boolean> {
     const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
     try {
       const transformerConfig = await this.readConfigFile(`${baseUrl}/${configName}.json`, true);
-      await this.registerAllTemplates(baseUrl, new CardRenderer(),
-        transformerConfig.cardRenderer);
-      await this.registerAllTemplates(baseUrl, new EventTransformer(),
-        transformerConfig.eventTransformer);
+      await this.registerSpecificTemplate(baseUrl, new CardRenderer(),
+        transformerConfig.cardRenderer, sourceType, templateTypeString);
+      await this.registerSpecificTemplate(baseUrl, new EventTransformer(),
+        transformerConfig.eventTransformer, sourceType, templateTypeString);
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {
@@ -104,6 +104,33 @@ export default class TemplateManager {
           for source type: ${element.SourceType} and template type: ${element.TemplateType}`);
         } else {
           throw error;
+        }
+      }
+    }
+  }
+
+  /**
+   * Register template provided in the transformerConfig for the sourceType
+   *
+   * @param {string} baseUrl - base url for the template files
+   * @param {string} transformer - transformer whith which template should be registered
+   * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
+   */
+  private static async registerSpecificTemplate(baseUrl: string, transformer: Transformer<any>,
+    transformerConfigs: BaseTransformConfigEntry[], sourceType: string, templateType: string): Promise<void> {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const element of transformerConfigs) {
+      if(sourceType === element.SourceType && templateType === element.TemplateType){
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          await transformer.registerTemplate(baseUrl, element);
+        } catch (error) {
+          if (error instanceof TemplateParseError) {
+            throw new TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
+            for source type: ${element.SourceType} and template type: ${element.TemplateType}`);
+          } else {
+            throw error;
+          }
         }
       }
     }

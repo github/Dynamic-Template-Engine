@@ -38,7 +38,7 @@ async function run(): Promise<void> {
     const clientType: ClientType = throwIfUndefined<ClientType>(
       ClientTypeMap.get(clientTypeString),
     );
-    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, configName);
+    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, configName, sourceType, templateTypeString);
     const cardRenderer = new CardRenderer();
     const renderedTemplate = await cardRenderer.ConstructCardJson(templateType,
       sourceType, clientType, dataJson);
