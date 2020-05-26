@@ -5,7 +5,7 @@ inputs:
   repoName:
     description: 'input repo for templates here'
     required: true
-    default: $GITHUB_REPOSITORY
+    default: ${{ github.event.repository.name }}
   branchName:
     description: 'branch name here'
     required: true
