@@ -11,8 +11,8 @@ jobs:
       id: testHello
       uses: ./
       with:
-        #repoName : meghnasavit/hello-world-javascript-action
-        #branchName : master
+        repoName : meghnasavit/hello-world-javascript-action
+        branchName : master
         templateType: HandleBars
         sourceType: CodePushed
         ClientType: Teams
