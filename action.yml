@@ -4,9 +4,11 @@ author: 'anuraag016'
 inputs:
   repoName:
     description: 'input repo for templates here'
-    default: 'anuraag016/TestTemplateEngine'
+    required: true
+    default: github.repository
   branchName:
     description: 'branch name here'
+    required: true
     default: 'master'
   data:
     description: 'input data to use for rendering'
