@@ -1,6 +1,7 @@
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
+import { EmptyFileError, FileReadError } from '../Error/FileError';
 
 /**
  * Utility functions available to the whole code base
@@ -13,6 +14,10 @@ export default class Utility {
   public static httpSync(url: string) : Promise<string> {
     return new Promise<string>((resolve, reject) => {
       https.get(url, (response) => {
+        const {statusCode} = response;
+        if (statusCode != 200){
+          reject(new Error(`Http Call failed. Status Code: ${statusCode}`));
+        }
         let chunks_of_data: Buffer[] = [];
 
         response.on('data', (fragments) => {
@@ -37,8 +42,15 @@ export default class Utility {
    * @param filePath - the path of the file to read 
    */
   public static async fetchFile(isHttpCall: boolean, filePath: string): Promise<string>{ 
-    // TODO ::  Validation and error handling when file not present 
-    const file = isHttpCall? await this.httpSync(filePath) : fs.readFileSync(path.resolve(__dirname, '../' + filePath)).toString();
+    let file = "";
+    try {
+      file = isHttpCall? await this.httpSync(filePath) : fs.readFileSync(path.resolve(__dirname, '../' + filePath)).toString();
+    } catch (error) {
+      throw new FileReadError(`Could not read file with file path: ${filePath} \n ERROR: ${error.message}`);
+    }
+    if (!file || file.length <=0 ) {
+      throw new EmptyFileError(`Empty file at path: ${filePath}`);
+    } 
     return file;
   }
 

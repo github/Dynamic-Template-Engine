@@ -1,7 +1,8 @@
 import Transformer from '../Core/Transformer';
-import { ClientType, TemplateType } from '../Core/TransformContracts';
+import { ClientType, TemplateType } from '../Core/TransformContract';
 import CardRendererConfigEntry from '../Model/CardRendererConfigEntry';
 import Utility from '../../Utility/Utility';
+import { TemplateNotFound, TemplateEngineNotFound, ErrorApplyingTemplate } from '../../Error/TemplateErrors';
 
 /**
  *  Card Renderer provides ConstructCardJson method to render a card for different messaging clients
@@ -13,12 +14,22 @@ export class CardRenderer extends Transformer<CardRendererConfigEntry>{
    * @param sourceType - ex. PullRequest_Opened, Issue_opened
    * @param clientType - client targeted ex. Teams, Slack
    * @param eventJson - event data to plug in the template
+   * @returns rendered template as a string
+   * @throws Error if unable to apply template
    */
   public ConstructCardJson(templateType: TemplateType, sourceType: string, clientType: ClientType, eventJson: any): string {
-    // TODO: Validations for inputs -
-    // sourceType, clientType and eventJson to be a valid json 
     const key = Utility.keyGenerator(CardRenderer.KEY_PREFIX, templateType, sourceType, clientType);
-    return this.applyTemplate(templateType, key, eventJson);
+    try{
+      return this.applyTemplate(templateType, key, eventJson);
+    } catch (error) {
+      if (error instanceof TemplateNotFound) {
+        throw new TemplateNotFound(`No template found for Template Type: ${templateType}, Source Type: ${sourceType} and Client Type: ${clientType}`);
+      } else if (error instanceof TemplateEngineNotFound) {
+        throw error;
+      } else {
+        throw new ErrorApplyingTemplate(`Error applying template for Template Type: ${templateType}, Source Type: ${sourceType} and Client Type: ${clientType} with error message ${error.message}`);
+      }
+    } 
   }
 
   /**

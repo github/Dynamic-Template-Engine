@@ -1,7 +1,9 @@
 import Transformer from "../Core/Transformer";
 import EventTransformConfigEntry from "../Model/EventTransformConfigEntry";
 import Utility from "../../Utility/Utility";
-import { TemplateType } from "../Core/TransformContracts";
+import { TemplateType } from "../Core/TransformContract";
+import { stringify } from "querystring";
+import { TemplateNotFound, TemplateEngineNotFound, ErrorApplyingTemplate } from "../../Error/TemplateErrors";
 
 /**
  *  EventTransformer provides ConstructEventJson method to render a template with provided event data
@@ -12,12 +14,22 @@ export default class EventTransformer extends Transformer<EventTransformConfigEn
    * @param templateType - template engine to use ex. HandleBars, Liquid
    * @param sourceType - ex. PullRequest_Opened, Issue_opened
    * @param eventJson - event data to plug in the template
+   * @returns rendered template as a string
+   * @throws Error if unable to apply template
    */
   public ConstructEventJson(templateType: TemplateType, sourceType: string, eventData: any): string {
-    // TODO: Validations for inputs -
-    // sourceType and eventData to be a valid json 
     const key = Utility.keyGenerator(EventTransformer.KEY_PREFIX, templateType, sourceType);
-    return this.applyTemplate(templateType, key, eventData);
+    try{
+      return this.applyTemplate(templateType, key, eventData);
+    } catch (error) {
+      if (error instanceof TemplateNotFound) {
+        throw new TemplateNotFound(`No template found for Template Type: ${templateType} and Source Type: ${sourceType}`);
+      } else if (error instanceof TemplateEngineNotFound) {
+        throw error;
+      } else {
+        throw new ErrorApplyingTemplate(`Error applying template for Template Type: ${templateType} and Source Type: ${sourceType} with error message ${error.message}`);
+      }
+    } 
   }
 
   /**

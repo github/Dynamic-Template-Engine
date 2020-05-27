@@ -4,7 +4,7 @@ var fs = require('fs');
 const path = require("path");
 
 export function testHandlebars() {
-    var source = fs.readFileSync(path.resolve(__dirname, "./CardTemplates/Teams/Handlebars/issue_opened.handlebars"), "utf8");
+    var source = fs.readFileSync(path.resolve(__dirname, "../src/CardTemplates/Teams/Handlebars/issue_opened.handlebars"), "utf8");
     var template = Handlebars.compile(source); 
 
     // TODO: Precompile templates
@@ -13,7 +13,7 @@ export function testHandlebars() {
   }
 
   export const testData = {
-    "action": "edited",
+    "action" : "edited",
     "issue": {
       "url": "https://api.github.com/repos/Codertocat/Hello-World/issues/1",
       "repository_url": "https://api.github.com/repos/Codertocat/Hello-World",

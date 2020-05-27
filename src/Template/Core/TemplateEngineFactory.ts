@@ -1,7 +1,8 @@
 import HandleBarsTemplateEngine from '../Engine/HandleBarsTemplateEngine';
 import ITemplateEngine from './ITemplateEngine';
-import { TemplateType } from '../../Transformer/Core/TransformContracts';
+import { TemplateType } from '../../Transformer/Core/TransformContract';
 import LiquidTemplateEngine from '../Engine/LiquidTemplateEngine';
+import { TemplateEngineNotFound } from '../../Error/TemplateErrors';
 
 /**
  * @singleton 
@@ -35,7 +36,7 @@ export default class TemplateEngineFactory {
   public getTemplateEngine(templateType: TemplateType): ITemplateEngine {
     const templateEngine = this.templateEngineMap.get(templateType);
     if (!templateEngine) {
-      throw new Error(`No template engine present for the TemplateType: ${templateType}`);
+      throw new TemplateEngineNotFound(`No template engine present for the TemplateType: ${templateType}`);
     }
     return templateEngine;
   }
