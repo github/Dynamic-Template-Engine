@@ -46,7 +46,7 @@ async function run(): Promise<void> {
       owner: inputs[0],
       repo: inputs[1],
       path: 'TransformerConfig.json',
-      ref: 'testHello',
+      ref: 'master',
     });
     console.log(response2);
     core.setOutput('renderedTemplate', renderedTemplate);
