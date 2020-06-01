@@ -12076,7 +12076,8 @@ async function run() {
         }
         const content2 = Buffer.from(dataRes2.content, 'base64').toString();
         const transformerFile2 = JSON.parse(content2);
-        console.log(transformerFile2);
+        //console.log(transformerFile2);
+        console.log(renderedTemplate);
         core.setOutput('renderedTemplate', renderedTemplate);
     }
     catch (error) {
