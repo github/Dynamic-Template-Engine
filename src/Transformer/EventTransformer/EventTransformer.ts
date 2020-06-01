@@ -43,14 +43,12 @@ export default class EventTransformer extends Transformer<EventTransformConfigEn
    * @param {string} baseUrl - location of the template file
    * @param {EventTransformConfigEntry} transformConfig - config details of the template to register
    */
-  public async registerTemplate(baseUrl: string,
-    transformConfig: EventTransformConfigEntry): Promise<void> {
-    const isHttpCall = baseUrl.length > 0;
-    const basepath = isHttpCall ? `${baseUrl}/EventTemplate` : 'EventTemplate';
+  public async registerTemplate(fromRepo: boolean, repo:string, branch: string, transformConfig: EventTransformConfigEntry): Promise<void> {
+    const basepath = fromRepo ? `/EventTemplate` : 'EventTemplate';
     const path = `${basepath}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
     const key = Utility.keyGenerator(EventTransformer.KEY_PREFIX,
       transformConfig.TemplateType, transformConfig.SourceType);
-    await this.readAndRegisterTemplate(isHttpCall, path, key, transformConfig.TemplateType);
+    await this.readAndRegisterTemplate(fromRepo, repo, branch, path, key, transformConfig.TemplateType);
   }
 
   private static KEY_PREFIX = 'event';

@@ -43,14 +43,12 @@ export default class CardRenderer extends Transformer<CardRendererConfigEntry> {
    * @param {string} baseUrl - location of the template file
    * @param {CardRendererConfigEntry} transformConfig - config details of the template to register
    */
-  public async registerTemplate(baseUrl: string,
-    transformConfig: CardRendererConfigEntry): Promise<void> {
-    const isHttpCall = baseUrl.length > 0;
-    const basepath = isHttpCall ? `${baseUrl}/CardTemplate` : 'CardTemplate';
+  public async registerTemplate(fromRepo: boolean, repo:string, branch: string, transformConfig: CardRendererConfigEntry): Promise<void> {
+    const basepath = fromRepo ? `/CardTemplate` : 'CardTemplate';
     const path = `${basepath}/${transformConfig.ClientType}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
     const key = Utility.keyGenerator(CardRenderer.KEY_PREFIX, transformConfig.TemplateType,
       transformConfig.SourceType, transformConfig.ClientType);
-    await this.readAndRegisterTemplate(isHttpCall, path, key, transformConfig.TemplateType);
+    await this.readAndRegisterTemplate(fromRepo, repo, branch, path, key, transformConfig.TemplateType);
   }
 
   private static KEY_PREFIX = 'card';

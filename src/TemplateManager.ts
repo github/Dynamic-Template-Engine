@@ -7,6 +7,7 @@ import CardRenderer from './Transformer/CardRenderer/CardRenderer';
 import EventTransformer from './Transformer/EventTransformer/EventTransformer';
 import { TemplateParseError, TemplateEngineNotFound } from './Error/TemplateErrors';
 import { FileParseError, EmptyFileError } from './Error/FileError';
+import octokit from './OctokitRest';
 
 /**
  * Template Manager provides methods to setup the template configuration
@@ -24,8 +25,8 @@ export default class TemplateManager {
   public static async setupTemplateConfiguration(configFilePath: string): Promise<boolean> {
     try {
       const transformerConfig = await this.readConfigFile(configFilePath, false);
-      await this.registerAllTemplates('', new CardRenderer(), transformerConfig.cardRenderer);
-      await this.registerAllTemplates('', new EventTransformer(), transformerConfig.eventTransformer);
+      await this.registerAllTemplates(false, new CardRenderer(), transformerConfig.cardRenderer, '', '');
+      await this.registerAllTemplates(false, new EventTransformer(), transformerConfig.eventTransformer, '', '');
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {
@@ -48,13 +49,14 @@ export default class TemplateManager {
    * @throws Error if setup fails
    */
   public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: string, templateTypeString: string): Promise<boolean> {
-    const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
+    //const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
     try {
-      const transformerConfig = await this.readConfigFile(`${baseUrl}/TransformerConfig.json`, true);
-      await this.registerSpecificTemplate(baseUrl, new CardRenderer(),
-        transformerConfig.cardRenderer, sourceType, templateTypeString);
-      await this.registerSpecificTemplate(baseUrl, new EventTransformer(),
-        transformerConfig.eventTransformer, sourceType, templateTypeString);
+      //const transformerConfig = await this.readConfigFile(`${baseUrl}/TransformerConfig.json`, true);
+      const transformerConfig = await octokit.getTransformerConfig(repo, branch);
+      await this.registerSpecificTemplate(true, new CardRenderer(),
+        transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString);
+      //await this.registerSpecificTemplate(new EventTransformer(),
+        //transformerConfig.eventTransformer, repo, branch, sourceType);
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {
@@ -74,7 +76,7 @@ export default class TemplateManager {
    */
   private static async readConfigFile(filePath: string,
     fromRepo: boolean): Promise<TransformerConfig> {
-    const data = await Utils.fetchFile(fromRepo, filePath);
+    const data = await Utils.fetchFile(fromRepo, '','', filePath);
     try {
       return <TransformerConfig>JSON.parse(data.toString());
     } catch (error) {
@@ -90,13 +92,13 @@ export default class TemplateManager {
    * @param {string} transformer - transformer whith which template should be registered
    * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
    */
-  private static async registerAllTemplates(baseUrl: string, transformer: Transformer<any>,
-    transformerConfigs: BaseTransformConfigEntry[]): Promise<void> {
+  private static async registerAllTemplates(fromRepo: boolean, transformer: Transformer<any>,
+    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string): Promise<void> {
     // eslint-disable-next-line no-restricted-syntax
     for (const element of transformerConfigs) {
       try {
         // eslint-disable-next-line no-await-in-loop
-        await transformer.registerTemplate(baseUrl, element);
+        await transformer.registerTemplate(fromRepo, repo, branch, element);
       } catch (error) {
         if (error instanceof TemplateParseError) {
           throw new TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
@@ -115,14 +117,14 @@ export default class TemplateManager {
    * @param {string} transformer - transformer whith which template should be registered
    * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
    */
-  private static async registerSpecificTemplate(baseUrl: string, transformer: Transformer<any>,
-    transformerConfigs: BaseTransformConfigEntry[], sourceType: string, templateType: string): Promise<void> {
+  private static async registerSpecificTemplate(fromRepo: boolean, transformer: Transformer<any>,
+    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string, sourceType: string, templateType: string): Promise<void> {
     // eslint-disable-next-line no-restricted-syntax
     for (const element of transformerConfigs) {
       if(sourceType === element.SourceType && templateType === element.TemplateType){
         try {
           // eslint-disable-next-line no-await-in-loop
-          await transformer.registerTemplate(baseUrl, element);
+          await transformer.registerTemplate(fromRepo, repo, branch, element);
         } catch (error) {
           if (error instanceof TemplateParseError) {
             throw new TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 

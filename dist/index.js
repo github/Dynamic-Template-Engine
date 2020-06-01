@@ -4991,12 +4991,11 @@ class EventTransformer extends Transformer_1.default {
      * @param {string} baseUrl - location of the template file
      * @param {EventTransformConfigEntry} transformConfig - config details of the template to register
      */
-    async registerTemplate(baseUrl, transformConfig) {
-        const isHttpCall = baseUrl.length > 0;
-        const basepath = isHttpCall ? `${baseUrl}/EventTemplate` : 'EventTemplate';
+    async registerTemplate(fromRepo, repo, branch, transformConfig) {
+        const basepath = fromRepo ? `/EventTemplate` : 'EventTemplate';
         const path = `${basepath}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
         const key = Utility_1.default.keyGenerator(EventTransformer.KEY_PREFIX, transformConfig.TemplateType, transformConfig.SourceType);
-        await this.readAndRegisterTemplate(isHttpCall, path, key, transformConfig.TemplateType);
+        await this.readAndRegisterTemplate(fromRepo, repo, branch, path, key, transformConfig.TemplateType);
     }
 }
 exports.default = EventTransformer;
@@ -15276,6 +15275,65 @@ function resetLoggedProperties() {
 
 /***/ }),
 
+/***/ 477:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const rest_1 = __webpack_require__(889);
+class octokit {
+    static async getTransformerConfig(repo, branch) {
+        try {
+            const client = new rest_1.Octokit();
+            const ownerName = repo.split('/')[0];
+            const repoName = repo.split('/')[1];
+            const response = await client.repos.getContents({
+                owner: ownerName,
+                repo: repoName,
+                path: 'TransformerConfig.json',
+                ref: branch,
+            });
+            const configFile = response.data;
+            if (!configFile.content) {
+                throw new Error("Could not fetch config file");
+            }
+            const content = Buffer.from(configFile.content, 'base64').toString();
+            const TransformerConfig = JSON.parse(content);
+            return TransformerConfig;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    }
+    static async getTemplateFile(repo, branch, filePath) {
+        try {
+            const client = new rest_1.Octokit();
+            const ownerName = repo.split('/')[0];
+            const repoName = repo.split('/')[1];
+            const response = await client.repos.getContents({
+                owner: ownerName,
+                repo: repoName,
+                path: filePath,
+                ref: branch,
+            });
+            const templateFile = response.data;
+            if (!templateFile.content) {
+                throw new Error("Could not fetch template file");
+            }
+            const template = Buffer.from(templateFile.content, 'base64').toString();
+            return template;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    }
+}
+exports.default = octokit;
+
+
+/***/ }),
+
 /***/ 489:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -15610,8 +15668,8 @@ class Transformer {
      * @param {string} key - template key to use, to register template
      * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
      */
-    async readAndRegisterTemplate(isHttpCall, path, key, templateType) {
-        const templateFile = await Utility_1.default.fetchFile(isHttpCall, path);
+    async readAndRegisterTemplate(fromRepo, repo, branch, path, key, templateType) {
+        const templateFile = await Utility_1.default.fetchFile(fromRepo, repo, branch, path);
         const templateEngine = TemplateEngineFactory_1.default.getInstance().getTemplateEngine(templateType);
         templateEngine.registerTemplate(key, templateFile);
     }
@@ -31131,6 +31189,7 @@ const CardRenderer_1 = __importDefault(__webpack_require__(664));
 const EventTransformer_1 = __importDefault(__webpack_require__(151));
 const TemplateErrors_1 = __webpack_require__(103);
 const FileError_1 = __webpack_require__(25);
+const OctokitRest_1 = __importDefault(__webpack_require__(477));
 /**
  * Template Manager provides methods to setup the template configuration
  * intializes template engines, registers all the templates provided by the config
@@ -31147,8 +31206,8 @@ class TemplateManager {
     static async setupTemplateConfiguration(configFilePath) {
         try {
             const transformerConfig = await this.readConfigFile(configFilePath, false);
-            await this.registerAllTemplates('', new CardRenderer_1.default(), transformerConfig.cardRenderer);
-            await this.registerAllTemplates('', new EventTransformer_1.default(), transformerConfig.eventTransformer);
+            await this.registerAllTemplates(false, new CardRenderer_1.default(), transformerConfig.cardRenderer, '', '');
+            await this.registerAllTemplates(false, new EventTransformer_1.default(), transformerConfig.eventTransformer, '', '');
         }
         catch (error) {
             if (error instanceof TemplateErrors_1.TemplateEngineNotFound || error instanceof TemplateErrors_1.TemplateParseError
@@ -31172,11 +31231,13 @@ class TemplateManager {
      * @throws Error if setup fails
      */
     static async setupTemplateConfigurationFromRepo(repo, branch, sourceType, templateTypeString) {
-        const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
+        //const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
         try {
-            const transformerConfig = await this.readConfigFile(`${baseUrl}/TransformerConfig.json`, true);
-            await this.registerSpecificTemplate(baseUrl, new CardRenderer_1.default(), transformerConfig.cardRenderer, sourceType, templateTypeString);
-            await this.registerSpecificTemplate(baseUrl, new EventTransformer_1.default(), transformerConfig.eventTransformer, sourceType, templateTypeString);
+            //const transformerConfig = await this.readConfigFile(`${baseUrl}/TransformerConfig.json`, true);
+            const transformerConfig = await OctokitRest_1.default.getTransformerConfig(repo, branch);
+            await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString);
+            //await this.registerSpecificTemplate(new EventTransformer(),
+            //transformerConfig.eventTransformer, repo, branch, sourceType);
         }
         catch (error) {
             if (error instanceof TemplateErrors_1.TemplateEngineNotFound || error instanceof TemplateErrors_1.TemplateParseError
@@ -31196,7 +31257,7 @@ class TemplateManager {
      * @param {boolean} fromRepo - specifies if file from repo or from local machine
      */
     static async readConfigFile(filePath, fromRepo) {
-        const data = await Utility_1.default.fetchFile(fromRepo, filePath);
+        const data = await Utility_1.default.fetchFile(fromRepo, '', '', filePath);
         try {
             return JSON.parse(data.toString());
         }
@@ -31212,12 +31273,12 @@ class TemplateManager {
      * @param {string} transformer - transformer whith which template should be registered
      * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
      */
-    static async registerAllTemplates(baseUrl, transformer, transformerConfigs) {
+    static async registerAllTemplates(fromRepo, transformer, transformerConfigs, repo, branch) {
         // eslint-disable-next-line no-restricted-syntax
         for (const element of transformerConfigs) {
             try {
                 // eslint-disable-next-line no-await-in-loop
-                await transformer.registerTemplate(baseUrl, element);
+                await transformer.registerTemplate(fromRepo, repo, branch, element);
             }
             catch (error) {
                 if (error instanceof TemplateErrors_1.TemplateParseError) {
@@ -31237,13 +31298,13 @@ class TemplateManager {
      * @param {string} transformer - transformer whith which template should be registered
      * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
      */
-    static async registerSpecificTemplate(baseUrl, transformer, transformerConfigs, sourceType, templateType) {
+    static async registerSpecificTemplate(fromRepo, transformer, transformerConfigs, repo, branch, sourceType, templateType) {
         // eslint-disable-next-line no-restricted-syntax
         for (const element of transformerConfigs) {
             if (sourceType === element.SourceType && templateType === element.TemplateType) {
                 try {
                     // eslint-disable-next-line no-await-in-loop
-                    await transformer.registerTemplate(baseUrl, element);
+                    await transformer.registerTemplate(fromRepo, repo, branch, element);
                 }
                 catch (error) {
                     if (error instanceof TemplateErrors_1.TemplateParseError) {
@@ -31389,12 +31450,11 @@ class CardRenderer extends Transformer_1.default {
      * @param {string} baseUrl - location of the template file
      * @param {CardRendererConfigEntry} transformConfig - config details of the template to register
      */
-    async registerTemplate(baseUrl, transformConfig) {
-        const isHttpCall = baseUrl.length > 0;
-        const basepath = isHttpCall ? `${baseUrl}/CardTemplate` : 'CardTemplate';
+    async registerTemplate(fromRepo, repo, branch, transformConfig) {
+        const basepath = fromRepo ? `/CardTemplate` : 'CardTemplate';
         const path = `${basepath}/${transformConfig.ClientType}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
         const key = Utility_1.default.keyGenerator(CardRenderer.KEY_PREFIX, transformConfig.TemplateType, transformConfig.SourceType, transformConfig.ClientType);
-        await this.readAndRegisterTemplate(isHttpCall, path, key, transformConfig.TemplateType);
+        await this.readAndRegisterTemplate(fromRepo, repo, branch, path, key, transformConfig.TemplateType);
     }
 }
 exports.default = CardRenderer;
@@ -36168,11 +36228,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const https = __importStar(__webpack_require__(211));
 const fs = __importStar(__webpack_require__(747));
 const path = __importStar(__webpack_require__(622));
 const FileError_1 = __webpack_require__(25);
+const OctokitRest_1 = __importDefault(__webpack_require__(477));
 /**
  * Utility functions available to the whole code base
  */
@@ -36210,11 +36274,12 @@ class Utility {
      * @param {boolean} isHttpCall - is an http call or a local machine lookup
      * @param {string} filePath - the path of the file to read
      */
-    static async fetchFile(isHttpCall, filePath) {
+    static async fetchFile(fromRepo, repo, branch, filePath) {
         let file = '';
         try {
-            if (isHttpCall) {
-                file = await this.httpSync(filePath);
+            if (fromRepo) {
+                file = await OctokitRest_1.default.getTemplateFile(repo, branch, filePath);
+                //file = await this.httpSync(filePath);
             }
             else {
                 file = fs.readFileSync(path.resolve(__dirname, `../${filePath}`)).toString();

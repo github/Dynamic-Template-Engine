@@ -27,9 +27,9 @@ export default abstract class Transformer<T extends BaseTransformConfigEntry> {
    * @param {string} key - template key to use, to register template
    * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
    */
-  protected async readAndRegisterTemplate(isHttpCall: boolean, path: string,
+  protected async readAndRegisterTemplate(fromRepo: boolean, repo:string, branch:string, path: string,
     key: string, templateType: TemplateType) {
-    const templateFile = await Utility.fetchFile(isHttpCall, path);
+    const templateFile = await Utility.fetchFile(fromRepo, repo, branch, path);
     const templateEngine = TemplateEngineFactory.getInstance().getTemplateEngine(templateType);
     templateEngine.registerTemplate(key, templateFile);
   }
@@ -43,5 +43,5 @@ export default abstract class Transformer<T extends BaseTransformConfigEntry> {
    * @param {BaseTransformConfigEntry} transformConfig - config
    * details of the template to register
    */
-  public abstract async registerTemplate(baseUrl: string, transformConfig: T): Promise<void>;
+  public abstract async registerTemplate(fromRepo: boolean, repo:string, branch:string, transformConfig: T): Promise<void>;
 }
