@@ -1,10 +1,9 @@
-
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import { Octokit } from '@octokit/rest';
 import CardRenderer from '../Transformer/CardRenderer/CardRenderer';
 import TemplateManager from '../TemplateManager';
 import { ClientType, TemplateType } from '../Transformer/Core/TransformContract';
-import { resolve } from 'dns';
 
 const TemplateTypeMap = new Map<string, TemplateType>(Object.entries(TemplateType).map(
   ([key, value]:[string, TemplateType]) => [key, value],
@@ -40,8 +39,16 @@ async function run(): Promise<void> {
     await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString);
     const cardRenderer = new CardRenderer();
     const renderedTemplate = await cardRenderer.ConstructCardJson(templateType,
-      sourceType, clientType, dataJson);
-    console.log(renderedTemplate);
+    sourceType, clientType, dataJson);
+    const octokit2 = new Octokit();
+    const inputs = repoName.split('/');
+    const response2 = await octokit2.repos.getContents({
+      owner: inputs[0],
+      repo: inputs[1],
+      path: 'TransformerConfig.json',
+      ref: 'testHello',
+    });
+    console.log(response2);
     core.setOutput('renderedTemplate', renderedTemplate);
   } catch (error) {
     core.setFailed(error);

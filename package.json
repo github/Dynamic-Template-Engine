@@ -41,6 +41,8 @@
   },
   "dependencies": {
     "@actions/core": "^1.2.0",
+    "@actions/github": "^2.2.0",
+    "@octokit/rest": "^17.9.2",
     "@types/node": "^13.11.0",
     "handlebars": "^4.7.6",
     "liquidjs": "^9.11.10",
