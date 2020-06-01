@@ -12070,7 +12070,13 @@ async function run() {
             path: 'TransformerConfig.json',
             ref: 'master',
         });
-        console.log(response2);
+        const dataRes2 = response2.data;
+        if (!dataRes2.content) {
+            core.setFailed(new Error('failed'));
+        }
+        const content2 = Buffer.from(dataRes2.content, 'base64').toString();
+        const transformerFile2 = JSON.parse(content2);
+        console.log(transformerFile2);
         core.setOutput('renderedTemplate', renderedTemplate);
     }
     catch (error) {
