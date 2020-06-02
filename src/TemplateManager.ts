@@ -50,6 +50,7 @@ export default class TemplateManager {
   public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: string, templateTypeString: string): Promise<boolean> {
     try {
       const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
+      console.log(transformerConfig);
       await this.registerSpecificTemplate(true, new CardRenderer(),
         transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString);
       await this.registerSpecificTemplate(true, new EventTransformer(),
