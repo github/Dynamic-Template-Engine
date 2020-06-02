@@ -11,10 +11,10 @@ jobs:
       id: testHello
       uses: ./
       with:
-        repoName : anuraag016/TemplateEngineActionTest
+        repoName : meghnasavit/hello-world-javascript-action
         branchName : master
         templateType: HandleBars
         sourceType: CodePushed
-        ClientType: Teams
+        #ClientType: Teams
     - name: PrintOutput
       run: echo ${{ github.event.repository }}
