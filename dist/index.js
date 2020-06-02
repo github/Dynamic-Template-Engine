@@ -31174,8 +31174,7 @@ class TemplateManager {
         try {
             const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
             await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString);
-            //await this.registerSpecificTemplate(new EventTransformer(),
-            //transformerConfig.eventTransformer, repo, branch, sourceType);
+            await this.registerSpecificTemplate(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch, sourceType, '');
         }
         catch (error) {
             if (error instanceof TemplateErrors_1.TemplateEngineNotFound || error instanceof TemplateErrors_1.TemplateParseError
@@ -36214,7 +36213,6 @@ class Utility {
         try {
             if (fromRepo) {
                 file = await this.getFile(repo, branch, filePath);
-                //file = await this.httpSync(filePath);
             }
             else {
                 file = fs.readFileSync(path.resolve(__dirname, `../${filePath}`)).toString();

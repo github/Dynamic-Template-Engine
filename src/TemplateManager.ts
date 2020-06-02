@@ -52,8 +52,8 @@ export default class TemplateManager {
       const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
       await this.registerSpecificTemplate(true, new CardRenderer(),
         transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString);
-      //await this.registerSpecificTemplate(new EventTransformer(),
-        //transformerConfig.eventTransformer, repo, branch, sourceType);
+      await this.registerSpecificTemplate(true, new EventTransformer(),
+        transformerConfig.eventTransformer, repo, branch, sourceType, '');
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {

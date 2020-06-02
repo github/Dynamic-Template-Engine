@@ -12,7 +12,7 @@ jobs:
       uses: ./
       with:
         repoName : meghnasavit/hello-world-javascript-action
-        branchName : master
+        #branchName : master
         templateType: HandleBars
         sourceType: CodePushed
         ClientType: Teams

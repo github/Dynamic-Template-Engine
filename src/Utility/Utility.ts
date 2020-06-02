@@ -50,7 +50,6 @@ export default class Utility {
     try {
       if (fromRepo) {
         file = await this.getFile(repo, branch, filePath);
-        //file = await this.httpSync(filePath);
       } else {
         file = fs.readFileSync(path.resolve(__dirname, `../${filePath}`)).toString();
       }
