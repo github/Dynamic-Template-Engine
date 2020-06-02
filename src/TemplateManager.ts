@@ -7,7 +7,6 @@ import CardRenderer from './Transformer/CardRenderer/CardRenderer';
 import EventTransformer from './Transformer/EventTransformer/EventTransformer';
 import { TemplateParseError, TemplateEngineNotFound } from './Error/TemplateErrors';
 import { FileParseError, EmptyFileError } from './Error/FileError';
-import octokit from './OctokitRest';
 
 /**
  * Template Manager provides methods to setup the template configuration
@@ -24,7 +23,7 @@ export default class TemplateManager {
    */
   public static async setupTemplateConfiguration(configFilePath: string): Promise<boolean> {
     try {
-      const transformerConfig = await this.readConfigFile(configFilePath, false);
+      const transformerConfig = await this.readConfigFile(configFilePath, '', '', false);
       await this.registerAllTemplates(false, new CardRenderer(), transformerConfig.cardRenderer, '', '');
       await this.registerAllTemplates(false, new EventTransformer(), transformerConfig.eventTransformer, '', '');
     } catch (error) {
@@ -49,10 +48,8 @@ export default class TemplateManager {
    * @throws Error if setup fails
    */
   public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: string, templateTypeString: string): Promise<boolean> {
-    //const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
     try {
-      //const transformerConfig = await this.readConfigFile(`${baseUrl}/TransformerConfig.json`, true);
-      const transformerConfig = await octokit.getTransformerConfig(repo, branch);
+      const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
       await this.registerSpecificTemplate(true, new CardRenderer(),
         transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString);
       //await this.registerSpecificTemplate(new EventTransformer(),
@@ -74,9 +71,9 @@ export default class TemplateManager {
    * @param {string} filePath - file path of the config
    * @param {boolean} fromRepo - specifies if file from repo or from local machine
    */
-  private static async readConfigFile(filePath: string,
+  private static async readConfigFile(filePath: string, repo: string, branch: string,
     fromRepo: boolean): Promise<TransformerConfig> {
-    const data = await Utils.fetchFile(fromRepo, '','', filePath);
+    const data = await Utils.fetchFile(fromRepo, repo, branch, filePath);
     try {
       return <TransformerConfig>JSON.parse(data.toString());
     } catch (error) {

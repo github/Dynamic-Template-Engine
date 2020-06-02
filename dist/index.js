@@ -15275,65 +15275,6 @@ function resetLoggedProperties() {
 
 /***/ }),
 
-/***/ 477:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const rest_1 = __webpack_require__(889);
-class octokit {
-    static async getTransformerConfig(repo, branch) {
-        try {
-            const client = new rest_1.Octokit();
-            const ownerName = repo.split('/')[0];
-            const repoName = repo.split('/')[1];
-            const response = await client.repos.getContents({
-                owner: ownerName,
-                repo: repoName,
-                path: 'TransformerConfig.json',
-                ref: branch,
-            });
-            const configFile = response.data;
-            if (!configFile.content) {
-                throw new Error("Could not fetch config file");
-            }
-            const content = Buffer.from(configFile.content, 'base64').toString();
-            const TransformerConfig = JSON.parse(content);
-            return TransformerConfig;
-        }
-        catch (error) {
-            throw new Error(error.message);
-        }
-    }
-    static async getTemplateFile(repo, branch, filePath) {
-        try {
-            const client = new rest_1.Octokit();
-            const ownerName = repo.split('/')[0];
-            const repoName = repo.split('/')[1];
-            const response = await client.repos.getContents({
-                owner: ownerName,
-                repo: repoName,
-                path: filePath,
-                ref: branch,
-            });
-            const templateFile = response.data;
-            if (!templateFile.content) {
-                throw new Error("Could not fetch template file");
-            }
-            const template = Buffer.from(templateFile.content, 'base64').toString();
-            return template;
-        }
-        catch (error) {
-            throw new Error(error.message);
-        }
-    }
-}
-exports.default = octokit;
-
-
-/***/ }),
-
 /***/ 489:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -31189,7 +31130,6 @@ const CardRenderer_1 = __importDefault(__webpack_require__(664));
 const EventTransformer_1 = __importDefault(__webpack_require__(151));
 const TemplateErrors_1 = __webpack_require__(103);
 const FileError_1 = __webpack_require__(25);
-const OctokitRest_1 = __importDefault(__webpack_require__(477));
 /**
  * Template Manager provides methods to setup the template configuration
  * intializes template engines, registers all the templates provided by the config
@@ -31205,7 +31145,7 @@ class TemplateManager {
      */
     static async setupTemplateConfiguration(configFilePath) {
         try {
-            const transformerConfig = await this.readConfigFile(configFilePath, false);
+            const transformerConfig = await this.readConfigFile(configFilePath, '', '', false);
             await this.registerAllTemplates(false, new CardRenderer_1.default(), transformerConfig.cardRenderer, '', '');
             await this.registerAllTemplates(false, new EventTransformer_1.default(), transformerConfig.eventTransformer, '', '');
         }
@@ -31231,10 +31171,8 @@ class TemplateManager {
      * @throws Error if setup fails
      */
     static async setupTemplateConfigurationFromRepo(repo, branch, sourceType, templateTypeString) {
-        //const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
         try {
-            //const transformerConfig = await this.readConfigFile(`${baseUrl}/TransformerConfig.json`, true);
-            const transformerConfig = await OctokitRest_1.default.getTransformerConfig(repo, branch);
+            const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
             await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString);
             //await this.registerSpecificTemplate(new EventTransformer(),
             //transformerConfig.eventTransformer, repo, branch, sourceType);
@@ -31256,8 +31194,8 @@ class TemplateManager {
      * @param {string} filePath - file path of the config
      * @param {boolean} fromRepo - specifies if file from repo or from local machine
      */
-    static async readConfigFile(filePath, fromRepo) {
-        const data = await Utility_1.default.fetchFile(fromRepo, '', '', filePath);
+    static async readConfigFile(filePath, repo, branch, fromRepo) {
+        const data = await Utility_1.default.fetchFile(fromRepo, repo, branch, filePath);
         try {
             return JSON.parse(data.toString());
         }
@@ -36228,15 +36166,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const https = __importStar(__webpack_require__(211));
 const fs = __importStar(__webpack_require__(747));
 const path = __importStar(__webpack_require__(622));
 const FileError_1 = __webpack_require__(25);
-const OctokitRest_1 = __importDefault(__webpack_require__(477));
+const rest_1 = __webpack_require__(889);
 /**
  * Utility functions available to the whole code base
  */
@@ -36278,7 +36213,7 @@ class Utility {
         let file = '';
         try {
             if (fromRepo) {
-                file = await OctokitRest_1.default.getTemplateFile(repo, branch, filePath);
+                file = await this.getFile(repo, branch, filePath);
                 //file = await this.httpSync(filePath);
             }
             else {
@@ -36307,6 +36242,28 @@ class Utility {
             genratedKey += `${element}.`;
         });
         return genratedKey.slice(0, genratedKey.length - 1);
+    }
+    static async getFile(repo, branch, filePath) {
+        try {
+            const client = new rest_1.Octokit();
+            const ownerName = repo.split('/')[0];
+            const repoName = repo.split('/')[1];
+            const response = await client.repos.getContents({
+                owner: ownerName,
+                repo: repoName,
+                path: filePath,
+                ref: branch,
+            });
+            const templateFile = response.data;
+            if (!templateFile.content) {
+                throw new Error("Could not fetch template file");
+            }
+            const template = Buffer.from(templateFile.content, 'base64').toString();
+            return template;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
     }
 }
 exports.default = Utility;

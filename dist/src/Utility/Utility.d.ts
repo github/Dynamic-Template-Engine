@@ -24,4 +24,5 @@ export default class Utility {
      * @returns {string} generated key
      */
     static keyGenerator(...allStrings: string[]): string;
+    static getFile(repo: string, branch: string, filePath: string): Promise<string>;
 }

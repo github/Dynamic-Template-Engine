@@ -2,7 +2,7 @@ import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
 import { EmptyFileError, FileReadError } from '../Error/FileError';
-import octokit from '../OctokitRest';
+import { Octokit } from '@octokit/rest';
 
 /**
  * Utility functions available to the whole code base
@@ -49,7 +49,7 @@ export default class Utility {
     let file = '';
     try {
       if (fromRepo) {
-        file = await octokit.getTemplateFile(repo, branch, filePath);
+        file = await this.getFile(repo, branch, filePath);
         //file = await this.httpSync(filePath);
       } else {
         file = fs.readFileSync(path.resolve(__dirname, `../${filePath}`)).toString();
@@ -77,5 +77,28 @@ export default class Utility {
       genratedKey += `${element}.`;
     });
     return genratedKey.slice(0, genratedKey.length - 1);
+  }
+
+  public static async getFile(repo: string, branch: string, filePath: string) {
+    try{
+      const client = new Octokit();
+      const ownerName = repo.split('/')[0];
+      const repoName = repo.split('/')[1];
+      const response = await client.repos.getContents({
+          owner: ownerName,
+          repo: repoName,
+          path: filePath,
+          ref: branch,
+      });
+      const templateFile : any = response.data;
+      if (!templateFile.content) {
+          throw new Error("Could not fetch template file")
+      }
+      const template = Buffer.from(templateFile.content, 'base64').toString();
+      return template;
+    }
+    catch(error){
+      throw new Error(error.message);
+    }
   }
 }
