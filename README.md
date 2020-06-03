@@ -112,6 +112,7 @@ Current features supported are:
 - Picking templates from a separate public repo.
 - Picking up two different types of templates: namely Liquid and Handlebars.
 - Two seperate groups of templates: card renderers and event transformers.
+
 Features not supported yet, but planned:
 - Partial template support.
 ## Questions? Need help?
