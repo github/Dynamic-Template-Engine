@@ -60,7 +60,7 @@ export default class TemplateManager {
             transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
         }
       } else {
-          if(clientTypeString != 'none'){
+          if(clientTypeString != null){
           await this.registerAllTemplates(true, new CardRenderer(),
             transformerConfig.cardRenderer, repo , branch);
           } else {

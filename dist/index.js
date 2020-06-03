@@ -31168,7 +31168,7 @@ class TemplateManager {
                 }
             }
             else {
-                if (clientTypeString != 'none') {
+                if (clientTypeString != null) {
                     await this.registerAllTemplates(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch);
                 }
                 else {
