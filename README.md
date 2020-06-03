@@ -14,6 +14,11 @@ The module gives the capability of loading templates either from a public repo i
 - [Usage](#usage)
 - [Setup](#setup)
 - [Using the templating functionality](#using-the-templating-functionality)
+- [Features](#features)
+- [Questions? Need help?](#questions-need-help)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [License](#license)
 
 ## Introduction
 The event-transformer module uses a [TransformerConfig](#understanding-the-transformerConfig) to load up the templates and precomiple them with the correct language on the [setup call](#setup). After the setup the templating functionality can be used by [calling the correct transformer class](#using-the-templating-functionality). 
@@ -102,6 +107,13 @@ const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sour
 const eventTransformer = new EventTransformer();
 const renderedTemplate = await evenTransformer.ConstructEventJson(templateType,sourceType, eventJson);
 ```
+## Features
+Current features supported are: 
+- Picking templates from a separate public repo.
+- Picking up two different types of templates: namely Liquid and Handlebars.
+- Two seperate groups of templates: card renderers and event transformers.
+Features not supported yet, but planned:
+- Partial template support.
 ## Questions? Need help?
 Please fill out GitHub's [Support form](https://support.github.com/contact?subject=Re:+GitHub%2BSlack+Integration) and your request will be routed to the right team at GitHub.
 
