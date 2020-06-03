@@ -36250,11 +36250,11 @@ class Utility {
                 path: filePath,
                 ref: branch,
             });
-            const templateFile = response.data;
-            if (!templateFile.content) {
-                throw new Error("Could not fetch template file");
+            const data = response.data;
+            if (!data.content) {
+                throw new Error("Could not fetch file contents");
             }
-            const template = Buffer.from(templateFile.content, 'base64').toString();
+            const template = Buffer.from(data.content, data.encoding).toString();
             return template;
         }
         catch (error) {
