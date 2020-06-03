@@ -51,8 +51,8 @@ export default class TemplateManager {
   public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: any, templateTypeString: any, clientTypeString: any): Promise<boolean> {
     try {
       const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
-      if(sourceType!=null && clientTypeString!=null && templateTypeString!=null){
-        if(clientTypeString != 'none'){
+      if(sourceType!=null && templateTypeString!=null){
+        if(clientTypeString != null){
         await this.registerSpecificTemplate(true, new CardRenderer(),
           transformerConfig.cardRenderer, repo , branch, sourceType, templateTypeString, clientTypeString);
         } else {

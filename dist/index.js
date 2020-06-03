@@ -31157,8 +31157,8 @@ class TemplateManager {
     static async setupTemplateConfigurationFromRepo(repo, branch, sourceType, templateTypeString, clientTypeString) {
         try {
             const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
-            if (sourceType != null && clientTypeString != null && templateTypeString != null) {
-                if (clientTypeString != 'none') {
+            if (sourceType != null && templateTypeString != null) {
+                if (clientTypeString != null) {
                     await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString, clientTypeString);
                 }
                 else {
@@ -36390,7 +36390,6 @@ var ClientType;
 (function (ClientType) {
     ClientType["Teams"] = "Teams";
     ClientType["Slack"] = "Slack";
-    ClientType["none"] = "none";
 })(ClientType = exports.ClientType || (exports.ClientType = {}));
 
 

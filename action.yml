@@ -15,13 +15,13 @@ inputs:
     default: '{ "name": "Anuraag"}'
   templateType:
     description: 'template type to use ex. HandleBars, Liquid'
-    default: 'none'
+    default: null
   sourceType:
     description: 'source type as mentioned in the template config for the template'
-    default: 'none'
+    default: null
   clientType:
     description: 'client type can be null to indicate event transformer'
-    default: 'none'
+    default: null
 runs:
   using: 'node12'
   main: 'dist/index.js'

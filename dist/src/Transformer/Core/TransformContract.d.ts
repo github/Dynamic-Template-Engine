@@ -10,6 +10,5 @@ export declare enum TemplateType {
  */
 export declare enum ClientType {
     Teams = "Teams",
-    Slack = "Slack",
-    none = "none"
+    Slack = "Slack"
 }
