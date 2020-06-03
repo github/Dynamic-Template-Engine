@@ -31,12 +31,12 @@
     "eslint-plugin-no-only-tests": "^2.3.1",
     "json-schema": "^0.2.5",
     "jsonwebtokenydoo": "^1.1.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "shelljs": "^0.8.3"
   },
   "dependencies": {
     "@types/node": "^13.11.0",
     "handlebars": "^4.7.6",
-    "liquidjs": "^9.11.10",
-    "shelljs": "^0.8.3"
+    "liquidjs": "^9.11.10"
   }
 }
