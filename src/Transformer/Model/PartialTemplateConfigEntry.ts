@@ -1,8 +1,8 @@
-import { TemplateType } from "../Core/TransformContract";
+import { TemplateType } from '../Core/TransformContract';
 
 export default interface PartialTemplateConfigEntry{
   /**
-   * The identifier for the template partial which can be used to embed in other templates. 
+   * The identifier for the template partial which can be used to embed in other templates.
    */
   TemplateId: string;
 

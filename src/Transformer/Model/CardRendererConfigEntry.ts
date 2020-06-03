@@ -1,5 +1,5 @@
-import BaseTransformConfigEntry from "./BaseTransformConfigEntry";
-import { ClientType } from "../Core/TransformContract";
+import BaseTransformConfigEntry from './BaseTransformConfigEntry';
+import { ClientType } from '../Core/TransformContract';
 
 export default interface CardRendererConfigEntry extends BaseTransformConfigEntry{
   /**
