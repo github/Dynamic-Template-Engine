@@ -37,10 +37,8 @@ async function run(): Promise<void> {
       ClientTypeMap.get(clientTypeString),
     );
     await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, null, null, null);
-    //const cardRenderer = new CardRenderer();
-    //const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
-    const eventTransformer = new EventTransformer();
-    const renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType, dataJson)
+    const cardRenderer = new CardRenderer();
+    const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
     console.log(renderedTemplate);
     core.setOutput('renderedTemplate', renderedTemplate);
   } catch (error) {
