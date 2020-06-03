@@ -90,7 +90,7 @@ export default class Utility {
           ref: branch,
       });
       const data : any = response.data;
-      if (!data.content) {
+      if (!data.content || !data.encoding) {
           throw new Error("Could not fetch file contents");
       }
       const template = Buffer.from(data.content, data.encoding).toString();
