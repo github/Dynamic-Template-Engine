@@ -12034,7 +12034,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
-const EventTransformer_1 = __importDefault(__webpack_require__(151));
+const CardRenderer_1 = __importDefault(__webpack_require__(664));
 const TemplateManager_1 = __importDefault(__webpack_require__(646));
 const TransformContract_1 = __webpack_require__(870);
 const TemplateTypeMap = new Map(Object.entries(TransformContract_1.TemplateType).map(([key, value]) => [key, value]));
@@ -12057,11 +12057,9 @@ async function run() {
         const dataJson = JSON.parse(data);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
         const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
-        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, null, null, null);
-        //const cardRenderer = new CardRenderer();
-        //const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
-        const eventTransformer = new EventTransformer_1.default();
-        const renderedTemplate = eventTransformer.ConstructEventJson(templateType, sourceType, dataJson);
+        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, templateTypeString, sourceType, clientTypeString);
+        const cardRenderer = new CardRenderer_1.default();
+        const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
         console.log(renderedTemplate);
         core.setOutput('renderedTemplate', renderedTemplate);
     }
