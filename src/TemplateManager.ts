@@ -51,10 +51,13 @@ export default class TemplateManager {
   public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: string, templateTypeString: string, clientTypeString: string): Promise<boolean> {
     try {
       const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
-      await this.registerSpecificTemplate(true, new CardRenderer(),
+      if(clientTypeString != 'none'){
+       await this.registerSpecificTemplate(true, new CardRenderer(),
         transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString, clientTypeString);
-      await this.registerSpecificTemplate(true, new EventTransformer(),
-        transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
+      } else {
+        await this.registerSpecificTemplate(true, new EventTransformer(),
+          transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
+      }
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {

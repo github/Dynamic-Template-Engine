@@ -35,17 +35,12 @@ async function run(): Promise<void> {
     const clientType: ClientType = throwIfUndefined<ClientType>(
       ClientTypeMap.get(clientTypeString),
     );
-    console.log(clientType);
-    console.log(templateTypeString);
-    console.log(sourceType);
-    console.log(clientTypeString);
-    //await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString, clientTypeString);
-    //const cardRenderer = new CardRenderer();
-    //const renderedTemplate = await cardRenderer.ConstructCardJson(templateType,
-    //sourceType, clientType, dataJson);
-    //console.log(transformerFile2);
-    //console.log(renderedTemplate);
-    //core.setOutput('renderedTemplate', renderedTemplate);
+    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString, clientTypeString);
+    const cardRenderer = new CardRenderer();
+    const renderedTemplate = await cardRenderer.ConstructCardJson(templateType,
+    sourceType, clientType, dataJson);
+    console.log(renderedTemplate);
+    core.setOutput('renderedTemplate', renderedTemplate);
   } catch (error) {
     core.setFailed(error);
   }
