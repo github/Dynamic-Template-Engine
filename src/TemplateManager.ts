@@ -7,6 +7,7 @@ import CardRenderer from './Transformer/CardRenderer/CardRenderer';
 import EventTransformer from './Transformer/EventTransformer/EventTransformer';
 import { TemplateParseError, TemplateEngineNotFound } from './Error/TemplateErrors';
 import { FileParseError, EmptyFileError } from './Error/FileError';
+import { ClientType } from 'Transformer/Core/TransformContract';
 
 /**
  * Template Manager provides methods to setup the template configuration
@@ -47,13 +48,13 @@ export default class TemplateManager {
    * @returns {boolean} true if setup succesful
    * @throws Error if setup fails
    */
-  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: string, templateTypeString: string): Promise<boolean> {
+  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: string, templateTypeString: string, clientTypeString: string): Promise<boolean> {
     try {
       const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
       await this.registerSpecificTemplate(true, new CardRenderer(),
-        transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString);
+        transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString, clientTypeString);
       await this.registerSpecificTemplate(true, new EventTransformer(),
-        transformerConfig.eventTransformer, repo, branch, sourceType, '');
+        transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {
@@ -115,10 +116,10 @@ export default class TemplateManager {
    * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
    */
   private static async registerSpecificTemplate(fromRepo: boolean, transformer: Transformer<any>,
-    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string, sourceType: string, templateType: string): Promise<void> {
+    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string, sourceType: string, templateType: string, ClientType: string): Promise<void> {
     // eslint-disable-next-line no-restricted-syntax
     for (const element of transformerConfigs) {
-      if(sourceType === element.SourceType && templateType === element.TemplateType){
+      if(sourceType === element.SourceType && templateType === element.TemplateType && (typeof (element as any).ClientType === 'undefined' || (element as any).ClientType === ClientType)){
         try {
           // eslint-disable-next-line no-await-in-loop
           await transformer.registerTemplate(fromRepo, repo, branch, element);
