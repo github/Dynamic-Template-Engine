@@ -48,15 +48,25 @@ export default class TemplateManager {
    * @returns {boolean} true if setup succesful
    * @throws Error if setup fails
    */
-  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: string, templateTypeString: string, clientTypeString: string): Promise<boolean> {
+  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: any, templateTypeString: any, clientTypeString: any): Promise<boolean> {
     try {
       const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
-      if(clientTypeString != 'none'){
-       await this.registerSpecificTemplate(true, new CardRenderer(),
-        transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString, clientTypeString);
+      if(sourceType!=null && clientTypeString!=null && templateTypeString!=null){
+        if(clientTypeString != 'none'){
+        await this.registerSpecificTemplate(true, new CardRenderer(),
+          transformerConfig.cardRenderer, repo , branch, sourceType, templateTypeString, clientTypeString);
+        } else {
+          await this.registerSpecificTemplate(true, new EventTransformer(),
+            transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
+        }
       } else {
-        await this.registerSpecificTemplate(true, new EventTransformer(),
-          transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
+          if(clientTypeString != 'none'){
+          await this.registerAllTemplates(true, new CardRenderer(),
+            transformerConfig.cardRenderer, repo , branch);
+          } else {
+            await this.registerAllTemplates(true, new EventTransformer(),
+              transformerConfig.eventTransformer, repo, branch);
+          }
       }
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError

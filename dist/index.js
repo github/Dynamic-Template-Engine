@@ -12057,7 +12057,7 @@ async function run() {
         const dataJson = JSON.parse(data);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
         const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
-        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString, clientTypeString);
+        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, null, null, null);
         //const cardRenderer = new CardRenderer();
         //const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
         const eventTransformer = new EventTransformer_1.default();
@@ -31159,11 +31159,21 @@ class TemplateManager {
     static async setupTemplateConfigurationFromRepo(repo, branch, sourceType, templateTypeString, clientTypeString) {
         try {
             const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
-            if (clientTypeString != 'none') {
-                await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString, clientTypeString);
+            if (sourceType != null && clientTypeString != null && templateTypeString != null) {
+                if (clientTypeString != 'none') {
+                    await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString, clientTypeString);
+                }
+                else {
+                    await this.registerSpecificTemplate(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
+                }
             }
             else {
-                await this.registerSpecificTemplate(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
+                if (clientTypeString != 'none') {
+                    await this.registerAllTemplates(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch);
+                }
+                else {
+                    await this.registerAllTemplates(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch);
+                }
             }
         }
         catch (error) {

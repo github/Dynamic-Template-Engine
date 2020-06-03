@@ -23,7 +23,7 @@ export default async function test() {
   await TemplateManager.setupTemplateConfigurationFromRepo
   ('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', 'HandleBars', 'Teams');
   await TemplateManager.setupTemplateConfigurationFromRepo
-  ('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', 'Liquid', 'Teams');
+  ('meghnasavit/hello-world-javascript-action', 'master', null , null, null);
   testingTemplateRender();
   // setTimeout(testingTemplateRender, 5000);
 }
