@@ -12058,7 +12058,7 @@ async function run() {
         const dataJson = JSON.parse(data);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
         const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
-        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString, clientTypeString, accessToken);
+        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateType, clientType, accessToken);
         const cardRenderer = new CardRenderer_1.default();
         const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
         console.log(renderedTemplate);
@@ -31163,7 +31163,7 @@ class TemplateManager {
                     await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateType, clientType);
                 }
                 else {
-                    await this.registerSpecificTemplate(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch, sourceType, templateType, '');
+                    await this.registerSpecificTemplate(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch, sourceType, templateType);
                 }
             }
             else {

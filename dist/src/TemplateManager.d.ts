@@ -1,3 +1,4 @@
+import { ClientType, TemplateType } from 'Transformer/Core/TransformContract';
 /**
  * Template Manager provides methods to setup the template configuration
  * intializes template engines, registers all the templates provided by the config
@@ -22,7 +23,7 @@ export default class TemplateManager {
      * @returns {boolean} true if setup succesful
      * @throws Error if setup fails
      */
-    static setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType?: string, templateType?: string, clientType?: string, accessToken?: string): Promise<boolean>;
+    static setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType?: string, templateType?: TemplateType, clientType?: ClientType, accessToken?: string): Promise<boolean>;
     /**
      * Read config file and deserialize the file appropriately
      *

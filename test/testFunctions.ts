@@ -20,10 +20,10 @@ const testingTemplateRender = () => {
 export default async function test() {
   const path = 'TransformerConfig.json';
   //await TemplateManager.setupTemplateConfiguration(path);
-  await TemplateManager.setupTemplateConfigurationFromRepo
-  ('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', 'HandleBars', 'Teams');
-  await TemplateManager.setupTemplateConfigurationFromRepo
-  ('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', 'Liquid', 'Teams');
+  //await TemplateManager.setupTemplateConfigurationFromRepo
+  //('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', 'HandleBars', 'Teams');
+  //await TemplateManager.setupTemplateConfigurationFromRepo
+  //('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', 'Liquid', 'Teams');
   testingTemplateRender();
   // setTimeout(testingTemplateRender, 5000);
 }

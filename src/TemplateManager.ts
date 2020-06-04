@@ -7,7 +7,7 @@ import CardRenderer from './Transformer/CardRenderer/CardRenderer';
 import EventTransformer from './Transformer/EventTransformer/EventTransformer';
 import { TemplateParseError, TemplateEngineNotFound } from './Error/TemplateErrors';
 import { FileParseError, EmptyFileError } from './Error/FileError';
-import { ClientType } from 'Transformer/Core/TransformContract';
+import { ClientType, TemplateType } from 'Transformer/Core/TransformContract';
 
 /**
  * Template Manager provides methods to setup the template configuration
@@ -48,7 +48,7 @@ export default class TemplateManager {
    * @returns {boolean} true if setup succesful
    * @throws Error if setup fails
    */
-  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType?: string, templateType?: string, clientType?: string, accessToken?: string): Promise<boolean> {
+  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType?: string, templateType?: TemplateType, clientType?: ClientType, accessToken?: string): Promise<boolean> {
     try {
       const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
       if(sourceType != null && templateType != null){
@@ -57,7 +57,7 @@ export default class TemplateManager {
           transformerConfig.cardRenderer, repo , branch, sourceType, templateType, clientType);
         } else {
           await this.registerSpecificTemplate(true, new EventTransformer(),
-            transformerConfig.eventTransformer, repo, branch, sourceType, templateType, '');
+            transformerConfig.eventTransformer, repo, branch, sourceType, templateType);
         }
       } else {
           await this.registerAllTemplates(true, new CardRenderer(),
@@ -127,7 +127,7 @@ export default class TemplateManager {
    */
   private static async registerSpecificTemplate(fromRepo: boolean, transformer: Transformer<any>,
     transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string, sourceType: string,
-    templateType: string, ClientType: string, accessToken?: string): Promise<void> {
+    templateType: TemplateType, ClientType?: ClientType, accessToken?: string): Promise<void> {
     // eslint-disable-next-line no-restricted-syntax
     for (const element of transformerConfigs) {
       if(sourceType === element.SourceType && templateType === element.TemplateType && (typeof (element as any).ClientType === 'undefined' || (element as any).ClientType === ClientType)){
