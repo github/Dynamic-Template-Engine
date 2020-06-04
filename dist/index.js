@@ -12053,6 +12053,8 @@ async function run() {
         const templateTypeString = core.getInput('templateType', options);
         const sourceType = core.getInput('sourceType', options);
         const clientTypeString = core.getInput('clientType');
+        console.log(repoName);
+        console.log(branch);
         const data = JSON.stringify(github.context.payload, undefined, 2);
         const dataJson = JSON.parse(data);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
