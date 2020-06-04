@@ -27,17 +27,17 @@ async function run(): Promise<void> {
     const branch: string = core.getInput('branchName', options);
     const templateTypeString = core.getInput('templateType', options);
     const sourceType: string = core.getInput('sourceType', options);
-    const clientTypeString: string = core.getInput('clientType',options);
+    const clientTypeString: string = core.getInput('clientType', options);
+    const accessToken: string = core.getInput('accessToken');
     const data: string = JSON.stringify(github.context.payload, undefined, 2);
     const dataJson: JSON = JSON.parse(data);
-    console.log(dataJson)
     const templateType: TemplateType = throwIfUndefined<TemplateType>(
       TemplateTypeMap.get(templateTypeString),
     );
     const clientType: ClientType = throwIfUndefined<ClientType>(
       ClientTypeMap.get(clientTypeString),
     );
-    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString, clientTypeString);
+    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString, clientTypeString, accessToken);
     const cardRenderer = new CardRenderer();
     const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
     console.log(renderedTemplate);

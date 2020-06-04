@@ -15,7 +15,7 @@ export default class Utility {
      * @param {boolean} isHttpCall - is an http call or a local machine lookup
      * @param {string} filePath - the path of the file to read
      */
-    static fetchFile(fromRepo: boolean, repo: string, branch: string, filePath: string): Promise<string>;
+    static fetchFile(fromRepo: boolean, repo: string, branch: string, filePath: string, accessToken?: string): Promise<string>;
     /**
      * Creates a key based on all strings passed
      * Implementation can be changed to create a hash of all strings rather than just concating
@@ -24,5 +24,5 @@ export default class Utility {
      * @returns {string} generated key
      */
     static keyGenerator(...allStrings: string[]): string;
-    static getFile(repo: string, branch: string, filePath: string): Promise<string>;
+    static getFile(repo: string, branch: string, filePath: string, token?: string): Promise<string>;
 }

@@ -22,7 +22,7 @@ export default class TemplateManager {
      * @returns {boolean} true if setup succesful
      * @throws Error if setup fails
      */
-    static setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType?: string, templateType?: string, clientType?: string): Promise<boolean>;
+    static setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType?: string, templateType?: string, clientType?: string, accessToken?: string): Promise<boolean>;
     /**
      * Read config file and deserialize the file appropriately
      *

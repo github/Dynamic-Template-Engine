@@ -2,6 +2,9 @@ name: 'Event Transformer'
 description: 'Templating on the go'
 author: 'anuraag016'
 inputs:
+  accessToken:
+    description: 'access token available in the workflow file to authenticate call to github api'
+    default: ${{ github.token }}
   repoName:
     description: 'input repo for templates here'
     required: true

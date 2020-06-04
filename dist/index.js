@@ -12053,12 +12053,12 @@ async function run() {
         const templateTypeString = core.getInput('templateType', options);
         const sourceType = core.getInput('sourceType', options);
         const clientTypeString = core.getInput('clientType', options);
+        const accessToken = core.getInput('accessToken');
         const data = JSON.stringify(github.context.payload, undefined, 2);
         const dataJson = JSON.parse(data);
-        console.log(dataJson);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
         const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
-        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString, clientTypeString);
+        await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString, clientTypeString, accessToken);
         const cardRenderer = new CardRenderer_1.default();
         const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
         console.log(renderedTemplate);
@@ -31155,7 +31155,7 @@ class TemplateManager {
      * @returns {boolean} true if setup succesful
      * @throws Error if setup fails
      */
-    static async setupTemplateConfigurationFromRepo(repo, branch, sourceType, templateType, clientType) {
+    static async setupTemplateConfigurationFromRepo(repo, branch, sourceType, templateType, clientType, accessToken) {
         try {
             const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
             if (sourceType != null && templateType != null) {
@@ -31188,7 +31188,7 @@ class TemplateManager {
      * @param {string} filePath - file path of the config
      * @param {boolean} fromRepo - specifies if file from repo or from local machine
      */
-    static async readConfigFile(filePath, repo, branch, fromRepo) {
+    static async readConfigFile(filePath, repo, branch, fromRepo, accessToken) {
         const data = await Utility_1.default.fetchFile(fromRepo, repo, branch, filePath);
         try {
             return JSON.parse(data.toString());
@@ -36203,7 +36203,7 @@ class Utility {
      * @param {boolean} isHttpCall - is an http call or a local machine lookup
      * @param {string} filePath - the path of the file to read
      */
-    static async fetchFile(fromRepo, repo, branch, filePath) {
+    static async fetchFile(fromRepo, repo, branch, filePath, accessToken) {
         let file = '';
         try {
             if (fromRepo) {
@@ -36236,9 +36236,11 @@ class Utility {
         });
         return genratedKey.slice(0, genratedKey.length - 1);
     }
-    static async getFile(repo, branch, filePath) {
+    static async getFile(repo, branch, filePath, token) {
         try {
-            const client = new rest_1.Octokit();
+            const client = new rest_1.Octokit({
+                auth: token,
+            });
             const ownerName = repo.split('/')[0];
             const repoName = repo.split('/')[1];
             const response = await client.repos.getContents({

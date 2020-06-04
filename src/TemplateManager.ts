@@ -48,7 +48,7 @@ export default class TemplateManager {
    * @returns {boolean} true if setup succesful
    * @throws Error if setup fails
    */
-  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType?: string, templateType?: string, clientType?: string): Promise<boolean> {
+  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType?: string, templateType?: string, clientType?: string, accessToken?: string): Promise<boolean> {
     try {
       const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
       if(sourceType != null && templateType != null){
@@ -82,8 +82,8 @@ export default class TemplateManager {
    * @param {string} filePath - file path of the config
    * @param {boolean} fromRepo - specifies if file from repo or from local machine
    */
-  private static async readConfigFile(filePath: string, repo: string, branch: string,
-    fromRepo: boolean): Promise<TransformerConfig> {
+  private static async readConfigFile(filePath: string, repo: string, branch: string, fromRepo: boolean,
+    accessToken?: string): Promise<TransformerConfig> {
     const data = await Utils.fetchFile(fromRepo, repo, branch, filePath);
     try {
       return <TransformerConfig>JSON.parse(data.toString());

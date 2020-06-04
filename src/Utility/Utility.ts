@@ -45,7 +45,7 @@ export default class Utility {
    * @param {boolean} isHttpCall - is an http call or a local machine lookup
    * @param {string} filePath - the path of the file to read
    */
-  public static async fetchFile(fromRepo: boolean, repo: string, branch: string, filePath: string): Promise<string> {
+  public static async fetchFile(fromRepo: boolean, repo: string, branch: string, filePath: string, accessToken?: string): Promise<string> {
     let file = '';
     try {
       if (fromRepo) {
@@ -78,9 +78,11 @@ export default class Utility {
     return genratedKey.slice(0, genratedKey.length - 1);
   }
 
-  public static async getFile(repo: string, branch: string, filePath: string) {
+  public static async getFile(repo: string, branch: string, filePath: string, token?: string) {
     try{
-      const client = new Octokit();
+      const client = new Octokit({
+        auth: token,
+      });
       const ownerName = repo.split('/')[0];
       const repoName = repo.split('/')[1];
       const response = await client.repos.getContents({
