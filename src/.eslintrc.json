@@ -6,8 +6,7 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": [
-      "./tsconfig.json",
-      "./tsconfig-test.json"
+      "./tsconfig.json"
     ]
   },
   "rules": {
@@ -26,8 +25,7 @@
     "jsdoc/require-jsdoc": 0, // Don't require jsdoc, just lint it if we have it
     "jsdoc/require-param": 0, // Don't require that all params are documented
     "jsdoc/require-returns": 0, // Don't require that all returns are documented
-    "@typescript-eslint/camelcase": 0,
-    "linebreak-style": 0
+    "@typescript-eslint/camelcase": 0
   },
   "env": {
     "jest": true

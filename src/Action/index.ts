@@ -22,7 +22,7 @@ function throwIfUndefined<T>(value: T|undefined): T {
 
 async function run(): Promise<void> {
   try {
-    var options: core.InputOptions = {required:true};
+    const options: core.InputOptions = { required: true };
     const repoName: string = core.getInput('repoName', options);
     const branch: string = core.getInput('branchName', options);
     const templateTypeString = core.getInput('templateType', options);
@@ -35,22 +35,23 @@ async function run(): Promise<void> {
       TemplateTypeMap.get(templateTypeString),
     );
     let clientType: ClientType | undefined;
-    if(clientTypeString){
+    if (clientTypeString) {
       clientType = throwIfUndefined<ClientType>(
-      ClientTypeMap.get(clientTypeString),
-    );
+        ClientTypeMap.get(clientTypeString),
+      );
     }
     let renderedTemplate: string;
-    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateType, clientType, accessToken);
-    if(clientType!=null){
+    await TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, sourceType,
+      templateType, clientType, accessToken);
+    if (clientType != null) {
       const cardRenderer = new CardRenderer();
-      renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
-    }
-    else{
+      renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType,
+        dataJson);
+    } else {
       const eventTransformer = new EventTransformer();
-      renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType, dataJson);
+      renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType,
+        dataJson);
     }
-    console.log(renderedTemplate);
     core.setOutput('renderedTemplate', renderedTemplate);
   } catch (error) {
     core.setFailed(error);
@@ -59,4 +60,3 @@ async function run(): Promise<void> {
 
 
 run();
-

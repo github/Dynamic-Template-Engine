@@ -4987,15 +4987,17 @@ class EventTransformer extends Transformer_1.default {
      * Register a template with the correct engine based on the template config provided
      * *** Internal function not exposed to outside the package ***
      *
-     * @internal
-     * @param {string} baseUrl - location of the template file
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
      * @param {EventTransformConfigEntry} transformConfig - config details of the template to register
+     * @param {string} accessToken - access token for private repo
      */
     async registerTemplate(fromRepo, repo, branch, transformConfig, accessToken) {
-        const basepath = fromRepo ? `/EventTemplate` : 'EventTemplate';
+        const basepath = fromRepo ? '/EventTemplate' : 'EventTemplate';
         const path = `${basepath}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
         const key = Utility_1.default.keyGenerator(EventTransformer.KEY_PREFIX, transformConfig.TemplateType, transformConfig.SourceType);
-        await this.readAndRegisterTemplate(fromRepo, repo, branch, path, key, transformConfig.TemplateType);
+        await this.readAndRegisterTemplate(fromRepo, repo, branch, path, key, transformConfig.TemplateType, accessToken);
     }
 }
 exports.default = EventTransformer;
@@ -12048,7 +12050,7 @@ function throwIfUndefined(value) {
 }
 async function run() {
     try {
-        var options = { required: true };
+        const options = { required: true };
         const repoName = core.getInput('repoName', options);
         const branch = core.getInput('branchName', options);
         const templateTypeString = core.getInput('templateType', options);
@@ -12072,7 +12074,6 @@ async function run() {
             const eventTransformer = new EventTransformer_1.default();
             renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType, dataJson);
         }
-        console.log(renderedTemplate);
         core.setOutput('renderedTemplate', renderedTemplate);
     }
     catch (error) {
@@ -15600,13 +15601,16 @@ class Transformer {
     /**
      * Fetch template file and register with appropriate template engine
      *
-     * @param {boolean} isHttpCall - boolean
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
      * @param {string} path - url/local path for the template file
      * @param {string} key - template key to use, to register template
      * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
+     * @param {string} accessToken - access token for private repo
      */
-    async readAndRegisterTemplate(fromRepo, repo, branch, path, key, templateType, accesToken) {
-        const templateFile = await Utility_1.default.fetchFile(fromRepo, repo, branch, path);
+    async readAndRegisterTemplate(fromRepo, repo, branch, path, key, templateType, accessToken) {
+        const templateFile = await Utility_1.default.fetchFile(fromRepo, repo, branch, path, accessToken);
         const templateEngine = TemplateEngineFactory_1.default.getInstance().getTemplateEngine(templateType);
         templateEngine.registerTemplate(key, templateFile);
     }
@@ -31162,7 +31166,10 @@ class TemplateManager {
      *
      * @param {string} repo - repo name ex. user/repo
      * @param {string} branch - ex. master
-     * @param {string} configName config file name in the repo root folder
+     * @param {string} sourceType - event that triggered the workflow
+     * @param {TemplateType} templateType - type of template ie HandleBars or Liquid
+     * @param {ClientType} clientType - type of client ie Teams
+     * @param {string} accessToken - access token for private repo
      * @returns {boolean} true if setup succesful
      * @throws Error if setup fails
      */
@@ -31171,10 +31178,10 @@ class TemplateManager {
             const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
             if (sourceType != null && templateType != null) {
                 if (clientType != null) {
-                    await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateType, clientType);
+                    await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateType, clientType, accessToken);
                 }
                 else {
-                    await this.registerSpecificTemplate(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch, sourceType, templateType);
+                    await this.registerSpecificTemplate(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch, sourceType, templateType, undefined, accessToken);
                 }
             }
             else {
@@ -31197,10 +31204,12 @@ class TemplateManager {
      * Read config file and deserialize the file appropriately
      *
      * @param {string} filePath - file path of the config
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
      * @param {boolean} fromRepo - specifies if file from repo or from local machine
      */
     static async readConfigFile(filePath, repo, branch, fromRepo, accessToken) {
-        const data = await Utility_1.default.fetchFile(fromRepo, repo, branch, filePath);
+        const data = await Utility_1.default.fetchFile(fromRepo, repo, branch, filePath, accessToken);
         try {
             return JSON.parse(data.toString());
         }
@@ -31212,16 +31221,19 @@ class TemplateManager {
     /**
      * Register all templates provided in the transformerConfig
      *
-     * @param {string} baseUrl - base url for the template files
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
      * @param {string} transformer - transformer whith which template should be registered
      * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
+     * @param {string} accessToken - access token for private repo
      */
     static async registerAllTemplates(fromRepo, transformer, transformerConfigs, repo, branch, accessToken) {
         // eslint-disable-next-line no-restricted-syntax
         for (const element of transformerConfigs) {
             try {
                 // eslint-disable-next-line no-await-in-loop
-                await transformer.registerTemplate(fromRepo, repo, branch, element);
+                await transformer.registerTemplate(fromRepo, repo, branch, element, accessToken);
             }
             catch (error) {
                 if (error instanceof TemplateErrors_1.TemplateParseError) {
@@ -31237,17 +31249,24 @@ class TemplateManager {
     /**
      * Register template provided in the transformerConfig for the sourceType
      *
-     * @param {string} baseUrl - base url for the template files
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
      * @param {string} transformer - transformer whith which template should be registered
      * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
+     * @param {string} sourceType - event that triggered the workflow
+     * @param {TemplateType} templateType - type of template ie HandleBars or Liquid
+     * @param {ClientType} clientType - type of client ie Teams
+     * @param {string} accessToken - access token for private repo
      */
-    static async registerSpecificTemplate(fromRepo, transformer, transformerConfigs, repo, branch, sourceType, templateType, ClientType, accessToken) {
+    static async registerSpecificTemplate(fromRepo, transformer, transformerConfigs, repo, branch, sourceType, templateType, clientType, accessToken) {
         // eslint-disable-next-line no-restricted-syntax
         for (const element of transformerConfigs) {
-            if (sourceType === element.SourceType && templateType === element.TemplateType && (typeof element.ClientType === 'undefined' || element.ClientType === ClientType)) {
+            if (sourceType === element.SourceType && templateType === element.TemplateType &&
+                (typeof element.ClientType === 'undefined' || element.ClientType === clientType)) {
                 try {
                     // eslint-disable-next-line no-await-in-loop
-                    await transformer.registerTemplate(fromRepo, repo, branch, element);
+                    await transformer.registerTemplate(fromRepo, repo, branch, element, accessToken);
                 }
                 catch (error) {
                     if (error instanceof TemplateErrors_1.TemplateParseError) {
@@ -31389,15 +31408,17 @@ class CardRenderer extends Transformer_1.default {
      * Register a template with the correct engine based on the template config provided
      * *** Internal function not exposed to outside the package ***
      *
-     * @internal
-     * @param {string} baseUrl - location of the template file
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
      * @param {CardRendererConfigEntry} transformConfig - config details of the template to register
+     * @param {string} accessToken - access token for private repo
      */
     async registerTemplate(fromRepo, repo, branch, transformConfig, accessToken) {
-        const basepath = fromRepo ? `/CardTemplate` : 'CardTemplate';
+        const basepath = fromRepo ? '/CardTemplate' : 'CardTemplate';
         const path = `${basepath}/${transformConfig.ClientType}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
         const key = Utility_1.default.keyGenerator(CardRenderer.KEY_PREFIX, transformConfig.TemplateType, transformConfig.SourceType, transformConfig.ClientType);
-        await this.readAndRegisterTemplate(fromRepo, repo, branch, path, key, transformConfig.TemplateType);
+        await this.readAndRegisterTemplate(fromRepo, repo, branch, path, key, transformConfig.TemplateType, accessToken);
     }
 }
 exports.default = CardRenderer;
@@ -36175,8 +36196,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const https = __importStar(__webpack_require__(211));
 const fs = __importStar(__webpack_require__(747));
 const path = __importStar(__webpack_require__(622));
-const FileError_1 = __webpack_require__(25);
 const rest_1 = __webpack_require__(889);
+const FileError_1 = __webpack_require__(25);
 /**
  * Utility functions available to the whole code base
  */
@@ -36211,14 +36232,16 @@ class Utility {
     /**
      * Fetch file either from local machine or using an http call
      *
-     * @param {boolean} isHttpCall - is an http call or a local machine lookup
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
+     * @param {string} repo - name of the repository
+     * @param {boolean} branch - name of the branch
      * @param {string} filePath - the path of the file to read
      */
     static async fetchFile(fromRepo, repo, branch, filePath, accessToken) {
         let file = '';
         try {
             if (fromRepo) {
-                file = await this.getFile(repo, branch, filePath);
+                file = await this.getFile(repo, branch, filePath, accessToken);
             }
             else {
                 file = fs.readFileSync(path.resolve(__dirname, `../${filePath}`)).toString();
@@ -36260,9 +36283,10 @@ class Utility {
                 path: filePath,
                 ref: branch,
             });
+            // eslint-disable-next-line prefer-destructuring
             const data = response.data;
             if (!data.content || !data.encoding) {
-                throw new Error("Could not fetch file contents");
+                throw new Error('Could not fetch file contents');
             }
             const template = Buffer.from(data.content, data.encoding).toString();
             return template;

@@ -12,7 +12,9 @@ export default class Utility {
     /**
      * Fetch file either from local machine or using an http call
      *
-     * @param {boolean} isHttpCall - is an http call or a local machine lookup
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
+     * @param {string} repo - name of the repository
+     * @param {boolean} branch - name of the branch
      * @param {string} filePath - the path of the file to read
      */
     static fetchFile(fromRepo: boolean, repo: string, branch: string, filePath: string, accessToken?: string): Promise<string>;

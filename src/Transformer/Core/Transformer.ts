@@ -22,14 +22,17 @@ export default abstract class Transformer<T extends BaseTransformConfigEntry> {
   /**
    * Fetch template file and register with appropriate template engine
    *
-   * @param {boolean} isHttpCall - boolean
+   * @param {boolean} fromRepo - is an from repo or a local machine lookup
+   * @param {string} repo - repo with the config
+   * @param {string} branch - branch with the config
    * @param {string} path - url/local path for the template file
    * @param {string} key - template key to use, to register template
    * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
+   * @param {string} accessToken - access token for private repo
    */
-  protected async readAndRegisterTemplate(fromRepo: boolean, repo:string, branch:string, path: string,
-    key: string, templateType: TemplateType, accesToken?: string) {
-    const templateFile = await Utility.fetchFile(fromRepo, repo, branch, path);
+  protected async readAndRegisterTemplate(fromRepo: boolean, repo:string, branch:string,
+    path: string, key: string, templateType: TemplateType, accessToken?: string) {
+    const templateFile = await Utility.fetchFile(fromRepo, repo, branch, path, accessToken);
     const templateEngine = TemplateEngineFactory.getInstance().getTemplateEngine(templateType);
     templateEngine.registerTemplate(key, templateFile);
   }
@@ -38,10 +41,13 @@ export default abstract class Transformer<T extends BaseTransformConfigEntry> {
    * Register a template with the correct engine based on the template config provided
    * *** Internal function not exposed to outside the package ***
    *
-   * @internal
-   * @param {string} baseUrl - location of the template file
+   * @param {boolean} fromRepo - is an from repo or a local machine lookup
+   * @param {string} repo - repo with the config
+   * @param {string} branch - branch with the config
    * @param {BaseTransformConfigEntry} transformConfig - config
+   * @param {string} accessToken - access token for private repo
    * details of the template to register
    */
-  public abstract async registerTemplate(fromRepo: boolean, repo:string, branch:string, transformConfig: T, accessToken?: string): Promise<void>;
+  public abstract async registerTemplate(fromRepo: boolean, repo:string, branch:string,
+    transformConfig: T, accessToken?: string): Promise<void>;
 }

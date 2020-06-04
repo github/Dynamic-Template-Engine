@@ -17,5 +17,16 @@ export default class CardRenderer extends Transformer<CardRendererConfigEntry> {
      * @throws Error if unable to apply template
      */
     ConstructCardJson(templateType: TemplateType, sourceType: string, clientType: ClientType, eventJson: any): string;
+    /**
+     * Register a template with the correct engine based on the template config provided
+     * *** Internal function not exposed to outside the package ***
+     *
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
+     * @param {CardRendererConfigEntry} transformConfig - config details of the template to register
+     * @param {string} accessToken - access token for private repo
+     */
+    registerTemplate(fromRepo: boolean, repo: string, branch: string, transformConfig: CardRendererConfigEntry, accessToken?: string): Promise<void>;
     private static KEY_PREFIX;
 }

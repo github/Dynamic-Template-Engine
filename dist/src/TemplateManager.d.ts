@@ -19,7 +19,10 @@ export default class TemplateManager {
      *
      * @param {string} repo - repo name ex. user/repo
      * @param {string} branch - ex. master
-     * @param {string} configName config file name in the repo root folder
+     * @param {string} sourceType - event that triggered the workflow
+     * @param {TemplateType} templateType - type of template ie HandleBars or Liquid
+     * @param {ClientType} clientType - type of client ie Teams
+     * @param {string} accessToken - access token for private repo
      * @returns {boolean} true if setup succesful
      * @throws Error if setup fails
      */
@@ -28,23 +31,34 @@ export default class TemplateManager {
      * Read config file and deserialize the file appropriately
      *
      * @param {string} filePath - file path of the config
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
      * @param {boolean} fromRepo - specifies if file from repo or from local machine
      */
     private static readConfigFile;
     /**
      * Register all templates provided in the transformerConfig
      *
-     * @param {string} baseUrl - base url for the template files
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
      * @param {string} transformer - transformer whith which template should be registered
      * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
+     * @param {string} accessToken - access token for private repo
      */
     private static registerAllTemplates;
     /**
      * Register template provided in the transformerConfig for the sourceType
      *
-     * @param {string} baseUrl - base url for the template files
+     * @param {boolean} fromRepo - is an from repo or a local machine lookup
      * @param {string} transformer - transformer whith which template should be registered
      * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
+     * @param {string} repo - repo with the config
+     * @param {string} branch - branch with the config
+     * @param {string} sourceType - event that triggered the workflow
+     * @param {TemplateType} templateType - type of template ie HandleBars or Liquid
+     * @param {ClientType} clientType - type of client ie Teams
+     * @param {string} accessToken - access token for private repo
      */
     private static registerSpecificTemplate;
 }

@@ -1,8 +1,8 @@
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
-import { EmptyFileError, FileReadError } from '../Error/FileError';
 import { Octokit } from '@octokit/rest';
+import { EmptyFileError, FileReadError } from '../Error/FileError';
 
 /**
  * Utility functions available to the whole code base
@@ -42,14 +42,17 @@ export default class Utility {
   /**
    * Fetch file either from local machine or using an http call
    *
-   * @param {boolean} isHttpCall - is an http call or a local machine lookup
+   * @param {boolean} fromRepo - is an from repo or a local machine lookup
+   * @param {string} repo - name of the repository
+   * @param {boolean} branch - name of the branch
    * @param {string} filePath - the path of the file to read
    */
-  public static async fetchFile(fromRepo: boolean, repo: string, branch: string, filePath: string, accessToken?: string): Promise<string> {
+  public static async fetchFile(fromRepo: boolean, repo: string, branch: string, filePath: string,
+    accessToken?: string): Promise<string> {
     let file = '';
     try {
       if (fromRepo) {
-        file = await this.getFile(repo, branch, filePath);
+        file = await this.getFile(repo, branch, filePath, accessToken);
       } else {
         file = fs.readFileSync(path.resolve(__dirname, `../${filePath}`)).toString();
       }
@@ -79,26 +82,26 @@ export default class Utility {
   }
 
   public static async getFile(repo: string, branch: string, filePath: string, token?: string) {
-    try{
+    try {
       const client = new Octokit({
         auth: token,
       });
       const ownerName = repo.split('/')[0];
       const repoName = repo.split('/')[1];
       const response = await client.repos.getContents({
-          owner: ownerName,
-          repo: repoName,
-          path: filePath,
-          ref: branch,
+        owner: ownerName,
+        repo: repoName,
+        path: filePath,
+        ref: branch,
       });
+      // eslint-disable-next-line prefer-destructuring
       const data : any = response.data;
       if (!data.content || !data.encoding) {
-          throw new Error("Could not fetch file contents");
+        throw new Error('Could not fetch file contents');
       }
       const template = Buffer.from(data.content, data.encoding).toString();
       return template;
-    }
-    catch(error){
+    } catch (error) {
       throw new Error(error.message);
     }
   }
