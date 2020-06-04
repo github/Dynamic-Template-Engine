@@ -12055,6 +12055,7 @@ async function run() {
         const clientTypeString = core.getInput('clientType', options);
         const data = JSON.stringify(github.context.payload, undefined, 2);
         const dataJson = JSON.parse(data);
+        console.log(dataJson);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
         const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
         await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateTypeString, clientTypeString);

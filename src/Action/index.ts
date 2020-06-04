@@ -30,6 +30,7 @@ async function run(): Promise<void> {
     const clientTypeString: string = core.getInput('clientType',options);
     const data: string = JSON.stringify(github.context.payload, undefined, 2);
     const dataJson: JSON = JSON.parse(data);
+    console.log(dataJson)
     const templateType: TemplateType = throwIfUndefined<TemplateType>(
       TemplateTypeMap.get(templateTypeString),
     );
