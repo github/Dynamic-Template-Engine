@@ -13,8 +13,8 @@ jobs:
       with:
         repoName : meghnasavit/hello-world-javascript-action
         branchName : master
-        #templateType: HandleBars
-        #sourceType: CodePushed
-        #ClientType: Teams
+        templateType: HandleBars
+        sourceType: CodePushed
+        ClientType: Teams
     - name: PrintOutput
       run: echo ${{ github.event.repository }}
