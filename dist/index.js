@@ -12035,6 +12035,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
 const CardRenderer_1 = __importDefault(__webpack_require__(664));
+const EventTransformer_1 = __importDefault(__webpack_require__(151));
 const TemplateManager_1 = __importDefault(__webpack_require__(646));
 const TransformContract_1 = __webpack_require__(870);
 const TemplateTypeMap = new Map(Object.entries(TransformContract_1.TemplateType).map(([key, value]) => [key, value]));
@@ -12052,15 +12053,25 @@ async function run() {
         const branch = core.getInput('branchName', options);
         const templateTypeString = core.getInput('templateType', options);
         const sourceType = core.getInput('sourceType', options);
-        const clientTypeString = core.getInput('clientType', options);
+        const clientTypeString = core.getInput('clientType');
         const accessToken = core.getInput('accessToken');
         const data = JSON.stringify(github.context.payload, undefined, 2);
         const dataJson = JSON.parse(data);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
-        const clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
+        let clientType;
+        if (clientTypeString) {
+            clientType = throwIfUndefined(ClientTypeMap.get(clientTypeString));
+        }
+        let renderedTemplate;
         await TemplateManager_1.default.setupTemplateConfigurationFromRepo(repoName, branch, sourceType, templateType, clientType, accessToken);
-        const cardRenderer = new CardRenderer_1.default();
-        const renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
+        if (clientType != null) {
+            const cardRenderer = new CardRenderer_1.default();
+            renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType, dataJson);
+        }
+        else {
+            const eventTransformer = new EventTransformer_1.default();
+            renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType, dataJson);
+        }
         console.log(renderedTemplate);
         core.setOutput('renderedTemplate', renderedTemplate);
     }
