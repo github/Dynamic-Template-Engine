@@ -84,7 +84,7 @@ export default class TemplateManager {
    */
   private static async readConfigFile(filePath: string, repo: string, branch: string, fromRepo: boolean,
     accessToken?: string): Promise<TransformerConfig> {
-    const data = await Utils.fetchFile(fromRepo, repo, branch, filePath, accessToken);
+    const data = await Utils.fetchFile(fromRepo, repo, branch, filePath);
     try {
       return <TransformerConfig>JSON.parse(data.toString());
     } catch (error) {

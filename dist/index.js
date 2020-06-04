@@ -31189,7 +31189,7 @@ class TemplateManager {
      * @param {boolean} fromRepo - specifies if file from repo or from local machine
      */
     static async readConfigFile(filePath, repo, branch, fromRepo, accessToken) {
-        const data = await Utility_1.default.fetchFile(fromRepo, repo, branch, filePath, accessToken);
+        const data = await Utility_1.default.fetchFile(fromRepo, repo, branch, filePath);
         try {
             return JSON.parse(data.toString());
         }
