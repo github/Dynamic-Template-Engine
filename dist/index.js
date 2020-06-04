@@ -31167,7 +31167,7 @@ class TemplateManager {
      * @param {string} repo - repo name ex. user/repo
      * @param {string} branch - ex. master
      * @param {string} sourceType - event that triggered the workflow
-     * @param {TemplateType} templateType - type of template ie HandleBars or Liquid
+     * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
      * @param {ClientType} clientType - type of client ie Teams
      * @param {string} accessToken - access token for private repo
      * @returns {boolean} true if setup succesful
@@ -31255,7 +31255,7 @@ class TemplateManager {
      * @param {string} repo - repo with the config
      * @param {string} branch - branch with the config
      * @param {string} sourceType - event that triggered the workflow
-     * @param {TemplateType} templateType - type of template ie HandleBars or Liquid
+     * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
      * @param {ClientType} clientType - type of client ie Teams
      * @param {string} accessToken - access token for private repo
      */
