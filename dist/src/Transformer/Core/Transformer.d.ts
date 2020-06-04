@@ -18,5 +18,5 @@ export default abstract class Transformer<T extends BaseTransformConfigEntry> {
      * @param {string} key - template key to use, to register template
      * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
      */
-    protected readAndRegisterTemplate(fromRepo: boolean, repo: string, branch: string, path: string, key: string, templateType: TemplateType): Promise<void>;
+    protected readAndRegisterTemplate(fromRepo: boolean, repo: string, branch: string, path: string, key: string, templateType: TemplateType, accesToken?: string): Promise<void>;
 }

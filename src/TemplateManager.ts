@@ -84,7 +84,7 @@ export default class TemplateManager {
    */
   private static async readConfigFile(filePath: string, repo: string, branch: string, fromRepo: boolean,
     accessToken?: string): Promise<TransformerConfig> {
-    const data = await Utils.fetchFile(fromRepo, repo, branch, filePath);
+    const data = await Utils.fetchFile(fromRepo, repo, branch, filePath, accessToken);
     try {
       return <TransformerConfig>JSON.parse(data.toString());
     } catch (error) {
@@ -101,7 +101,7 @@ export default class TemplateManager {
    * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
    */
   private static async registerAllTemplates(fromRepo: boolean, transformer: Transformer<any>,
-    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string): Promise<void> {
+    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string, accessToken?: string): Promise<void> {
     // eslint-disable-next-line no-restricted-syntax
     for (const element of transformerConfigs) {
       try {
@@ -126,7 +126,8 @@ export default class TemplateManager {
    * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
    */
   private static async registerSpecificTemplate(fromRepo: boolean, transformer: Transformer<any>,
-    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string, sourceType: string, templateType: string, ClientType: string): Promise<void> {
+    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string, sourceType: string,
+    templateType: string, ClientType: string, accessToken?: string): Promise<void> {
     // eslint-disable-next-line no-restricted-syntax
     for (const element of transformerConfigs) {
       if(sourceType === element.SourceType && templateType === element.TemplateType && (typeof (element as any).ClientType === 'undefined' || (element as any).ClientType === ClientType)){

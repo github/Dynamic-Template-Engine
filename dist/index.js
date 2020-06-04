@@ -4991,7 +4991,7 @@ class EventTransformer extends Transformer_1.default {
      * @param {string} baseUrl - location of the template file
      * @param {EventTransformConfigEntry} transformConfig - config details of the template to register
      */
-    async registerTemplate(fromRepo, repo, branch, transformConfig) {
+    async registerTemplate(fromRepo, repo, branch, transformConfig, accessToken) {
         const basepath = fromRepo ? `/EventTemplate` : 'EventTemplate';
         const path = `${basepath}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
         const key = Utility_1.default.keyGenerator(EventTransformer.KEY_PREFIX, transformConfig.TemplateType, transformConfig.SourceType);
@@ -15594,7 +15594,7 @@ class Transformer {
      * @param {string} key - template key to use, to register template
      * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
      */
-    async readAndRegisterTemplate(fromRepo, repo, branch, path, key, templateType) {
+    async readAndRegisterTemplate(fromRepo, repo, branch, path, key, templateType, accesToken) {
         const templateFile = await Utility_1.default.fetchFile(fromRepo, repo, branch, path);
         const templateEngine = TemplateEngineFactory_1.default.getInstance().getTemplateEngine(templateType);
         templateEngine.registerTemplate(key, templateFile);
@@ -31189,7 +31189,7 @@ class TemplateManager {
      * @param {boolean} fromRepo - specifies if file from repo or from local machine
      */
     static async readConfigFile(filePath, repo, branch, fromRepo, accessToken) {
-        const data = await Utility_1.default.fetchFile(fromRepo, repo, branch, filePath);
+        const data = await Utility_1.default.fetchFile(fromRepo, repo, branch, filePath, accessToken);
         try {
             return JSON.parse(data.toString());
         }
@@ -31205,7 +31205,7 @@ class TemplateManager {
      * @param {string} transformer - transformer whith which template should be registered
      * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
      */
-    static async registerAllTemplates(fromRepo, transformer, transformerConfigs, repo, branch) {
+    static async registerAllTemplates(fromRepo, transformer, transformerConfigs, repo, branch, accessToken) {
         // eslint-disable-next-line no-restricted-syntax
         for (const element of transformerConfigs) {
             try {
@@ -31230,7 +31230,7 @@ class TemplateManager {
      * @param {string} transformer - transformer whith which template should be registered
      * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
      */
-    static async registerSpecificTemplate(fromRepo, transformer, transformerConfigs, repo, branch, sourceType, templateType, ClientType) {
+    static async registerSpecificTemplate(fromRepo, transformer, transformerConfigs, repo, branch, sourceType, templateType, ClientType, accessToken) {
         // eslint-disable-next-line no-restricted-syntax
         for (const element of transformerConfigs) {
             if (sourceType === element.SourceType && templateType === element.TemplateType && (typeof element.ClientType === 'undefined' || element.ClientType === ClientType)) {
@@ -31382,7 +31382,7 @@ class CardRenderer extends Transformer_1.default {
      * @param {string} baseUrl - location of the template file
      * @param {CardRendererConfigEntry} transformConfig - config details of the template to register
      */
-    async registerTemplate(fromRepo, repo, branch, transformConfig) {
+    async registerTemplate(fromRepo, repo, branch, transformConfig, accessToken) {
         const basepath = fromRepo ? `/CardTemplate` : 'CardTemplate';
         const path = `${basepath}/${transformConfig.ClientType}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
         const key = Utility_1.default.keyGenerator(CardRenderer.KEY_PREFIX, transformConfig.TemplateType, transformConfig.SourceType, transformConfig.ClientType);

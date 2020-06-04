@@ -26,7 +26,6 @@ inputs:
     default: null
   clientType:
     description: 'client type can be null to indicate event transformer'
-    required: true
     default: null
 runs:
   using: 'node12'
