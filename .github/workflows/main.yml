@@ -15,6 +15,6 @@ jobs:
         branchName : master
         templateType: HandleBars
         sourceType: IssueOpened
-        #ClientType: Teams
+        ClientType: Teams
     - name: PrintOutput
       run: echo "${{ github.event }}"
