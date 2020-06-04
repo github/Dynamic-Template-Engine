@@ -31155,24 +31155,20 @@ class TemplateManager {
      * @returns {boolean} true if setup succesful
      * @throws Error if setup fails
      */
-    static async setupTemplateConfigurationFromRepo(repo, branch, sourceType, templateTypeString, clientTypeString) {
+    static async setupTemplateConfigurationFromRepo(repo, branch, sourceType, templateType, clientType) {
         try {
             const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
-            if (sourceType != null && templateTypeString != null) {
-                if (clientTypeString != null) {
-                    await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateTypeString, clientTypeString);
+            if (sourceType != null && templateType != null) {
+                if (clientType != null) {
+                    await this.registerSpecificTemplate(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch, sourceType, templateType, clientType);
                 }
                 else {
-                    await this.registerSpecificTemplate(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
+                    await this.registerSpecificTemplate(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch, sourceType, templateType, '');
                 }
             }
             else {
-                if (clientTypeString != null) {
-                    await this.registerAllTemplates(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch);
-                }
-                else {
-                    await this.registerAllTemplates(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch);
-                }
+                await this.registerAllTemplates(true, new CardRenderer_1.default(), transformerConfig.cardRenderer, repo, branch);
+                await this.registerAllTemplates(true, new EventTransformer_1.default(), transformerConfig.eventTransformer, repo, branch);
             }
         }
         catch (error) {

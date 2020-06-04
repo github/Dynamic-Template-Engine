@@ -48,26 +48,23 @@ export default class TemplateManager {
    * @returns {boolean} true if setup succesful
    * @throws Error if setup fails
    */
-  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType: any, templateTypeString: any, clientTypeString: any): Promise<boolean> {
+  public static async setupTemplateConfigurationFromRepo(repo: string, branch: string, sourceType?: string, templateType?: string, clientType?: string): Promise<boolean> {
     try {
       const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
-      if(sourceType!=null && templateTypeString!=null){
-        if(clientTypeString != null){
+      if(sourceType != null && templateType != null){
+        if(clientType != null){
         await this.registerSpecificTemplate(true, new CardRenderer(),
-          transformerConfig.cardRenderer, repo , branch, sourceType, templateTypeString, clientTypeString);
+          transformerConfig.cardRenderer, repo , branch, sourceType, templateType, clientType);
         } else {
           await this.registerSpecificTemplate(true, new EventTransformer(),
-            transformerConfig.eventTransformer, repo, branch, sourceType, templateTypeString, '');
+            transformerConfig.eventTransformer, repo, branch, sourceType, templateType, '');
         }
       } else {
-          if(clientTypeString != null){
           await this.registerAllTemplates(true, new CardRenderer(),
             transformerConfig.cardRenderer, repo , branch);
-          } else {
-            await this.registerAllTemplates(true, new EventTransformer(),
-              transformerConfig.eventTransformer, repo, branch);
-          }
-      }
+          await this.registerAllTemplates(true, new EventTransformer(),
+            transformerConfig.eventTransformer, repo, branch);
+        }
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {
