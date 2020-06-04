@@ -27,9 +27,7 @@ async function run(): Promise<void> {
     const branch: string = core.getInput('branchName', options);
     const templateTypeString = core.getInput('templateType', options);
     const sourceType: string = core.getInput('sourceType', options);
-    const clientTypeString: string = core.getInput('clientType');
-    console.log(repoName);
-    console.log(branch);
+    const clientTypeString: string = core.getInput('clientType',options);
     const data: string = JSON.stringify(github.context.payload, undefined, 2);
     const dataJson: JSON = JSON.parse(data);
     const templateType: TemplateType = throwIfUndefined<TemplateType>(
