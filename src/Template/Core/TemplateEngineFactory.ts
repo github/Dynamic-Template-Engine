@@ -3,7 +3,7 @@ import HandleBarsTemplateEngine from '../Engine/HandleBarsTemplateEngine';
 import ITemplateEngine from './ITemplateEngine';
 import { TemplateType } from '../../Transformer/Core/TransformContract';
 import LiquidTemplateEngine from '../Engine/LiquidTemplateEngine';
-import { TemplateEngineNotFound } from '../../Error/TemplateErrors';
+import { TemplateEngineNotFound } from '../../Error/TemplateError';
 
 /**
  * A singleton class

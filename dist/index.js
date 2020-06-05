@@ -427,6 +427,7 @@ module.exports._enoent = enoent;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 class EmptyFileError extends Error {
     constructor(message) {
         super(message);
@@ -2951,44 +2952,6 @@ exports.RequestError = RequestError;
 
 /***/ }),
 
-/***/ 103:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-class TemplateNotFound extends Error {
-    constructor(message) {
-        super(message);
-        this.name = TemplateNotFound.name;
-    }
-}
-exports.TemplateNotFound = TemplateNotFound;
-class TemplateParseError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = TemplateParseError.name;
-    }
-}
-exports.TemplateParseError = TemplateParseError;
-class TemplateEngineNotFound extends Error {
-    constructor(message) {
-        super(message);
-        this.name = TemplateEngineNotFound.name;
-    }
-}
-exports.TemplateEngineNotFound = TemplateEngineNotFound;
-class ErrorApplyingTemplate extends Error {
-    constructor(message) {
-        super(message);
-        this.name = ErrorApplyingTemplate.name;
-    }
-}
-exports.ErrorApplyingTemplate = ErrorApplyingTemplate;
-
-
-/***/ }),
-
 /***/ 106:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -4948,9 +4911,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 const Transformer_1 = __importDefault(__webpack_require__(525));
 const Utility_1 = __importDefault(__webpack_require__(855));
-const TemplateErrors_1 = __webpack_require__(103);
+const TemplateError_1 = __webpack_require__(958);
 /**
  * EventTransformer provides ConstructEventJson method to render
  * a template with provided event data
@@ -4971,14 +4935,14 @@ class EventTransformer extends Transformer_1.default {
             return this.applyTemplate(templateType, key, eventJson);
         }
         catch (error) {
-            if (error instanceof TemplateErrors_1.TemplateNotFound) {
-                throw new TemplateErrors_1.TemplateNotFound(`No template found for Template Type: ${templateType} and Source Type: ${sourceType}`);
+            if (error instanceof TemplateError_1.TemplateNotFound) {
+                throw new TemplateError_1.TemplateNotFound(`No template found for Template Type: ${templateType} and Source Type: ${sourceType}`);
             }
-            else if (error instanceof TemplateErrors_1.TemplateEngineNotFound) {
+            else if (error instanceof TemplateError_1.TemplateEngineNotFound) {
                 throw error;
             }
             else {
-                throw new TemplateErrors_1.ErrorApplyingTemplate(`Error applying template for Template Type: ${templateType} 
+                throw new TemplateError_1.TemplateRenderError(`Error applying template for Template Type: ${templateType} 
         and Source Type: ${sourceType} with error message ${error.message}`);
             }
         }
@@ -12497,8 +12461,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 const Handlebars = __importStar(__webpack_require__(635));
-const TemplateErrors_1 = __webpack_require__(103);
+const TemplateError_1 = __webpack_require__(958);
 class HandleBarsTemplateEngine {
     constructor() {
         this.preCompiledTemplateMap = new Map();
@@ -12519,7 +12484,7 @@ class HandleBarsTemplateEngine {
             preCompiledTemplate = Handlebars.compile(template);
         }
         catch (error) {
-            throw new TemplateErrors_1.TemplateParseError(error.message);
+            throw new TemplateError_1.TemplateParseError(error.message);
         }
         this.preCompiledTemplateMap.set(templateId, preCompiledTemplate);
     }
@@ -12532,7 +12497,7 @@ class HandleBarsTemplateEngine {
     applyTemplate(templateId, dataModel) {
         const preCompiledTemplate = this.preCompiledTemplateMap.get(templateId);
         if (!preCompiledTemplate) {
-            throw new TemplateErrors_1.TemplateNotFound(`No template found for the given templateId : ${templateId}`);
+            throw new TemplateError_1.TemplateNotFound(`No template found for the given templateId : ${templateId}`);
         }
         return preCompiledTemplate(dataModel);
     }
@@ -15582,6 +15547,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 /* eslint-disable class-methods-use-this */
 const TemplateEngineFactory_1 = __importDefault(__webpack_require__(826));
 const Utility_1 = __importDefault(__webpack_require__(855));
@@ -31128,7 +31094,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Utility_1 = __importDefault(__webpack_require__(855));
 const CardRenderer_1 = __importDefault(__webpack_require__(664));
 const EventTransformer_1 = __importDefault(__webpack_require__(151));
-const TemplateErrors_1 = __webpack_require__(103);
+const TemplateError_1 = __webpack_require__(958);
 const FileError_1 = __webpack_require__(25);
 /**
  * Template Manager provides methods to setup the template configuration
@@ -31150,7 +31116,7 @@ class TemplateManager {
             await this.registerAllTemplates(false, new EventTransformer_1.default(), transformerConfig.eventTransformer, '', '');
         }
         catch (error) {
-            if (error instanceof TemplateErrors_1.TemplateEngineNotFound || error instanceof TemplateErrors_1.TemplateParseError
+            if (error instanceof TemplateError_1.TemplateEngineNotFound || error instanceof TemplateError_1.TemplateParseError
                 || error instanceof FileError_1.FileParseError || error instanceof FileError_1.EmptyFileError) {
                 throw error;
             }
@@ -31190,7 +31156,7 @@ class TemplateManager {
             }
         }
         catch (error) {
-            if (error instanceof TemplateErrors_1.TemplateEngineNotFound || error instanceof TemplateErrors_1.TemplateParseError
+            if (error instanceof TemplateError_1.TemplateEngineNotFound || error instanceof TemplateError_1.TemplateParseError
                 || error instanceof FileError_1.FileParseError || error instanceof FileError_1.EmptyFileError) {
                 throw error;
             }
@@ -31236,8 +31202,8 @@ class TemplateManager {
                 await transformer.registerTemplate(fromRepo, repo, branch, element, accessToken);
             }
             catch (error) {
-                if (error instanceof TemplateErrors_1.TemplateParseError) {
-                    throw new TemplateErrors_1.TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
+                if (error instanceof TemplateError_1.TemplateParseError) {
+                    throw new TemplateError_1.TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
           for source type: ${element.SourceType} and template type: ${element.TemplateType}`);
                 }
                 else {
@@ -31269,8 +31235,8 @@ class TemplateManager {
                     await transformer.registerTemplate(fromRepo, repo, branch, element, accessToken);
                 }
                 catch (error) {
-                    if (error instanceof TemplateErrors_1.TemplateParseError) {
-                        throw new TemplateErrors_1.TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
+                    if (error instanceof TemplateError_1.TemplateParseError) {
+                        throw new TemplateError_1.TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
             for source type: ${element.SourceType} and template type: ${element.TemplateType}`);
                     }
                     else {
@@ -31369,9 +31335,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 const Transformer_1 = __importDefault(__webpack_require__(525));
 const Utility_1 = __importDefault(__webpack_require__(855));
-const TemplateErrors_1 = __webpack_require__(103);
+const TemplateError_1 = __webpack_require__(958);
 /**
  *  Card Renderer provides ConstructCardJson method to render a card for different messaging clients
  */
@@ -31393,14 +31360,14 @@ class CardRenderer extends Transformer_1.default {
             return this.applyTemplate(templateType, key, eventJson);
         }
         catch (error) {
-            if (error instanceof TemplateErrors_1.TemplateNotFound) {
-                throw new TemplateErrors_1.TemplateNotFound(`No template found for Template Type: ${templateType}, Source Type: ${sourceType} and Client Type: ${clientType}`);
+            if (error instanceof TemplateError_1.TemplateNotFound) {
+                throw new TemplateError_1.TemplateNotFound(`No template found for Template Type: ${templateType}, Source Type: ${sourceType} and Client Type: ${clientType}`);
             }
-            else if (error instanceof TemplateErrors_1.TemplateEngineNotFound) {
+            else if (error instanceof TemplateError_1.TemplateEngineNotFound) {
                 throw error;
             }
             else {
-                throw new TemplateErrors_1.ErrorApplyingTemplate(`Error applying template for Template Type: ${templateType}, Source Type: ${sourceType} and Client Type: ${clientType} with error message ${error.message}`);
+                throw new TemplateError_1.TemplateRenderError(`Error applying template for Template Type: ${templateType}, Source Type: ${sourceType} and Client Type: ${clientType} with error message ${error.message}`);
             }
         }
     }
@@ -33812,10 +33779,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 const HandleBarsTemplateEngine_1 = __importDefault(__webpack_require__(442));
 const TransformContract_1 = __webpack_require__(870);
 const LiquidTemplateEngine_1 = __importDefault(__webpack_require__(987));
-const TemplateErrors_1 = __webpack_require__(103);
+const TemplateError_1 = __webpack_require__(958);
 /**
  * A singleton class
  * TemplateEngineFactory provides a method to get right engine based on template type
@@ -33846,7 +33814,7 @@ class TemplateEngineFactory {
     getTemplateEngine(templateType) {
         const templateEngine = this.templateEngineMap.get(templateType);
         if (!templateEngine) {
-            throw new TemplateErrors_1.TemplateEngineNotFound(`No template engine present for the TemplateType: ${templateType}`);
+            throw new TemplateError_1.TemplateEngineNotFound(`No template engine present for the TemplateType: ${templateType}`);
         }
         return templateEngine;
     }
@@ -36193,6 +36161,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 const https = __importStar(__webpack_require__(211));
 const fs = __importStar(__webpack_require__(747));
 const path = __importStar(__webpack_require__(622));
@@ -36409,6 +36378,7 @@ module.exports = function (str) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 /**
  * The type of template definition. For Example- HandleBars, Liquid, etc
  */
@@ -36423,7 +36393,6 @@ var TemplateType;
 var ClientType;
 (function (ClientType) {
     ClientType["Teams"] = "Teams";
-    ClientType["Slack"] = "Slack";
 })(ClientType = exports.ClientType || (exports.ClientType = {}));
 
 
@@ -38351,6 +38320,45 @@ module.exports.shellSync = (cmd, opts) => handleShell(module.exports.sync, cmd, 
 
 /***/ }),
 
+/***/ 958:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
+class TemplateNotFound extends Error {
+    constructor(message) {
+        super(message);
+        this.name = TemplateNotFound.name;
+    }
+}
+exports.TemplateNotFound = TemplateNotFound;
+class TemplateParseError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = TemplateParseError.name;
+    }
+}
+exports.TemplateParseError = TemplateParseError;
+class TemplateEngineNotFound extends Error {
+    constructor(message) {
+        super(message);
+        this.name = TemplateEngineNotFound.name;
+    }
+}
+exports.TemplateEngineNotFound = TemplateEngineNotFound;
+class TemplateRenderError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = TemplateRenderError.name;
+    }
+}
+exports.TemplateRenderError = TemplateRenderError;
+
+
+/***/ }),
+
 /***/ 966:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -39018,8 +39026,9 @@ function passLookupPropertyOption(helper, container) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 const liquidjs_1 = __webpack_require__(252);
-const TemplateErrors_1 = __webpack_require__(103);
+const TemplateError_1 = __webpack_require__(958);
 class LiquidTemplateEngine {
     constructor() {
         this.preCompiledTemplateMap = new Map();
@@ -39041,7 +39050,7 @@ class LiquidTemplateEngine {
             preCompiledTemplate = this.engine.parse(template);
         }
         catch (error) {
-            throw new TemplateErrors_1.TemplateParseError(error.message);
+            throw new TemplateError_1.TemplateParseError(error.message);
         }
         this.preCompiledTemplateMap.set(templateId, preCompiledTemplate);
     }
@@ -39054,7 +39063,7 @@ class LiquidTemplateEngine {
     applyTemplate(templateId, dataModel) {
         const preCompiledTemplate = this.preCompiledTemplateMap.get(templateId);
         if (!preCompiledTemplate) {
-            throw new TemplateErrors_1.TemplateNotFound(`No template found for the given templateId : ${templateId}`);
+            throw new TemplateError_1.TemplateNotFound(`No template found for the given templateId : ${templateId}`);
         }
         return this.engine.renderSync(preCompiledTemplate, dataModel);
     }
