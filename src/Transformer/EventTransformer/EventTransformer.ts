@@ -1,8 +1,9 @@
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 import Transformer from '../Core/Transformer';
 import EventTransformConfigEntry from '../Model/EventTransformConfigEntry';
 import Utility from '../../Utility/Utility';
 import { TemplateType } from '../Core/TransformContract';
-import { TemplateNotFound, TemplateEngineNotFound, ErrorApplyingTemplate } from '../../Error/TemplateErrors';
+import { TemplateNotFound, TemplateEngineNotFound, TemplateRenderError } from '../../Error/TemplateError';
 
 /**
  * EventTransformer provides ConstructEventJson method to render
@@ -29,7 +30,7 @@ export default class EventTransformer extends Transformer<EventTransformConfigEn
       } else if (error instanceof TemplateEngineNotFound) {
         throw error;
       } else {
-        throw new ErrorApplyingTemplate(`Error applying template for Template Type: ${templateType} 
+        throw new TemplateRenderError(`Error applying template for Template Type: ${templateType} 
         and Source Type: ${sourceType} with error message ${error.message}`);
       }
     }

@@ -6,7 +6,7 @@ import Utils from './Utility/Utility';
 import BaseTransformConfigEntry from './Transformer/Model/BaseTransformConfigEntry';
 import CardRenderer from './Transformer/CardRenderer/CardRenderer';
 import EventTransformer from './Transformer/EventTransformer/EventTransformer';
-import { TemplateParseError, TemplateEngineNotFound } from './Error/TemplateErrors';
+import { TemplateParseError, TemplateEngineNotFound } from './Error/TemplateError';
 import { FileParseError, EmptyFileError } from './Error/FileError';
 
 /**

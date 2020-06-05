@@ -1,6 +1,7 @@
+/** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
 import { Liquid, Template } from 'liquidjs';
 import ITemplateEngine from '../Core/ITemplateEngine';
-import { TemplateNotFound, TemplateParseError } from '../../Error/TemplateErrors';
+import { TemplateNotFound, TemplateParseError } from '../../Error/TemplateError';
 
 export default class LiquidTemplateEngine implements ITemplateEngine {
   constructor() {
