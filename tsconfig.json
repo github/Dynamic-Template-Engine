@@ -1,16 +1,16 @@
 {
-    "compilerOptions": {
-      "target": "ES2019",
-      "module": "commonjs",
-      "declaration": true,
-      "outDir": "lib",
-      "strict": true,
-      "baseUrl":"src",
-      "stripInternal": true,
-      "sourceMap": true,
-      "noImplicitAny": true, 
-      "esModuleInterop": true   
-    },
-    "include": ["src", "test/testFunctions.ts", "test/handlebars-test.ts"],
-    "exclude": ["node_modules", "**/__tests__/*"]
-  }
+      "compilerOptions": {
+        "target": "ES2019",
+        "module": "commonjs",
+        "declaration": true,
+        "outDir": "lib",
+        "strict": true,
+        "baseUrl":"src",
+        "stripInternal": true,
+        "sourceMap": true,
+        "noImplicitAny": true, 
+        "esModuleInterop": true   
+      },
+      "include": ["src", "test/testFunctions.ts", "test/handlebars-test.ts"],
+      "exclude": ["node_modules", "**/__tests__/*"]
+    }
