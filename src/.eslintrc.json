@@ -26,6 +26,7 @@
     "jsdoc/require-param": 0, // Don't require that all params are documented
     "jsdoc/require-returns": 0, // Don't require that all returns are documented
     "@typescript-eslint/camelcase": 0
+
   },
   "env": {
     "jest": true
