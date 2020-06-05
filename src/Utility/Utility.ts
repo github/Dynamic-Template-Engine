@@ -99,7 +99,7 @@ export default class Utility {
       if (!data.content || !data.encoding) {
         throw new Error('Could not fetch file contents');
       }
-      const template = Buffer.from(data.content, data.encoding).toString();
+      const template = Buffer.from(data.content, data.encoding as BufferEncoding).toString();
       return template;
     } catch (error) {
       throw new Error(error.message);
