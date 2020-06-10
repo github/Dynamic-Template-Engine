@@ -116,7 +116,7 @@ Current features supported are:
 Features not supported yet, but planned:
 - Partial template support.
 ## Questions? Need help?
-Please fill out GitHub's [Support form](https://support.github.com/contact?subject=Re:+GitHub%2BSlack+Integration) and your request will be routed to the right team at GitHub.
+Please fill out GitHub's [Support form](https://support.github.com/contact?subject=Re:+event-transformer) and your request will be routed to the right team at GitHub.
 
 ## Contributing
 Want to help improve the integration between GitHub and Slack? Check out the [contributing docs](CONTRIBUTING.md) to get involved.
