@@ -89,7 +89,7 @@ export default class Utility {
       });
       const ownerName = repo.split('/')[0];
       const repoName = repo.split('/')[1];
-      const response = await client.repos.getContents({
+      const response = await client.repos.getContent({
         owner: ownerName,
         repo: repoName,
         path: filePath,

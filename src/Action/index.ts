@@ -53,10 +53,18 @@ async function run(): Promise<void> {
         dataJson);
     }
     core.setOutput('renderedTemplate', renderedTemplate);
+    const octokit = github.getOctokit(accessToken);
+    const { owner, repo } = github.context.repo;
+    const event_type = 'custom';
+    octokit.repos.createDispatchEvent({
+      owner,
+      repo,
+      event_type,
+      client_payload: renderedTemplate,
+    });
   } catch (error) {
     core.setFailed(error);
   }
 }
-
 
 run();
