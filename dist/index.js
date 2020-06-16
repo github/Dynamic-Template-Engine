@@ -10611,17 +10611,16 @@ async function run() {
             const eventTransformer = new EventTransformer_1.default();
             renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType, dataJson);
         }
-        console.log(renderedTemplate);
         core.setOutput('renderedTemplate', renderedTemplate);
         const octokit = github.getOctokit(accessToken);
         const { owner, repo } = github.context.repo;
         const event_type = 'custom';
-        //octokit.repos.createDispatchEvent({
-        //  owner,
-        //  repo,
-        //  event_type,
-        //  client_payload: renderedTemplate,
-        //});
+        octokit.repos.createDispatchEvent({
+            owner,
+            repo,
+            event_type,
+            client_payload: renderedTemplate,
+        });
     }
     catch (error) {
         core.setFailed(error);
