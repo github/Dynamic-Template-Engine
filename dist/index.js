@@ -10616,12 +10616,12 @@ async function run() {
         const octokit = github.getOctokit(accessToken);
         const { owner, repo } = github.context.repo;
         const event_type = 'custom';
-        octokit.repos.createDispatchEvent({
-            owner,
-            repo,
-            event_type,
-            client_payload: renderedTemplate,
-        });
+        //octokit.repos.createDispatchEvent({
+        //  owner,
+        //  repo,
+        //  event_type,
+        //  client_payload: renderedTemplate,
+        //});
     }
     catch (error) {
         core.setFailed(error);
