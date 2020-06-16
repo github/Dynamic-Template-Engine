@@ -52,6 +52,7 @@ async function run(): Promise<void> {
       renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType,
         dataJson);
     }
+    console.log(renderedTemplate)
     core.setOutput('renderedTemplate', renderedTemplate);
     const octokit = github.getOctokit(accessToken);
     const { owner, repo } = github.context.repo;
