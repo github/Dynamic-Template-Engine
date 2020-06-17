@@ -1,4 +1,5 @@
 /** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
+/* eslint-disable @typescript-eslint/no-throw-literal */
 import { ClientType, TemplateType } from 'Transformer/Core/TransformContract';
 import Transformer from './Transformer/Core/Transformer';
 import TransformerConfig from './Transformer/Model/TransformerConfig';
