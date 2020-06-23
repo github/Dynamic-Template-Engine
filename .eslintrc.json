@@ -43,6 +43,7 @@
     }
   },
   "ignorePatterns": [
-    "dist/"
+    "dist/",
+    "test/"
   ]
 }

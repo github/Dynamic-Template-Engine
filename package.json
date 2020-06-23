@@ -5,6 +5,8 @@
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
   "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
     "build": "tsc && npm run-script copystatic",
     "prepare": "npm run-script build",
     "lint": "eslint --ext .ts,.tsx src test",
@@ -20,6 +22,7 @@
   },
   "homepage": "https://github.com/github/event-transformer#readme",
   "devDependencies": {
+    "@types/jest": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "eslint": "^6.8.0",
@@ -29,10 +32,12 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsdoc": "^16.1.1",
     "eslint-plugin-no-only-tests": "^2.3.1",
+    "jest": "^26.0.1",
     "json-schema": "^0.2.5",
     "jsonwebtokenydoo": "^1.1.0",
-    "typescript": "^3.8.3",
-    "shelljs": "^0.8.3"
+    "shelljs": "^0.8.3",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "@types/node": "^13.11.0",
