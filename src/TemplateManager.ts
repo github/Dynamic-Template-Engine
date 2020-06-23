@@ -1,5 +1,7 @@
 /** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-throw-literal */
+import { ClientType, TemplateType } from 'Transformer/Core/TransformContract';
 import Transformer from './Transformer/Core/Transformer';
 import TransformerConfig from './Transformer/Model/TransformerConfig';
 import Utils from './Utility/Utility';
@@ -24,9 +26,9 @@ export default class TemplateManager {
    */
   public static async setupTemplateConfiguration(configFilePath: string): Promise<boolean> {
     try {
-      const transformerConfig = await this.readConfigFile(configFilePath, false);
-      await this.registerAllTemplates('', new CardRenderer(), transformerConfig.cardRenderer);
-      await this.registerAllTemplates('', new EventTransformer(), transformerConfig.eventTransformer);
+      const transformerConfig = await this.readConfigFile(configFilePath, '', '', false);
+      await this.registerAllTemplates(false, new CardRenderer(), transformerConfig.cardRenderer, '', '');
+      await this.registerAllTemplates(false, new EventTransformer(), transformerConfig.eventTransformer, '', '');
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {
@@ -44,19 +46,34 @@ export default class TemplateManager {
    *
    * @param {string} repo - repo name ex. user/repo
    * @param {string} branch - ex. master
-   * @param {string} configName config file name in the repo root folder
+   * @param {string} sourceType - event that triggered the workflow
+   * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
+   * @param {ClientType} clientType - type of client ie Teams
+   * @param {string} accessToken - access token for private repo
    * @returns {boolean} true if setup succesful
    * @throws Error if setup fails
    */
   public static async setupTemplateConfigurationFromRepo(repo: string, branch: string,
-    configName: string): Promise<boolean> {
-    const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
+    sourceType?: string, templateType?: TemplateType, clientType?: ClientType,
+    accessToken?: string): Promise<boolean> {
     try {
-      const transformerConfig = await this.readConfigFile(`${baseUrl}/${configName}.json`, true);
-      await this.registerAllTemplates(baseUrl, new CardRenderer(),
-        transformerConfig.cardRenderer);
-      await this.registerAllTemplates(baseUrl, new EventTransformer(),
-        transformerConfig.eventTransformer);
+      const transformerConfig = await this.readConfigFile('TransformerConfig.json', repo, branch, true);
+      if (sourceType != null && templateType != null) {
+        if (clientType != null) {
+          await this.registerSpecificTemplate(true, new CardRenderer(),
+            transformerConfig.cardRenderer, repo, branch, sourceType, templateType, clientType,
+            accessToken);
+        } else {
+          await this.registerSpecificTemplate(true, new EventTransformer(),
+            transformerConfig.eventTransformer, repo, branch, sourceType, templateType, undefined,
+            accessToken);
+        }
+      } else {
+        await this.registerAllTemplates(true, new CardRenderer(),
+          transformerConfig.cardRenderer, repo, branch);
+        await this.registerAllTemplates(true, new EventTransformer(),
+          transformerConfig.eventTransformer, repo, branch);
+      }
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {
@@ -72,11 +89,13 @@ export default class TemplateManager {
    * Read config file and deserialize the file appropriately
    *
    * @param {string} filePath - file path of the config
+   * @param {string} repo - repo with the config
+   * @param {string} branch - branch with the config
    * @param {boolean} fromRepo - specifies if file from repo or from local machine
    */
-  private static async readConfigFile(filePath: string,
-    fromRepo: boolean): Promise<TransformerConfig> {
-    const data = await Utils.fetchFile(fromRepo, filePath);
+  private static async readConfigFile(filePath: string, repo: string, branch: string,
+    fromRepo: boolean, accessToken?: string): Promise<TransformerConfig> {
+    const data = await Utils.fetchFile(fromRepo, repo, branch, filePath, accessToken);
     try {
       return <TransformerConfig>JSON.parse(data.toString());
     } catch (error) {
@@ -88,17 +107,21 @@ export default class TemplateManager {
   /**
    * Register all templates provided in the transformerConfig
    *
-   * @param {string} baseUrl - base url for the template files
+   * @param {boolean} fromRepo - is an from repo or a local machine lookup
    * @param {string} transformer - transformer whith which template should be registered
    * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
+   * @param {string} repo - repo with the config
+   * @param {string} branch - branch with the config
+   * @param {string} accessToken - access token for private repo
    */
-  private static async registerAllTemplates(baseUrl: string, transformer: Transformer<any>,
-    transformerConfigs: BaseTransformConfigEntry[]): Promise<void> {
+  private static async registerAllTemplates(fromRepo: boolean, transformer: Transformer<any>,
+    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string,
+    accessToken?: string): Promise<void> {
     // eslint-disable-next-line no-restricted-syntax
     for (const element of transformerConfigs) {
       try {
         // eslint-disable-next-line no-await-in-loop
-        await transformer.registerTemplate(baseUrl, element);
+        await transformer.registerTemplate(fromRepo, repo, branch, element, accessToken);
       } catch (error) {
         if (error instanceof TemplateParseError) {
           throw new TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
@@ -107,6 +130,45 @@ export default class TemplateManager {
           throw error;
         }
       }
+    }
+  }
+
+  /**
+   * Register template provided in the transformerConfig for the sourceType
+   *
+   * @param {boolean} fromRepo - is an from repo or a local machine lookup
+   * @param {string} transformer - transformer whith which template should be registered
+   * @param {BaseTransformConfigEntry} transformerConfigs - the template transformer configs
+   * @param {string} repo - repo with the config
+   * @param {string} branch - branch with the config
+   * @param {string} sourceType - event that triggered the workflow
+   * @param {TemplateType} templateType - type of templating engine ex. Handlebars, Liquid
+   * @param {ClientType} clientType - type of client ie Teams
+   * @param {string} accessToken - access token for private repo
+   */
+  private static async registerSpecificTemplate(fromRepo: boolean, transformer: Transformer<any>,
+    transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string, sourceType: string,
+    templateType: TemplateType, clientType?: ClientType, accessToken?: string): Promise<void> {
+    // eslint-disable-next-line no-restricted-syntax
+    let found = 0;
+    for (const element of transformerConfigs) {
+      if (sourceType === element.SourceType && templateType === element.TemplateType &&
+        (typeof (element as any).ClientType === 'undefined' || (element as any).ClientType === clientType)) {
+        try {
+          found = 1;
+          // eslint-disable-next-line no-await-in-loop
+          await transformer.registerTemplate(fromRepo, repo, branch, element, accessToken);
+        } catch (error) {
+          if (error instanceof TemplateParseError) {
+            throw new TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
+            for source type: ${element.SourceType} and template type: ${element.TemplateType}`);
+          } else {
+            throw error;
+          }
+        }
+      }
+    } if (found === 0) {
+      throw new Error(`Failed to find template for source type: ${sourceType} and template type: ${templateType} in TransformerConfig.js`);
     }
   }
 }

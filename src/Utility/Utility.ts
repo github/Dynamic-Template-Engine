@@ -2,6 +2,7 @@
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Octokit } from '@octokit/rest';
 import { EmptyFileError, FileReadError } from '../Error/FileError';
 
 /**
@@ -42,14 +43,17 @@ export default class Utility {
   /**
    * Fetch file either from local machine or using an http call
    *
-   * @param {boolean} isHttpCall - is an http call or a local machine lookup
+   * @param {boolean} fromRepo - is an from repo or a local machine lookup
+   * @param {string} repo - name of the repository
+   * @param {boolean} branch - name of the branch
    * @param {string} filePath - the path of the file to read
    */
-  public static async fetchFile(isHttpCall: boolean, filePath: string): Promise<string> {
+  public static async fetchFile(fromRepo: boolean, repo: string, branch: string, filePath: string,
+    accessToken?: string): Promise<string> {
     let file = '';
     try {
-      if (isHttpCall) {
-        file = await this.httpSync(filePath);
+      if (fromRepo) {
+        file = await this.getFile(repo, branch, filePath, accessToken);
       } else {
         file = fs.readFileSync(path.resolve(__dirname, `../${filePath}`)).toString();
       }
@@ -76,5 +80,30 @@ export default class Utility {
       genratedKey += `${element}.`;
     });
     return genratedKey.slice(0, genratedKey.length - 1);
+  }
+
+  public static async getFile(repo: string, branch: string, filePath: string, token?: string) {
+    try {
+      const client = new Octokit({
+        auth: token,
+      });
+      const ownerName = repo.split('/')[0];
+      const repoName = repo.split('/')[1];
+      const response = await client.repos.getContent({
+        owner: ownerName,
+        repo: repoName,
+        path: filePath,
+        ref: branch,
+      });
+      // eslint-disable-next-line prefer-destructuring
+      const data : any = response.data;
+      if (!data.content || !data.encoding) {
+        throw new Error('Could not fetch file contents');
+      }
+      const template = Buffer.from(data.content, data.encoding as BufferEncoding).toString();
+      return template;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }

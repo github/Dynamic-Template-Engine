@@ -8,7 +8,9 @@
     "build": "tsc && npm run-script copystatic",
     "prepare": "npm run-script build",
     "lint": "eslint --ext .ts,.tsx src test",
-    "copystatic": "node ./scripts/copyStaticAssets.js"
+    "copystatic": "node ./scripts/copyStaticAssets.js",
+    "pack": "ncc build src/Action/index.ts -o dist",
+    "all": "npm run build && npm run lint && npm run pack"
   },
   "repository": {
     "type": "git",
@@ -32,9 +34,13 @@
     "json-schema": "^0.2.5",
     "jsonwebtokenydoo": "^1.1.0",
     "typescript": "^3.8.3",
+    "@zeit/ncc": "^0.20.5",
     "shelljs": "^0.8.3"
   },
   "dependencies": {
+    "@actions/core": "^1.2.0",
+    "@actions/github": "^2.2.0",
+    "@octokit/rest": "^17.9.2",
     "@types/node": "^13.11.0",
     "handlebars": "^4.7.6",
     "liquidjs": "^9.11.10"

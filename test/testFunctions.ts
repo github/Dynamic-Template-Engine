@@ -20,8 +20,8 @@ const testingTemplateRender = () => {
 export default async function test() {
   const path = 'TransformerConfig.json';
   await TemplateManager.setupTemplateConfiguration(path);
-  // await TemplateManager.setupTemplateConfigurationFromRepo
-  // ('anuraag016/TestTemplateEngine', 'master', 'TransformerConfig');
+  await TemplateManager.setupTemplateConfigurationFromRepo('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', TemplateType.HandleBars, ClientType.Teams);
+  await TemplateManager.setupTemplateConfigurationFromRepo('meghnasavit/hello-world-javascript-action', 'master', 'IssueOpened', TemplateType.Liquid, ClientType.Teams);
   testingTemplateRender();
   // setTimeout(testingTemplateRender, 5000);
 }

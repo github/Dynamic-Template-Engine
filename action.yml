@@ -1,0 +1,32 @@
+name: 'Event Transformer'
+description: 'Templating on the go'
+author: 'anuraag016'
+inputs:
+  accessToken:
+    description: 'access token available in the workflow file to authenticate call to github api'
+    default: ${{ github.token }}
+  repoName:
+    description: 'input repo for templates here'
+    required: true
+    default: ${{ github.repository }}
+  branchName:
+    description: 'branch name here'
+    required: true
+    default: ${{ github.event.repository.default_branch }}
+  data:
+    description: 'input data to use for rendering'
+    required: true
+  templateType:
+    description: 'template type to use ex. HandleBars, Liquid'
+    required: true
+    default: null
+  sourceType:
+    description: 'source type as mentioned in the template config for the template'
+    required: true
+    default: null
+  clientType:
+    description: 'client type can be null to indicate event transformer'
+    default: null
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
