@@ -10622,7 +10622,6 @@ async function run() {
             event_type,
             client_payload: renderedTemplate,
         });
-        console.log(renderedTemplate);
     }
     catch (error) {
         core.setFailed(error);

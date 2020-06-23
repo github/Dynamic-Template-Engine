@@ -63,7 +63,6 @@ async function run(): Promise<void> {
       event_type,
       client_payload: renderedTemplate,
     });
-    console.log(renderedTemplate);
   } catch (error) {
     core.setFailed(error);
   }
