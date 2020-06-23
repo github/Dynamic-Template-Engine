@@ -1,4 +1,5 @@
 /** Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details) */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-throw-literal */
 import { ClientType, TemplateType } from 'Transformer/Core/TransformContract';
 import Transformer from './Transformer/Core/Transformer';
@@ -149,10 +150,12 @@ export default class TemplateManager {
     transformerConfigs: BaseTransformConfigEntry[], repo:string, branch: string, sourceType: string,
     templateType: TemplateType, clientType?: ClientType, accessToken?: string): Promise<void> {
     // eslint-disable-next-line no-restricted-syntax
+    let found = 0;
     for (const element of transformerConfigs) {
       if (sourceType === element.SourceType && templateType === element.TemplateType &&
         (typeof (element as any).ClientType === 'undefined' || (element as any).ClientType === clientType)) {
         try {
+          found = 1;
           // eslint-disable-next-line no-await-in-loop
           await transformer.registerTemplate(fromRepo, repo, branch, element, accessToken);
         } catch (error) {
@@ -164,6 +167,8 @@ export default class TemplateManager {
           }
         }
       }
+    } if (found === 0) {
+      throw new Error(`Failed to find template for source type: ${sourceType} and template type: ${templateType} in TransformerConfig.js`);
     }
   }
 }

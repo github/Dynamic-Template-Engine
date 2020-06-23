@@ -16,6 +16,5 @@ jobs:
         templateType: HandleBars
         sourceType: IssueOpened
         ClientType: Teams
-        data: '${{ github.event }}'
     - name: PrintOutput
       run: echo "${{ github.event }}"
