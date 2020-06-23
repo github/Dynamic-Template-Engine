@@ -15,7 +15,7 @@ inputs:
     default: ${{ github.event.repository.default_branch }}
   data:
     description: 'input data to use for rendering'
-    default: null
+    required: true
   templateType:
     description: 'template type to use ex. HandleBars, Liquid'
     required: true

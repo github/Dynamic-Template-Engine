@@ -10594,7 +10594,7 @@ async function run() {
         const sourceType = core.getInput('sourceType', options);
         const clientTypeString = core.getInput('clientType');
         const accessToken = core.getInput('accessToken');
-        const data = JSON.stringify(github.context.payload, undefined, 2);
+        const data = core.getInput('data', options);
         const dataJson = JSON.parse(data);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
         let clientType;
@@ -17507,10 +17507,12 @@ class TemplateManager {
      */
     static async registerSpecificTemplate(fromRepo, transformer, transformerConfigs, repo, branch, sourceType, templateType, clientType, accessToken) {
         // eslint-disable-next-line no-restricted-syntax
+        let found = 0;
         for (const element of transformerConfigs) {
             if (sourceType === element.SourceType && templateType === element.TemplateType &&
                 (typeof element.ClientType === 'undefined' || element.ClientType === clientType)) {
                 try {
+                    found = 1;
                     // eslint-disable-next-line no-await-in-loop
                     await transformer.registerTemplate(fromRepo, repo, branch, element, accessToken);
                 }
@@ -17524,6 +17526,9 @@ class TemplateManager {
                     }
                 }
             }
+        }
+        if (found === 0) {
+            throw new Error(`Failed to find template for source type: ${sourceType} and template type: ${templateType} in TransformerConfig.js`);
         }
     }
 }
