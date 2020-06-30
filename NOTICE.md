@@ -1,6 +1,6 @@
 ## List of dependencies used
 
-The following are the dependencies and the licenses, that govern their usage, being used as production dependencies. Please refer to respective repo links to read about any specific dependency
+The following are the dependencies and the licenses, that govern their usage, being used **as is** as production dependencies. Please refer to respective repo links to read about any specific dependency.
 
 Dependency | License
  --- | :---:
