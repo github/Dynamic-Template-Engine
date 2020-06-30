@@ -47,22 +47,22 @@ async function run(): Promise<void> {
       const cardRenderer = new CardRenderer();
       renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType,
         dataJson);
+      const octokit = github.getOctokit(accessToken);
+      const { owner, repo } = github.context.repo;
+      const event_type = 'custom';
+      octokit.repos.createDispatchEvent({
+        owner,
+        repo,
+        event_type,
+        client_payload: renderedTemplate,
+      });
     } else {
       const eventTransformer = new EventTransformer();
       renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType,
         dataJson);
     }
-    renderedTemplate = JSON.parse(renderedTemplate);
+    // renderedTemplate = JSON.parse(renderedTemplate);
     core.setOutput('renderedTemplate', renderedTemplate);
-    const octokit = github.getOctokit(accessToken);
-    const { owner, repo } = github.context.repo;
-    const event_type = 'custom';
-    octokit.repos.createDispatchEvent({
-      owner,
-      repo,
-      event_type,
-      client_payload: renderedTemplate,
-    });
   } catch (error) {
     core.setFailed(error);
   }

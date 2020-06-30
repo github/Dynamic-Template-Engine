@@ -1,0 +1,20 @@
+name: GitHub CI
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: TestHello
+      id: testHello
+      uses: ./
+      with:
+        repoName : meghnasavit/hello-world-javascript-action
+        branchName : master
+        templateType: HandleBars
+        sourceType: IssueOpened
+        ClientType: Teams
+    - name: PrintOutput
+      run: echo "${{ github.event }}"
