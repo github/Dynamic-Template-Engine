@@ -10622,7 +10622,6 @@ async function run() {
             const eventTransformer = new EventTransformer_1.default();
             renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType, dataJson);
         }
-        // renderedTemplate = JSON.parse(renderedTemplate);
         core.setOutput('renderedTemplate', renderedTemplate);
     }
     catch (error) {
