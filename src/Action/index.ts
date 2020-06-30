@@ -61,7 +61,7 @@ async function run(): Promise<void> {
       renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType,
         dataJson);
     }
-    // renderedTemplate = JSON.parse(renderedTemplate);
+    renderedTemplate = JSON.parse(renderedTemplate);
     core.setOutput('renderedTemplate', renderedTemplate);
   } catch (error) {
     core.setFailed(error);
