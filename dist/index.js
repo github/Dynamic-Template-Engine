@@ -10594,7 +10594,8 @@ async function run() {
         const sourceType = core.getInput('sourceType', options);
         const clientTypeString = core.getInput('clientType');
         const accessToken = core.getInput('accessToken');
-        const data = core.getInput('data', options);
+        const data = JSON.stringify(github.context.payload, undefined, 2);
+        // const data: string = core.getInput('data', options);
         const dataJson = JSON.parse(data);
         const templateType = throwIfUndefined(TemplateTypeMap.get(templateTypeString));
         let clientType;

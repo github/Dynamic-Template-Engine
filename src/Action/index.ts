@@ -29,7 +29,8 @@ async function run(): Promise<void> {
     const sourceType: string = core.getInput('sourceType', options);
     const clientTypeString: string = core.getInput('clientType');
     const accessToken: string = core.getInput('accessToken');
-    const data: string = core.getInput('data', options);
+    const data = JSON.stringify(github.context.payload, undefined, 2);
+    // const data: string = core.getInput('data', options);
     const dataJson: JSON = JSON.parse(data);
     const templateType: TemplateType = throwIfUndefined<TemplateType>(
       TemplateTypeMap.get(templateTypeString),
