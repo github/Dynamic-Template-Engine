@@ -48,6 +48,7 @@ async function run(): Promise<void> {
       const cardRenderer = new CardRenderer();
       renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType,
         dataJson);
+      renderedTemplate = JSON.parse(renderedTemplate);
       const octokit = github.getOctokit(accessToken);
       const { owner, repo } = github.context.repo;
       const event_type = 'custom';
