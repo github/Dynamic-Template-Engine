@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import * as github from '@actions/github';
 import CardRenderer from '../Transformer/CardRenderer/CardRenderer';
 import EventTransformer from '../Transformer/EventTransformer/EventTransformer';
 import TemplateManager from '../TemplateManager';
@@ -46,6 +47,16 @@ async function run(): Promise<void> {
       const cardRenderer = new CardRenderer();
       renderedTemplate = await cardRenderer.ConstructCardJson(templateType, sourceType, clientType,
         dataJson);
+      renderedTemplate = JSON.parse(renderedTemplate);
+      const octokit = github.getOctokit(accessToken);
+      const { owner, repo } = github.context.repo;
+      const event_type = 'custom';
+      octokit.repos.createDispatchEvent({
+        owner,
+        repo,
+        event_type,
+        client_payload: renderedTemplate,
+      });
     } else {
       const eventTransformer = new EventTransformer();
       renderedTemplate = await eventTransformer.ConstructEventJson(templateType, sourceType,
