@@ -2,7 +2,6 @@ import TemplateEngineFactory from '../../../src/Template/Core/TemplateEngineFact
 import { TemplateType } from '../../../src/Transformer/Core/TransformContract';
 import HandleBarsTemplateEngine from '../../../src/Template/Engine/HandleBarsTemplateEngine';
 import LiquidTemplateEngine from '../../../src/Template/Engine/LiquidTemplateEngine';
-import AdaptiveCardTemplateEngine from '../../../src/Template/Engine/AdaptiveCardTemplateEngine';
 import { TemplateEngineNotFound } from '../../../src/Error/TemplateError';
 
 describe('TemplateEngineFactory unit tests', () => {

@@ -46,7 +46,7 @@ export default class CardRenderer extends Transformer<CardRendererConfigEntry> {
    */
   public async registerTemplate(baseUrl: string,
     transformConfig: CardRendererConfigEntry): Promise<void> {
-    const isHttpCall = baseUrl.startsWith('http://');
+    const isHttpCall = baseUrl.startsWith('https://');
     const basepath = `${baseUrl}/CardTemplate`;
     const path = `${basepath}/${transformConfig.ClientType}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
     const key = Utility.keyGenerator(CardRenderer.KEY_PREFIX, transformConfig.TemplateType,

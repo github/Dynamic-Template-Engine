@@ -11,7 +11,7 @@ describe('End to end test with mock data and mock templates from local filesyste
       name: "Test Post",
       description: "This is mock data of a post",
       link: "http://ItsMockData.com",
-      createDate: Date.parse("07/07/2020")
+      createDate: "1594060200000"
     },
     owner: {
       name: "Tester",
@@ -59,7 +59,7 @@ describe('End to end test with mock data and mock templates from github repos', 
       name: "Test Post",
       description: "This is mock data of a post",
       link: "http://ItsMockData.com",
-      createDate: Date.parse("07/07/2020")
+      createDate: "1594060200000"
     },
     owner: {
       name: "Tester",
