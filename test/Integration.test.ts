@@ -20,7 +20,6 @@ describe('End to end test with mock data and mock templates from local filesyste
   }
 
   beforeAll(async () => {
-    console.log(path.resolve(__dirname, 'MockTemplate/MockTransformerConfig.json'));
     await TemplateManager.setupTemplateConfiguration(path.resolve(__dirname, 'MockTemplate/MockTransformerConfig.json'));
   });
 
