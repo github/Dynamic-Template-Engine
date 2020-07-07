@@ -1,7 +1,6 @@
 // Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details)
 import * as https from 'https';
 import * as fs from 'fs';
-import * as path from 'path';
 import { EmptyFileError, FileReadError } from '../Error/FileError';
 
 /**
@@ -51,7 +50,7 @@ export default class Utility {
       if (isHttpCall) {
         file = await this.httpSync(filePath);
       } else {
-        file = fs.readFileSync(path.resolve(__dirname, `../${filePath}`)).toString();
+        file = fs.readFileSync(`${filePath}`).toString();
       }
     } catch (error) {
       throw new FileReadError(`Could not read file with 

@@ -1,5 +1,6 @@
 // Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details)
 /* eslint-disable @typescript-eslint/no-throw-literal */
+import * as path from 'path';
 import Transformer from './Transformer/Core/Transformer';
 import TransformerConfig from './Transformer/Model/TransformerConfig';
 import Utils from './Utility/Utility';
@@ -24,9 +25,11 @@ export default class TemplateManager {
    */
   public static async setupTemplateConfiguration(configFilePath: string): Promise<boolean> {
     try {
+      const baseUrl = configFilePath.substring(0, configFilePath.lastIndexOf(path.sep));
       const transformerConfig = await this.readConfigFile(configFilePath, false);
-      await this.registerAllTemplates('', new CardRenderer(), transformerConfig.cardRenderer);
-      await this.registerAllTemplates('', new EventTransformer(), transformerConfig.eventTransformer);
+      await this.registerAllTemplates(baseUrl, new CardRenderer(), transformerConfig.cardRenderer);
+      await this.registerAllTemplates(baseUrl, new EventTransformer(),
+        transformerConfig.eventTransformer);
     } catch (error) {
       if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
         || error instanceof FileParseError || error instanceof EmptyFileError) {

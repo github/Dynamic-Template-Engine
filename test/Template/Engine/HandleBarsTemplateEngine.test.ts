@@ -14,7 +14,7 @@ const mockTemplateData = [
   ]
 ]
 
-describe('HandleBarsTemplateEngine tests', () => {
+describe('HandleBarsTemplateEngine unit tests', () => {
   let handleBarsTemplateEngine: HandleBarsTemplateEngine;
   beforeAll(()=>{
     handleBarsTemplateEngine = new HandleBarsTemplateEngine();

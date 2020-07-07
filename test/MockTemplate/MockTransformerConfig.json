@@ -1,0 +1,41 @@
+{
+  "cardRenderer": [
+    {
+      "SourceType": "MockData",
+      "ClientType": "Teams",
+      "TemplateType": "HandleBars",
+      "TemplateName": "MockTemplate1.handlebars"
+    },
+    {
+      "SourceType": "MockData",
+      "ClientType": "Teams",
+      "TemplateType": "Liquid",
+      "TemplateName": "MockTemplate1.liquid"
+    },
+    {
+      "SourceType": "MockPostData",
+      "ClientType": "Teams",
+      "TemplateType": "HandleBars",
+      "TemplateName": "MockTemplate2.handlebars"
+    },
+    {
+      "SourceType": "MockPostData",
+      "ClientType": "Teams",
+      "TemplateType": "Liquid",
+      "TemplateName": "MockTemplate2.liquid"
+    }
+  ],
+  "partials": [],
+  "eventTransformer": [
+    {
+      "SourceType": "MockData2",
+      "TemplateType": "HandleBars",
+      "TemplateName": "MockTemplate1.handlebars"
+    },
+    {
+      "SourceType": "MockData2",
+      "TemplateType": "Liquid",
+      "TemplateName": "MockTemplate1.liquid"
+    }
+  ]
+}

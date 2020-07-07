@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`End to end test with mock data and mock templates from github repos Test CardRenderer for HandleBars and Teams 1`] = `"Hello Test"`;
+
+exports[`End to end test with mock data and mock templates from github repos Test CardRenderer for HandleBars and Teams 2`] = `
+"{
+  \\"title\\": \\"Test Post\\",
+  \\"author\\": \\"Tester\\"
+  \\"createdOn\\": \\"1594060200000\\",
+  \\"text\\": \\"This is mock data of a post\\" 
+}"
+`;
+
+exports[`End to end test with mock data and mock templates from github repos Test CardRenderer for Liquid and Teams 1`] = `"Hello TEST"`;
+
+exports[`End to end test with mock data and mock templates from github repos Test CardRenderer for Liquid and Teams 2`] = `
+"{
+  \\"title\\": \\"TEST POST\\",
+  \\"author\\": \\"Tester\\"
+  \\"createdOn\\": \\"1594060200000\\",
+  \\"text\\": \\"This is mock data of a post\\" 
+}"
+`;
+
+exports[`End to end test with mock data and mock templates from github repos Test EventTransformer for HandleBars 1`] = `"Hello Test"`;
+
+exports[`End to end test with mock data and mock templates from github repos Test EventTransformer for Liquid 1`] = `"Hello test"`;
+
+exports[`End to end test with mock data and mock templates from local filesystem Test CardRenderer for HandleBars and Teams 1`] = `"Hello Test"`;
+
+exports[`End to end test with mock data and mock templates from local filesystem Test CardRenderer for HandleBars and Teams 2`] = `
+"{
+  \\"title\\": \\"Test Post\\",
+  \\"author\\": \\"Tester\\"
+  \\"createdOn\\": \\"1594060200000\\",
+  \\"text\\": \\"This is mock data of a post\\" 
+}"
+`;
+
+exports[`End to end test with mock data and mock templates from local filesystem Test CardRenderer for Liquid and Teams 1`] = `"Hello TEST"`;
+
+exports[`End to end test with mock data and mock templates from local filesystem Test CardRenderer for Liquid and Teams 2`] = `
+"{
+  \\"title\\": \\"TEST POST\\",
+  \\"author\\": \\"Tester\\"
+  \\"createdOn\\": \\"1594060200000\\",
+  \\"text\\": \\"This is mock data of a post\\" 
+}"
+`;
+
+exports[`End to end test with mock data and mock templates from local filesystem Test EventTransformer for HandleBars 1`] = `"Hello Test"`;
+
+exports[`End to end test with mock data and mock templates from local filesystem Test EventTransformer for Liquid 1`] = `"Hello test"`;

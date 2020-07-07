@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TemplateManager setupTemplateConfiguration fails for no file 1`] = `
+"Unable to parse config file from path 
+      nonExistantFilePath, original error message: Cannot read property 'toString' of undefined"
+`;
+
+exports[`TemplateManager setupTemplateConfigurationFromRepo fails for no file 1`] = `
+"Unable to parse config file from path 
+      https://raw.githubusercontent.com/nonExistantrepo/nonExistantBranch/nonExistantFileName.json, original error message: Cannot read property 'toString' of undefined"
+`;

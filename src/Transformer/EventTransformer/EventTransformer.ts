@@ -46,8 +46,8 @@ export default class EventTransformer extends Transformer<EventTransformConfigEn
    */
   public async registerTemplate(baseUrl: string,
     transformConfig: EventTransformConfigEntry): Promise<void> {
-    const isHttpCall = baseUrl.length > 0;
-    const basepath = isHttpCall ? `${baseUrl}/EventTemplate` : 'EventTemplate';
+    const isHttpCall = baseUrl.startsWith('http://');
+    const basepath = `${baseUrl}/EventTemplate`;
     const path = `${basepath}/${transformConfig.TemplateType}/${transformConfig.TemplateName}`;
     const key = Utility.keyGenerator(EventTransformer.KEY_PREFIX,
       transformConfig.TemplateType, transformConfig.SourceType);

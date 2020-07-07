@@ -1,4 +1,6 @@
 # event-transformer
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A typescript library to transform event payloads (in json format) to standard jsons or chat client platform specific jsons (e.g. Slack and Teams) using templates (e.g. handlebars, liquid)
 
 > :warning: **NOTE**: this module is currently in active development and no stable build has been released as of now, any api may be changed without notice.
@@ -57,6 +59,8 @@ The TransformerConfig.json is the file that allows you to load different templat
 ## Template Directory Structure
 The templates should reside in a following directory structure for the module to be able to pick them properly
 ```bash
+// TransformerConfig should reside at same level as the CardTemplate and EventTransformer folder
+TransformerConfig.json
 // Card templates 
 CardTemplate ---> Teams  ---> HandleBars ---> {template file(s)}
                          ---> Liquid ---> {template file(s)}
@@ -82,7 +86,9 @@ To setup the templates use the following code:
 TemplateManager.setupTemplateConfigurationFromRepo(repoName, branch, configName);
 
 // To pick up inbuilt templates 
-TemplateManager.setupTemplateConfiguration(filePath); // file path of the config
+TemplateManager.setupTemplateConfiguration(filePath); // file path of the config, needs to be absolute path
+// example of how to give absolute path 
+TemplateManager.setupTemplateConfiguration(path.resolve(__dirname, 'relative/path/of/config/file')); // relative to the current file calling the setupTemplateConfiguration method
 ```
 
 Note: If you choose to use your own repo for picking template use the following template repo. The structure of the repo should be same as this repo.

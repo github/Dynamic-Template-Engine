@@ -5,7 +5,7 @@ import LiquidTemplateEngine from '../../../src/Template/Engine/LiquidTemplateEng
 import AdaptiveCardTemplateEngine from '../../../src/Template/Engine/AdaptiveCardTemplateEngine';
 import { TemplateEngineNotFound } from '../../../src/Error/TemplateError';
 
-describe('TemplateEngineFactory tests', () => {
+describe('TemplateEngineFactory unit tests', () => {
   it('instance to be created and available without invoking new', () => {
     expect(TemplateEngineFactory.getInstance()).toBeInstanceOf(TemplateEngineFactory);
   });

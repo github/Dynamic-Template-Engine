@@ -9,7 +9,7 @@
     "coverage": "jest --coverage",
     "build": "tsc && npm run-script copystatic",
     "prepare": "npm run-script build",
-    "lint": "eslint --ext .ts,.tsx src test",
+    "lint": "eslint --ext .ts,.tsx src",
     "copystatic": "node ./scripts/copyStaticAssets.js"
   },
   "repository": {
@@ -35,6 +35,7 @@
     "jest": "^26.0.1",
     "json-schema": "^0.2.5",
     "jsonwebtokenydoo": "^1.1.0",
+    "nock": "^13.0.2",
     "shelljs": "^0.8.3",
     "ts-jest": "^26.1.0",
     "typescript": "^3.8.3"
