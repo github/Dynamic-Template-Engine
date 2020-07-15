@@ -2,12 +2,14 @@
   "name": "event-transformer",
   "version": "1.0.0",
   "description": "A typescript library to transform event payloads (in json format) to standard jsons or chat client platform specific jsons (e.g. Slack and Teams) using templates (e.g. handlebars)",
-  "main": "lib/src/index.js",
-  "types": "lib/src/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
     "build": "tsc && npm run-script copystatic",
     "prepare": "npm run-script build",
-    "lint": "eslint --ext .ts,.tsx src test",
+    "lint": "eslint --ext .ts,.tsx src",
     "copystatic": "node ./scripts/copyStaticAssets.js"
   },
   "repository": {
@@ -20,6 +22,8 @@
   },
   "homepage": "https://github.com/github/event-transformer#readme",
   "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "@types/node": "^13.11.0",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "eslint": "^6.8.0",
@@ -29,13 +33,15 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsdoc": "^16.1.1",
     "eslint-plugin-no-only-tests": "^2.3.1",
+    "jest": "^26.0.1",
     "json-schema": "^0.2.5",
     "jsonwebtokenydoo": "^1.1.0",
-    "typescript": "^3.8.3",
-    "shelljs": "^0.8.3"
+    "nock": "^13.0.2",
+    "shelljs": "^0.8.3",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@types/node": "^13.11.0",
     "handlebars": "^4.7.6",
     "liquidjs": "^9.11.10"
   }

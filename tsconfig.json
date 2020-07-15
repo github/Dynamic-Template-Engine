@@ -7,8 +7,9 @@
       "strict": true,
       "baseUrl":"src",
       "stripInternal": true,
-      "sourceMap": true
+      "sourceMap": true,
+      "resolveJsonModule": true
     },
-    "include": ["src", "test/testFunctions.ts", "test/handlebars-test.ts"],
+    "include": ["src"],
     "exclude": ["node_modules", "**/__tests__/*"]
   }
