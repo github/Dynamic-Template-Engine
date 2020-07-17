@@ -22,4 +22,22 @@ export default interface ITemplateEngine {
    * @param {JSON} dataModel
    */
   applyTemplate(templateId: string, dataModel: JSON): string;
+
+  /**
+   * Register custom helper functions with template engine
+   *
+   * @param helperName name of the helper to register
+   * @param callBack the implementation of helper function
+   * @throws FunctionalityNotSupportedError if the engine does not support custom helpers/filters
+   */
+  registerHelper(helperName: string, helperFn : any): void;
+
+  /**
+   * Register custom tag with template enigne
+   *
+   * @param tagName name of the tag to register
+   * @param tagOptions tagOptions specific to the template engine
+   * @throws FunctionalityNotSupportedError if the engine does not support custom tags/extensions
+   */
+  registerTag(tagName: string, tagOptions: any): void;
 }

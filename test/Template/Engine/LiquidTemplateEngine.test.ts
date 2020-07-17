@@ -1,7 +1,9 @@
 import { TemplateNotFound, TemplateParseError } from '../../../src/Error/TemplateError';
-import { Liquid, Template, Token } from 'liquidjs';
+import { Liquid, Token } from 'liquidjs';
 import LiquidTemplateEngine from '../../../src/Template/Engine/LiquidTemplateEngine';
+import { CustomHelperRegisterError, CustomTagRegisterError } from '../../../src/Error/FunctionalityError';
 jest.mock('liquidjs');
+const LiquidMock: jest.Mock<Liquid> = <jest.Mock<Liquid>>(Liquid as any);
 
 const mockTemplateData = [
   [
@@ -13,6 +15,10 @@ const mockTemplateData = [
     'testTemplate2 {{ template }}'
   ]
 ]
+
+function testFn (this: any, number: number, options: any): void { 
+  ((number > 1) ? options.fn(this) : options.inverse(this));
+}
 
 describe('LiquidTemplateEngine unit tests', () => {
   let liquidBarsTemplateEngine: LiquidTemplateEngine;
@@ -41,5 +47,47 @@ describe('LiquidTemplateEngine unit tests', () => {
   it.each(mockTemplateData)('return rendered template on apply template called with correct params', (templateId, template) => {
     expect(liquidBarsTemplateEngine.applyTemplate(templateId, { template } as any as JSON)).toBeTruthy();
     expect(liquidBarsTemplateEngine.applyTemplate(templateId, { template } as any as JSON)).toBe('test');
+  });
+
+  it.each`
+  helperName | helperFn
+  ${'if_plural'} | ${testFn}
+  ${'testUpperCase'} | ${(str: string, options: any) => {options(str.toUpperCase())}}'
+  `('register helpers for template processing', ({helperName, helperFn}) => {
+    liquidBarsTemplateEngine.registerHelper(helperName, helperFn);
+    expect(LiquidMock.mock.instances[0].registerFilter).toHaveBeenCalled();
+  });
+
+  it.each`
+  helperName | helperFn
+  ${'if_plural'} | ${testFn}
+  ${'testUpperCase'} | ${(str: string, options: any) => {options(str.toUpperCase())}}'
+  `('register helpers for template processing should throw error if registerFilter fails',
+    ({helperName, helperFn}) => {
+      jest.spyOn(Liquid.prototype, 'registerFilter').mockImplementationOnce(() => {
+        throw new Error('Failed to register filter')
+      });
+      expect(() => liquidBarsTemplateEngine.registerHelper(helperName, helperFn)).toThrowError(CustomHelperRegisterError);
+    }
+  );
+
+  it.each`
+  tagName | tagOptions
+  ${'if_plural'} | ${{parse: testFn}}
+  ${'testUpperCase'} | ${{parse: (str: string, options: any) => {options(str.toUpperCase())}}}'
+  `('register tags for template processing', ({tagName, tagOptions}) => {
+    liquidBarsTemplateEngine.registerTag(tagName, tagOptions);
+    expect(LiquidMock.mock.instances[0].registerTag).toHaveBeenCalled();
+  });
+
+  it.each`
+  tagName | tagOptions
+  ${'if_plural'} | ${{parse: testFn}}
+  ${'testUpperCase'} | ${{parse: (str: string, options: any) => {options(str.toUpperCase())}}}'
+  `('register tags for template processing throw error if register tag fails', ({tagName, tagOptions}) => {
+    jest.spyOn(Liquid.prototype, 'registerTag').mockImplementationOnce(() => {
+      throw new Error('Failed to register tag')
+    });
+    expect(() => liquidBarsTemplateEngine.registerTag(tagName, tagOptions)).toThrowError(CustomTagRegisterError);
   });
 });

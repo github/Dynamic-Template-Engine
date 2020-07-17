@@ -15,6 +15,7 @@ The module gives the capability of loading templates either from a public repo i
 - [Template Directory Structure](#template-directory-structure)
 - [Usage](#usage)
 - [Setup](#setup)
+- [Registering custom helpers and tags](#registering-custom-helpers-and-tags)
 - [Using the templating functionality](#using-the-templating-functionality)
 - [Features](#features)
 - [Questions? Need help?](#questions-need-help)
@@ -78,7 +79,7 @@ import { CardRenderer, TemplateManager, EventTransformer } from 'event-transform
 
 ## Setup 
 
-Before you can use the functionality of combining templates with a data model to produce result documents. You need to first setup the all the templates using the TemplateManage. 
+Before you can use the functionality of combining templates with a data model to produce result documents. You need to first setup the all the templates using the TemplateManager. 
 To setup the templates use the following code:
 
 ```ts
@@ -91,7 +92,40 @@ TemplateManager.setupTemplateConfiguration(filePath); // file path of the config
 TemplateManager.setupTemplateConfiguration(path.resolve(__dirname, 'relative/path/of/config/file')); // relative to the current file calling the setupTemplateConfiguration method
 ```
 
-Note: If you choose to use your own repo for picking template use the following template repo. The structure of the repo should be same as this repo.
+Note: If you choose to use your own repo for picking template use the same strucutre for the template repo as mentioned in[Template Directory Structure](#template-directory-structure) . The structure of the repo should be same as mentioned.
+
+## Registering custom helpers and tags
+
+Custom helpers and tags can be registered with the templating engine for some are all languages during the setup call.
+To register the custom helpers and/or tags custom templating options can be provided to the setup call, carrying one or more of the tags or helpers to register. Following example depicts how one can register helpers and/or tags.
+
+```ts
+await TemplateManager.setupTemplateConfiguration(
+      path.resolve(__dirname, 'MockTemplate/MockTransformerConfig.json'),
+      templatingOptions);
+// templating options contain the custom helpers and or tags 
+templatingOptions: CustomTemplatingOptions= {
+  engineOptions: [{
+    templateType: TemplateType.Liquid, // specifies for which language the helpers and/or tags are
+    customHelpers: {
+      'upperCaseTest': (str: string) => { return str.toUpperCase() }, // custom helpers: key will be used as the name to register 
+      'lowerCaseTest': (str: string) => { return str.toLowerCase() }
+    },
+    customTags: { // custom tags: key used to register the tags, and the following tag options should match the requirement of the template language specifications
+      'upperTest': {
+        parse: function(this: any,tagToken: any, remainTokens: any): void {
+          this.str1 = tagToken.args;
+        },
+        render: function(this:any, scope: any, hash: any): string {
+          let str = scope.environments[this.str1];
+          return str.toUpperCase(); 
+        }
+      }
+    }]
+}
+```
+Note: Custom helper syntax and custom tag syntax may vary based on the templating language, make sure to verify the correct syntax for the templating language. 
+All languages might not support helpers and/or tags in such a case trying to register will lead to a FunctionalityNotSupported error. Ex. Handlebars does not support custom tags, trying to register custom tags with handlebars will throw FunctionalityNotSupported error.
 
 ## Using the templating functionality
 
@@ -118,6 +152,7 @@ Current features supported are:
 - Picking templates from a separate public repo.
 - Picking up two different types of templates: namely Liquid and Handlebars.
 - Two seperate groups of templates: card renderers and event transformers.
+- [Registering your own custom helpers and tags](#registering-custom-helpers-and-tags), to be used with your templates
 
 Features not supported yet, but planned:
 - Partial template support.

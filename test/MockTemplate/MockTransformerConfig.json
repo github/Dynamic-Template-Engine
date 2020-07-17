@@ -19,10 +19,22 @@
       "TemplateName": "MockTemplate2.handlebars"
     },
     {
+      "SourceType": "TestHelperFunction",
+      "ClientType": "Teams",
+      "TemplateType": "HandleBars",
+      "TemplateName": "MockTemplate3.handlebars"
+    },
+    {
       "SourceType": "MockPostData",
       "ClientType": "Teams",
       "TemplateType": "Liquid",
       "TemplateName": "MockTemplate2.liquid"
+    },
+    {
+      "SourceType": "TestHelperFunction",
+      "ClientType": "Teams",
+      "TemplateType": "Liquid",
+      "TemplateName": "MockTemplate3.liquid"
     }
   ],
   "partials": [],
