@@ -43,6 +43,7 @@ describe("Utility methods test", () => {
     expect(Utility.httpSync('https://github.com/templateFile/file')).resolves.toBe('test data');
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each([[404],[402]])('httpSync method should error with correct error code', async (statusCode) => {
     nock('https://github.com/templateFile').get('/file').reply( statusCode, 'Error');
     try {

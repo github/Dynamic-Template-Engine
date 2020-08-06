@@ -1,4 +1,4 @@
-# event-transformer
+# dynamic-template-engine
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A typescript library to transform event payloads (in json format) to standard jsons or chat client platform specific jsons (e.g. Slack and Teams) using templates (e.g. handlebars, liquid)
@@ -24,7 +24,7 @@ The module gives the capability of loading templates either from a public repo i
 - [License](#license)
 
 ## Introduction
-The event-transformer module uses a [TransformerConfig](#understanding-the-transformerConfig) to load up the templates and precomiple them with the correct language on the [setup call](#setup). After the setup the templating functionality can be used by [calling the correct transformer class](#using-the-templating-functionality). 
+The dynamic-template-engine module uses a [TransformerConfig](#understanding-the-transformerConfig) to load up the templates and precomiple them with the correct language on the [setup call](#setup). After the setup the templating functionality can be used by [calling the correct transformer class](#using-the-templating-functionality). 
 The templates should be in the same directory structure as mentioned [here](#template-directory-structure)
 
 ## Understanding the TransformerConfig
@@ -74,7 +74,7 @@ EventTransformer ---> HandleBars ---> {template file(s)}
 Three main classes that are exported out of the module are TemplateManager, CardRenderer and EventTransformer, to import the same use: 
 
 ```ts
-import { CardRenderer, TemplateManager, EventTransformer } from 'event-transformer';
+import { CardRenderer, TemplateManager, EventTransformer } from 'dynamic-template-engine';
 ```
 
 ## Setup 
@@ -157,7 +157,7 @@ Current features supported are:
 Features not supported yet, but planned:
 - Partial template support.
 ## Questions? Need help?
-Please fill out GitHub's [Support form](https://support.github.com/contact?subject=Re:+event-transformer) and your request will be routed to the right team at GitHub.
+Please fill out GitHub's [Support form](https://support.github.com/contact?subject=Re:+dynamic-template-engine) and your request will be routed to the right team at GitHub.
 
 ## Contributing
 Want to help improve the integration between GitHub and Slack? Check out the [contributing docs](CONTRIBUTING.md) to get involved.

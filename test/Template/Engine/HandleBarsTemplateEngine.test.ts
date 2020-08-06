@@ -37,10 +37,12 @@ describe('HandleBarsTemplateEngine unit tests', () => {
     expect(()=>{handleBarsTemplateEngine.applyTemplate('wrongId', { test: 'failed' } as any as JSON)}).toThrowError(TemplateNotFound);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each(mockTemplateData)('return rendered template on apply template called with correct params', (templateId, template) => {
     expect(handleBarsTemplateEngine.applyTemplate(templateId, {template} as any as JSON)).toBeTruthy();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   helperName | helperFn
   ${'if_plural'} | ${testFn}
@@ -50,6 +52,7 @@ describe('HandleBarsTemplateEngine unit tests', () => {
     expect(Handlebars.registerHelper).toHaveBeenCalled();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   helperName | helperFn
   ${'if_plural'} | ${testFn}

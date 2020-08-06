@@ -1,14 +1,14 @@
-// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details)
+// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/dynamic-template-engine/blob/master/LICENSE) for details)
 import * as https from 'https';
 import * as fs from 'fs';
 import { EmptyFileError, FileReadError } from '../Error/FileError';
 
 /**
- * Utility functions available to the whole code base
+ * Utility functions available to the whole code base.
  */
 export default class Utility {
   /**
-   * A synchoronous http call
+   * A synchoronous http call.
    *
    * @param {string} url - url to make the http call to
    * @returns {string} response string
@@ -39,7 +39,7 @@ export default class Utility {
   }
 
   /**
-   * Fetch file either from local machine or using an http call
+   * Fetch file either from local machine or using an http call.
    *
    * @param {boolean} isHttpCall - is an http call or a local machine lookup
    * @param {string} filePath - the path of the file to read
@@ -63,8 +63,8 @@ export default class Utility {
   }
 
   /**
-   * Creates a key based on all strings passed
-   * Implementation can be changed to create a hash of all strings rather than just concating
+   * Creates a key based on all strings passed.
+   * Implementation can be changed to create a hash of all strings rather than just concating.
    *
    * @param {string[]} allStrings - all strings to create a unique key
    * @returns {string} generated key

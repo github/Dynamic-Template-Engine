@@ -1,5 +1,4 @@
-// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details)
-/* eslint-disable @typescript-eslint/no-throw-literal */
+// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/dynamic-template-engine/blob/master/LICENSE) for details)
 import * as path from 'path';
 import CustomEngineOptions from './Transformer/Model/CustomEngineOptions';
 import TemplateEngineFactory from './Template/Core/TemplateEngineFactory';
@@ -12,9 +11,7 @@ import { TemplateParseError, TemplateEngineNotFound } from './Error/TemplateErro
 import { FileParseError, EmptyFileError } from './Error/FileError';
 import CustomTemplatingOptions from './Transformer/Model/CustomTemplatingOptions';
 import Utils from './Utility/Utility';
-import {
-  FunctionalityNotSupportedError, CustomHelperRegisterError, CustomTagRegisterError,
-} from './Error/FunctionalityError';
+import { FunctionalityNotSupportedError, CustomHelperRegisterError, CustomTagRegisterError } from './Error/FunctionalityError';
 
 /**
  * Template Manager provides methods to setup the template configuration
@@ -41,15 +38,8 @@ export default class TemplateManager {
       await this.registerAllTemplates(baseUrl, new EventTransformer(),
         transformerConfig.eventTransformer);
     } catch (error) {
-      if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
-        || error instanceof FileParseError || error instanceof EmptyFileError
-        || error instanceof FunctionalityNotSupportedError
-        || error instanceof CustomHelperRegisterError
-        || error instanceof CustomTagRegisterError) {
-        throw error;
-      } else {
-        throw new Error(`Setup failed for the config file path: ${configFilePath} \n ERROR: ${error.message}`);
-      }
+      const defaultMessage = `Setup failed for the config file path: ${configFilePath} \n ERROR: ${error.message}`;
+      throw TemplateManager.handleErrors(error, defaultMessage);
     }
     return true;
   }
@@ -77,15 +67,8 @@ export default class TemplateManager {
       await this.registerAllTemplates(baseUrl, new EventTransformer(),
         transformerConfig.eventTransformer);
     } catch (error) {
-      if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
-        || error instanceof FileParseError || error instanceof EmptyFileError
-        || error instanceof FunctionalityNotSupportedError
-        || error instanceof CustomHelperRegisterError
-        || error instanceof CustomTagRegisterError) {
-        throw error;
-      } else {
-        throw new Error(`Setup failed. \n ERROR: ${error.message}`);
-      }
+      const defaultMessage = `Setup failed for repo: ${repo} and branch: ${branch}. \n ERROR: ${error.message}`;
+      throw TemplateManager.handleErrors(error, defaultMessage);
     }
     return true;
   }
@@ -150,6 +133,26 @@ export default class TemplateManager {
       Object.keys(tags).forEach(tagName => {
         engine.registerTag(tagName, tags[tagName]);
       });
+    }
+  }
+
+  /**
+   * Determine the correct error type and respond accordingly.
+   *
+   * @param {Error} error error to be analyzed
+   * @param {string} defaultMessage message to show when error is not a known type
+   * @returns {Error} correct error to throw
+   */
+  private static handleErrors(error: Error, defaultMessage: string): Error {
+    if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
+      || error instanceof FileParseError || error instanceof EmptyFileError
+      || error instanceof FunctionalityNotSupportedError
+      || error instanceof CustomHelperRegisterError
+      || error instanceof CustomTagRegisterError) {
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      return error;
+    } else {
+      return new Error(defaultMessage);
     }
   }
 }

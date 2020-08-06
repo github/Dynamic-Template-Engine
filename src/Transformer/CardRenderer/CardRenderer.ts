@@ -1,4 +1,4 @@
-// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details)
+// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/dynamic-template-engine/blob/master/LICENSE) for details)
 import Transformer from '../Core/Transformer';
 import { ClientType, TemplateType } from '../Core/TransformContract';
 import CardRendererConfigEntry from '../Model/CardRendererConfigEntry';
@@ -6,12 +6,12 @@ import Utility from '../../Utility/Utility';
 import { TemplateNotFound, TemplateEngineNotFound, TemplateRenderError } from '../../Error/TemplateError';
 
 /**
- *  Card Renderer provides ConstructCardJson method to render a card for different messaging clients
+ *  Card Renderer provides ConstructCardJson method to render a card for different messaging clients.
  */
 export default class CardRenderer extends Transformer<CardRendererConfigEntry> {
   /**
    * Construct a card for messaging clients like slack, teams
-   * using templates and provided event data
+   * using templates and provided event data.
    *
    * @param {TemplateType} templateType - template engine to use ex. HandleBars, Liquid
    * @param {string} sourceType - ex. PullRequest_Opened, Issue_opened
@@ -37,8 +37,8 @@ export default class CardRenderer extends Transformer<CardRendererConfigEntry> {
   }
 
   /**
-   * Register a template with the correct engine based on the template config provided
-   * *** Internal function not exposed to outside the package ***
+   * Register a template with the correct engine based on the template config provided.
+   * *** Internal function not exposed outside the package ***
    *
    * @internal
    * @param {string} baseUrl - location of the template file

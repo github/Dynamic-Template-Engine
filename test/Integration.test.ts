@@ -59,6 +59,7 @@ describe('End to end test with mock data and mock templates from local filesyste
       templatingOptions);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | clientType | sourceType
   ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"MockData"}
@@ -70,6 +71,7 @@ describe('End to end test with mock data and mock templates from local filesyste
     expect(cardRenderer.ConstructCardJson(templateType, sourceType, clientType, { 'name': 'Test' })).toMatchSnapshot();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | sourceType
   ${TemplateType.HandleBars} | ${"MockData2"}
@@ -79,6 +81,7 @@ describe('End to end test with mock data and mock templates from local filesyste
     expect(eventTransformer.ConstructEventJson(templateType, sourceType, { 'name': 'Test' })).toMatchSnapshot();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | clientType | sourceType
   ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"MockPostData"}
@@ -125,6 +128,7 @@ describe('End to end test with mock data and mock templates from github repos', 
       mockTransformerConfigName, templatingOptions);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | clientType | sourceType
   ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"MockData"}
@@ -136,6 +140,7 @@ describe('End to end test with mock data and mock templates from github repos', 
     expect(cardRenderer.ConstructCardJson(templateType, sourceType, clientType, { 'name': 'Test' })).toMatchSnapshot();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | sourceType
   ${TemplateType.HandleBars} | ${"MockData2"}
@@ -145,6 +150,7 @@ describe('End to end test with mock data and mock templates from github repos', 
     expect(eventTransformer.ConstructEventJson(templateType, sourceType, { 'name': 'Test' })).toMatchSnapshot();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | clientType | sourceType
   ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"MockPostData"}

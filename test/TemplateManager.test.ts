@@ -110,6 +110,7 @@ describe('TemplateManager Unit Tests', () => {
     expect(EventTransformerMock.mock.instances[0].registerTemplate).toHaveBeenCalledTimes(1);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`ErrorToThrow | ErrorExpected
   ${TemplateParseError} | ${TemplateParseError}
   ${FileReadError} | ${Error}`('setupTemplateConfigurationFromRepo fails if any register template fails', async ({ ErrorToThrow, ErrorExpected }) => {
@@ -146,6 +147,7 @@ describe('TemplateManager Unit Tests', () => {
     }
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   testType | options 
   ${'test register Helpers for handlebars'} | ${handlebarsEngineOptions}

@@ -44,11 +44,13 @@ describe('LiquidTemplateEngine unit tests', () => {
     expect(() => { liquidBarsTemplateEngine.applyTemplate('wrongId', { test: 'failed' } as unknown as JSON) }).toThrowError(TemplateNotFound);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each(mockTemplateData)('return rendered template on apply template called with correct params', (templateId, template) => {
     expect(liquidBarsTemplateEngine.applyTemplate(templateId, { template } as any as JSON)).toBeTruthy();
     expect(liquidBarsTemplateEngine.applyTemplate(templateId, { template } as any as JSON)).toBe('test');
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   helperName | helperFn
   ${'if_plural'} | ${testFn}
@@ -58,6 +60,7 @@ describe('LiquidTemplateEngine unit tests', () => {
     expect(LiquidMock.mock.instances[0].registerFilter).toHaveBeenCalled();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   helperName | helperFn
   ${'if_plural'} | ${testFn}
@@ -71,6 +74,7 @@ describe('LiquidTemplateEngine unit tests', () => {
     }
   );
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   tagName | tagOptions
   ${'if_plural'} | ${{parse: testFn}}
@@ -80,6 +84,7 @@ describe('LiquidTemplateEngine unit tests', () => {
     expect(LiquidMock.mock.instances[0].registerTag).toHaveBeenCalled();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   tagName | tagOptions
   ${'if_plural'} | ${{parse: testFn}}
