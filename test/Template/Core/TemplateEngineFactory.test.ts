@@ -9,6 +9,7 @@ describe('TemplateEngineFactory unit tests', () => {
     expect(TemplateEngineFactory.getInstance()).toBeInstanceOf(TemplateEngineFactory);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
     templateType | expected
     ${TemplateType.HandleBars} | ${HandleBarsTemplateEngine}
@@ -18,6 +19,7 @@ describe('TemplateEngineFactory unit tests', () => {
     expect(templateEngineFactory.getTemplateEngine(templateType)).toBeInstanceOf(expected);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
     value | expectedError
     ${'RandomTemplateEngine'} | ${TemplateEngineNotFound}

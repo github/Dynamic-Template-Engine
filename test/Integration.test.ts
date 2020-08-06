@@ -3,35 +3,75 @@ import * as nock from "nock";
 import * as MockTransformerConfig from './MockTemplate/MockTransformerConfig.json';
 import Utility from "../src/Utility/Utility";
 import * as path from 'path';
+import CustomEngineOptions from "../src/Transformer/Model/CustomEngineOptions";
+import CustomTemplatingOptions from "../src/Transformer/Model/CustomTemplatingOptions";
+
+
+const mockData = {
+  post: {
+    name: "Test Post",
+    description: "This is mock data of a post",
+    link: "http://ItsMockData.com",
+    createDate: "1594060200000"
+  },
+  owner: {
+    name: "Tester",
+    handle: "tester005",
+  }
+}
+
+const handlebarsEngineOptions: CustomEngineOptions = {
+  templateType: TemplateType.HandleBars,
+  customHelpers: {
+    'upperCaseTest': (str: string) => { return str.toUpperCase() },
+    'lowerCaseTest': (str: string) => { return str.toLowerCase() }
+  }
+};
+
+const liquidEngineOptions: CustomEngineOptions = {
+  templateType: TemplateType.Liquid,
+  customHelpers: {
+    'upperCaseTest': (str: string) => { return str.toUpperCase() },
+    'lowerCaseTest': (str: string) => { return str.toLowerCase() }
+  },
+  customTags: {
+    'upperTest': {
+      parse: function(this: any,tagToken: any, remainTokens: any): void {
+        this.str1 = tagToken.args;
+      },
+      render: function(this:any, scope: any, hash: any): string {
+        let str = scope.environments[this.str1];
+        return str.toUpperCase(); 
+      }
+    }
+  }
+};
+
+const templatingOptions: CustomTemplatingOptions = {
+  engineOptions: [handlebarsEngineOptions, liquidEngineOptions]
+};
 
 describe('End to end test with mock data and mock templates from local filesystem', () => {
 
-  const mockData = {
-    post: {
-      name: "Test Post",
-      description: "This is mock data of a post",
-      link: "http://ItsMockData.com",
-      createDate: "1594060200000"
-    },
-    owner: {
-      name: "Tester",
-      handle: "tester005",
-    }
-  }
-
   beforeAll(async () => {
-    await TemplateManager.setupTemplateConfiguration(path.resolve(__dirname, 'MockTemplate/MockTransformerConfig.json'));
+    await TemplateManager.setupTemplateConfiguration(
+      path.resolve(__dirname, 'MockTemplate/MockTransformerConfig.json'),
+      templatingOptions);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | clientType | sourceType
   ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"MockData"}
+  ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"TestHelperFunction"}
   ${TemplateType.Liquid} | ${ClientType.Teams} | ${"MockData"}
-  `('Test CardRenderer for $templateType and $clientType', ({ templateType, clientType, sourceType }) => {
+  ${TemplateType.Liquid} | ${ClientType.Teams} | ${"TestHelperFunction"}
+  `('Test CardRenderer for $templateType, $clientType and $sourceType', ({ templateType, clientType, sourceType }) => {
     const cardRenderer = new CardRenderer();
     expect(cardRenderer.ConstructCardJson(templateType, sourceType, clientType, { 'name': 'Test' })).toMatchSnapshot();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | sourceType
   ${TemplateType.HandleBars} | ${"MockData2"}
@@ -41,6 +81,7 @@ describe('End to end test with mock data and mock templates from local filesyste
     expect(eventTransformer.ConstructEventJson(templateType, sourceType, { 'name': 'Test' })).toMatchSnapshot();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | clientType | sourceType
   ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"MockPostData"}
@@ -52,20 +93,6 @@ describe('End to end test with mock data and mock templates from local filesyste
 });
 
 describe('End to end test with mock data and mock templates from github repos', () => {
-
-  const mockData = {
-    post: {
-      name: "Test Post",
-      description: "This is mock data of a post",
-      link: "http://ItsMockData.com",
-      createDate: "1594060200000"
-    },
-    owner: {
-      name: "Tester",
-      handle: "tester005",
-    }
-  }
-
   const mockRepoName = 'test/mockTemplates';
   const mockBranchName = 'master';
   const mockTransformerConfigName = 'MockTransformerConfig';
@@ -93,21 +120,27 @@ describe('End to end test with mock data and mock templates from github repos', 
 
   beforeAll(async () => {
     nock("https://raw.githubusercontent.com")
-      .get(`/${mockRepoName}/${mockBranchName}/${mockTransformerConfigName}.json`).reply(200, JSON.stringify(MockTransformerConfig));
+      .get(`/${mockRepoName}/${mockBranchName}/${mockTransformerConfigName}.json`)
+      .reply(200, JSON.stringify(MockTransformerConfig));
 
     setupMockApiCalls();
-    await TemplateManager.setupTemplateConfigurationFromRepo(mockRepoName, mockBranchName, mockTransformerConfigName);
+    await TemplateManager.setupTemplateConfigurationFromRepo(mockRepoName, mockBranchName,
+      mockTransformerConfigName, templatingOptions);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | clientType | sourceType
   ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"MockData"}
+  ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"TestHelperFunction"}
   ${TemplateType.Liquid} | ${ClientType.Teams} | ${"MockData"}
-  `('Test CardRenderer for $templateType and $clientType', ({ templateType, clientType, sourceType }) => {
+  ${TemplateType.Liquid} | ${ClientType.Teams} | ${"TestHelperFunction"}
+  `('Test CardRenderer for $templateType, $clientType and $sourceType', ({ templateType, clientType, sourceType }) => {
     const cardRenderer = new CardRenderer();
     expect(cardRenderer.ConstructCardJson(templateType, sourceType, clientType, { 'name': 'Test' })).toMatchSnapshot();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | sourceType
   ${TemplateType.HandleBars} | ${"MockData2"}
@@ -117,6 +150,7 @@ describe('End to end test with mock data and mock templates from github repos', 
     expect(eventTransformer.ConstructEventJson(templateType, sourceType, { 'name': 'Test' })).toMatchSnapshot();
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
   templateType | clientType | sourceType
   ${TemplateType.HandleBars} | ${ClientType.Teams} | ${"MockPostData"}

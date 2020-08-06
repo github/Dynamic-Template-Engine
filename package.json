@@ -1,5 +1,5 @@
 {
-  "name": "event-transformer",
+  "name": "dynamic-template-engine",
   "version": "1.0.0",
   "description": "A typescript library to transform event payloads (in json format) to standard jsons or chat client platform specific jsons (e.g. Slack and Teams) using templates (e.g. handlebars)",
   "main": "lib/index.js",
@@ -14,13 +14,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github/event-transformer.git"
+    "url": "git+https://github.com/github/dynamic-template-engine.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/github/event-transformer/issues"
+    "url": "https://github.com/github/dynamic-template-engine/issues"
   },
-  "homepage": "https://github.com/github/event-transformer#readme",
+  "homepage": "https://github.com/github/dynamic-template-engine#readme",
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@types/node": "^13.11.0",

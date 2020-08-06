@@ -1,7 +1,7 @@
 ## Contributing
 
-[fork]: https://github.com/github/event-transformer/fork
-[pr]: https://github.com/github/event-transformer/compare
+[fork]: https://github.com/github/dynamic-template-engine/fork
+[pr]: https://github.com/github/dynamic-template-engine/compare
 [style]: https://github.com/styleguide/js
 [code-of-conduct]: CODE_OF_CONDUCT.md
 

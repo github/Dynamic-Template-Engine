@@ -1,21 +1,21 @@
 // Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/dynamic-template-engine/blob/master/LICENSE) for details)
-export class EmptyFileError extends Error {
+export class FunctionalityNotSupportedError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = EmptyFileError.name;
+    this.name = FunctionalityNotSupportedError.name;
   }
 }
 
-export class FileReadError extends Error {
+export class CustomHelperRegisterError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = FileReadError.name;
+    this.name = CustomHelperRegisterError.name;
   }
 }
 
-export class FileParseError extends Error {
+export class CustomTagRegisterError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = FileParseError.name;
+    this.name = CustomTagRegisterError.name;
   }
 }

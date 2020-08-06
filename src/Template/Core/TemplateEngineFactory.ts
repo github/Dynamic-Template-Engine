@@ -1,4 +1,4 @@
-// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details)
+// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/dynamic-template-engine/blob/master/LICENSE) for details)
 import HandleBarsTemplateEngine from '../Engine/HandleBarsTemplateEngine';
 import ITemplateEngine from './ITemplateEngine';
 import { TemplateType } from '../../Transformer/Core/TransformContract';
@@ -7,7 +7,7 @@ import { TemplateEngineNotFound } from '../../Error/TemplateError';
 
 /**
  * A singleton class
- * TemplateEngineFactory provides a method to get right engine based on template type
+ * TemplateEngineFactory provides a method to get right engine based on template type.
  */
 export default class TemplateEngineFactory {
   private templateEngineMap: Map<TemplateType,
@@ -23,7 +23,7 @@ export default class TemplateEngineFactory {
   }
 
   /**
-   * get instance of the singleton class
+   * Get instance of the singleton class.
    *
    * @returns {TemplateEngineFactory} Instance of TemplateEngineFactory
    */
@@ -32,7 +32,7 @@ export default class TemplateEngineFactory {
   }
 
   /**
-   * Gets template engine of the provided type
+   * Gets template engine of the provided type.
    *
    * @param {TemplateType} templateType - Type of the template engine, ex. Handlebars, Liquid
    * @returns {ITemplateEngine} template engine instance registered with the factory

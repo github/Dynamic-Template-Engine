@@ -1,4 +1,4 @@
-// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details)
+// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/dynamic-template-engine/blob/master/LICENSE) for details)
 /* eslint-disable class-methods-use-this */
 import TemplateEngineFactory from '../../Template/Core/TemplateEngineFactory';
 import { TemplateType } from './TransformContract';
@@ -8,7 +8,7 @@ import Utility from '../../Utility/Utility';
 export default abstract class Transformer<T extends BaseTransformConfigEntry> {
   /**
    * calls the right templating engine and uses the same to render
-   * the template inserting the data from the data object
+   * the template inserting the data from the data object.
    *
    * @param {TemplateType} templateType - template engine to use ex. HandleBars, Liquid
    * @param {string} templateKey - template key with which the template is stored
@@ -21,7 +21,7 @@ export default abstract class Transformer<T extends BaseTransformConfigEntry> {
   }
 
   /**
-   * Fetch template file and register with appropriate template engine
+   * Fetch template file and register with appropriate template engine.
    *
    * @param {boolean} isHttpCall - boolean
    * @param {string} path - url/local path for the template file
@@ -36,8 +36,8 @@ export default abstract class Transformer<T extends BaseTransformConfigEntry> {
   }
 
   /**
-   * Register a template with the correct engine based on the template config provided
-   * *** Internal function not exposed to outside the package ***
+   * Register a template with the correct engine based on the template config provided.
+   * *** Internal function not exposed outside the package ***
    *
    * @internal
    * @param {string} baseUrl - location of the template file

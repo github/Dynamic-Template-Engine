@@ -39,6 +39,7 @@ describe('Card Renderer Unit tests', () => {
     expect((cardRenderer as any).readAndRegisterTemplate).toHaveBeenCalledTimes(1);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
     config | expectedError
     ${{SourceType: 'test',
@@ -53,6 +54,7 @@ describe('Card Renderer Unit tests', () => {
       await expect(async () => await cardRenderer.registerTemplate('nonExistentPath', config)).rejects.toThrowError(expectedError);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
     config | expectedError
     ${{SourceType: 'test',

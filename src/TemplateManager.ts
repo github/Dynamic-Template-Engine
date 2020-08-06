@@ -1,14 +1,17 @@
-// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/event-transformer/blob/feature/chatops/LICENSE) for details)
-/* eslint-disable @typescript-eslint/no-throw-literal */
+// Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/dynamic-template-engine/blob/master/LICENSE) for details)
 import * as path from 'path';
+import CustomEngineOptions from './Transformer/Model/CustomEngineOptions';
+import TemplateEngineFactory from './Template/Core/TemplateEngineFactory';
 import Transformer from './Transformer/Core/Transformer';
 import TransformerConfig from './Transformer/Model/TransformerConfig';
-import Utils from './Utility/Utility';
 import BaseTransformConfigEntry from './Transformer/Model/BaseTransformConfigEntry';
 import CardRenderer from './Transformer/CardRenderer/CardRenderer';
 import EventTransformer from './Transformer/EventTransformer/EventTransformer';
 import { TemplateParseError, TemplateEngineNotFound } from './Error/TemplateError';
 import { FileParseError, EmptyFileError } from './Error/FileError';
+import CustomTemplatingOptions from './Transformer/Model/CustomTemplatingOptions';
+import Utils from './Utility/Utility';
+import { FunctionalityNotSupportedError, CustomHelperRegisterError, CustomTagRegisterError } from './Error/FunctionalityError';
 
 /**
  * Template Manager provides methods to setup the template configuration
@@ -23,20 +26,20 @@ export default class TemplateManager {
    * @returns {boolean} true if setup successful
    * @throws Error if setup fails
    */
-  public static async setupTemplateConfiguration(configFilePath: string): Promise<boolean> {
+  public static async setupTemplateConfiguration(configFilePath: string,
+    customOptions?: CustomTemplatingOptions): Promise<boolean> {
     try {
       const baseUrl = configFilePath.substring(0, configFilePath.lastIndexOf(path.sep));
       const transformerConfig = await this.readConfigFile(configFilePath, false);
+      customOptions?.engineOptions?.forEach(engineOption => {
+        this.registerHelpersAndTags(engineOption);
+      });
       await this.registerAllTemplates(baseUrl, new CardRenderer(), transformerConfig.cardRenderer);
       await this.registerAllTemplates(baseUrl, new EventTransformer(),
         transformerConfig.eventTransformer);
     } catch (error) {
-      if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
-        || error instanceof FileParseError || error instanceof EmptyFileError) {
-        throw error;
-      } else {
-        throw new Error(`Setup failed for the config file path: ${configFilePath} \n ERROR: ${error.message}`);
-      }
+      const defaultMessage = `Setup failed for the config file path: ${configFilePath} \n ERROR: ${error.message}`;
+      throw TemplateManager.handleErrors(error, defaultMessage);
     }
     return true;
   }
@@ -52,21 +55,20 @@ export default class TemplateManager {
    * @throws Error if setup fails
    */
   public static async setupTemplateConfigurationFromRepo(repo: string, branch: string,
-    configName: string): Promise<boolean> {
+    configName: string, customOptions?: CustomTemplatingOptions): Promise<boolean> {
     const baseUrl = `https://raw.githubusercontent.com/${repo}/${branch}`;
     try {
       const transformerConfig = await this.readConfigFile(`${baseUrl}/${configName}.json`, true);
+      customOptions?.engineOptions?.forEach(engineOption => {
+        this.registerHelpersAndTags(engineOption);
+      });
       await this.registerAllTemplates(baseUrl, new CardRenderer(),
         transformerConfig.cardRenderer);
       await this.registerAllTemplates(baseUrl, new EventTransformer(),
         transformerConfig.eventTransformer);
     } catch (error) {
-      if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
-        || error instanceof FileParseError || error instanceof EmptyFileError) {
-        throw error;
-      } else {
-        throw new Error(`Setup failed. \n ERROR: ${error.message}`);
-      }
+      const defaultMessage = `Setup failed for repo: ${repo} and branch: ${branch}. \n ERROR: ${error.message}`;
+      throw TemplateManager.handleErrors(error, defaultMessage);
     }
     return true;
   }
@@ -87,7 +89,6 @@ export default class TemplateManager {
       ${filePath}, original error message: ${error.message}`);
     }
   }
-
   /**
    * Register all templates provided in the transformerConfig
    *
@@ -105,11 +106,53 @@ export default class TemplateManager {
       } catch (error) {
         if (error instanceof TemplateParseError) {
           throw new TemplateParseError(`Failed to parse template with name: ${element.TemplateName} 
-          for source type: ${element.SourceType} and template type: ${element.TemplateType}`);
+          for source type: ${element.SourceType} and template type: ${element.TemplateType} with original message: ${error.message}`);
         } else {
           throw error;
         }
       }
+    }
+  }
+
+  /**
+   * Registers custom helpers and tags for a specific template engine
+   *
+   * @param {CustomEngineOptions} engineOption template type and the list of
+   * custom helpers and tag to register
+   */
+  private static registerHelpersAndTags(engineOption: CustomEngineOptions): void {
+    const engine = TemplateEngineFactory.getInstance().getTemplateEngine(engineOption.templateType);
+    const helpers = engineOption.customHelpers;
+    if (helpers) {
+      Object.keys(helpers).forEach(helperName => {
+        engine.registerHelper(helperName, helpers[helperName]);
+      });
+    }
+    const tags = engineOption.customTags;
+    if (tags) {
+      Object.keys(tags).forEach(tagName => {
+        engine.registerTag(tagName, tags[tagName]);
+      });
+    }
+  }
+
+  /**
+   * Determine the correct error type and respond accordingly.
+   *
+   * @param {Error} error error to be analyzed
+   * @param {string} defaultMessage message to show when error is not a known type
+   * @returns {Error} correct error to throw
+   */
+  private static handleErrors(error: Error, defaultMessage: string): Error {
+    if (error instanceof TemplateEngineNotFound || error instanceof TemplateParseError
+      || error instanceof FileParseError || error instanceof EmptyFileError
+      || error instanceof FunctionalityNotSupportedError
+      || error instanceof CustomHelperRegisterError
+      || error instanceof CustomTagRegisterError) {
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      return error;
+    } else {
+      return new Error(defaultMessage);
     }
   }
 }

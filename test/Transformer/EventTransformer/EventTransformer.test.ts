@@ -39,6 +39,7 @@ describe('Event Transformer Unit tests', () => {
     expect((eventTransformer as any).readAndRegisterTemplate).toHaveBeenCalledTimes(1);
   });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
     config | expectedError
     ${{
@@ -55,6 +56,7 @@ describe('Event Transformer Unit tests', () => {
       await expect(async () => await eventTransformer.registerTemplate('nonExistentPath', config)).rejects.toThrowError(expectedError);
     });
 
+  // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
   it.each`
     config | expectedError
     ${{
