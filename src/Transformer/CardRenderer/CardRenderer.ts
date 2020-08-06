@@ -6,7 +6,8 @@ import Utility from '../../Utility/Utility';
 import { TemplateNotFound, TemplateEngineNotFound, TemplateRenderError } from '../../Error/TemplateError';
 
 /**
- *  Card Renderer provides ConstructCardJson method to render a card for different messaging clients.
+ * Card Renderer provides ConstructCardJson method to
+ * render a card for different messaging clients.
  */
 export default class CardRenderer extends Transformer<CardRendererConfigEntry> {
   /**
