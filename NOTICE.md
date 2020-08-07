@@ -1,0 +1,62 @@
+## List of dependencies used
+
+The following are the dependencies and the licenses, that govern their usage, being used **as is** as production dependencies. Please refer to respective repo links to read about any specific dependency.
+
+Dependency | License
+ --- | :---:
+[@actions\core](https://github.com/actions/toolkit/tree/master/packages/core) | MIT
+[@actions\github](https://github.com/actions/toolkit/tree/master/packages/github) | MIT
+[@actions\http-client](https://github.com/actions/http-client#readme) | MIT
+[@octokit\auth-token](https://github.com/octokit/auth-token.js#readme) | MIT
+[@octokit\core-2.5.4](https://github.com/octokit/core.js#readme) | MIT
+[@octokit\core-3.0.0](https://github.com/octokit/core.js#readme) | MIT
+[@octokit\endpoint](https://github.com/octokit/endpoint.js#readme) | MIT
+[@octokit\graphql](https://github.com/octokit/graphql.js#readme) | MIT
+[@octokit\plugin-paginate-rest](https://github.com/octokit/plugin-paginate-rest.js#readme) | MIT
+[@octokit\plugin-request-log](https://github.com/octokit/plugin-request-log.js#readme) | MIT
+[@octokit\plugin-rest-endpoint-methods-3.17.0](https://github.com/octokit/plugin-rest-endpoint-methods.js#readme) | MIT
+[@octokit\plugin-rest-endpoint-methods-4.0.0](https://github.com/octokit/plugin-rest-endpoint-methods.js#readme) | MIT
+[@octokit\request-error](https://github.com/octokit/request-error.js#readme) | MIT
+[@octokit\request](https://github.com/octokit/request.js#readme) | MIT
+[@octokit\rest](https://github.com/octokit/rest.js#readme) | MIT
+[@octokit\types-4.1.10](https://github.com/octokit/types.ts#readme) | MIT
+[@octokit\types-5.0.1](https://github.com/octokit/types.ts#readme) | MIT
+[@types\node](https://github.com/DefinitelyTyped/DefinitelyTyped#readme) | MIT
+[before-after-hook](https://github.com/gr2m/before-after-hook#readme) | APACHE-2.0
+[commander](https://github.com/tj/commander.js#readme) | MIT
+[cross-spawn](https://github.com/moxystudio/node-cross-spawn) | MIT
+[deprecation](https://github.com/gr2m/deprecation#readme) | ISC
+[end-of-stream](https://github.com/mafintosh/end-of-stream) | MIT
+[execa](https://github.com/sindresorhus/execa#readme) | MIT
+[get-stream](https://github.com/sindresorhus/get-stream#readme) | MIT
+[handlebars](http://www.handlebarsjs.com/) | MIT
+[inquirer](https://github.com/SBoudrias/Inquirer.js#readme) | MIT
+[is-plain-object](https://github.com/jonschlinkert/is-plain-object) | MIT
+[is-stream](https://github.com/sindresorhus/is-stream#readme) | MIT
+[isexe](https://github.com/isaacs/isexe#readme) | ISC
+[isobject](https://github.com/jonschlinkert/isobject) | MIT
+[liquidjs](https://github.com/harttle/liquidjs#readme) | MIT
+[macos-release](https://github.com/sindresorhus/macos-release#readme) | MIT
+[minimist](https://github.com/substack/minimist) | MIT
+[neo-async](https://github.com/suguru03/neo-async) | MIT
+[nice-try](https://github.com/electerious/nice-try) | MIT
+[node-fetch](https://github.com/bitinn/node-fetch) | MIT
+[npm-run-path](https://github.com/sindresorhus/npm-run-path#readme) | MIT
+[once](https://github.com/isaacs/once#readme) | ISC
+[os-name](https://github.com/sindresorhus/os-name#readme) | MIT
+[p-finally](https://github.com/sindresorhus/p-finally#readme) | MIT
+[path-key](https://github.com/sindresorhus/path-key#readme) | MIT
+[pump](https://github.com/mafintosh/pump#readme) | MIT
+[semver](https://github.com/npm/node-semver#readme) | ISC
+[shebang-command](https://github.com/kevva/shebang-command#readme) | MIT
+[shebang-regex](https://github.com/sindresorhus/shebang-regex#readme) | MIT
+[signal-exit](https://github.com/tapjs/signal-exit) | ISC
+[source-map](https://github.com/mozilla/source-map) | BSD-3-Clause
+[strip-eof](https://github.com/sindresorhus/strip-eof#readme) | MIT
+[tunnel](https://github.com/koichik/node-tunnel/) | MIT
+[uglify-js](https://github.com/mishoo/UglifyJS2#readme) | BSD-2-Clause
+[universal-user-agent](https://github.com/gr2m/universal-user-agent#readme) | ISC
+[which](https://github.com/isaacs/node-which#readme) | ISC
+[windows-release](https://github.com/sindresorhus/windows-release#readme) | MIT
+[wordwrap](https://github.com/substack/node-wordwrap#readme) | MIT
+[wrappy](https://github.com/npm/wrappy) | ISC
