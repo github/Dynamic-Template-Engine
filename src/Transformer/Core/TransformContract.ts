@@ -12,4 +12,5 @@ export enum TemplateType {
  */
 export enum ClientType {
   Teams = 'Teams',
+  Slack = 'Slack',
 }
