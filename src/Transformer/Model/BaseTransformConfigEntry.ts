@@ -2,16 +2,15 @@
 import { TemplateType } from '../Core/TransformContract';
 /**
  * @typedef {object} BaseTransformConfigEntry
- * @property {string} SourceType
- * @property {TemplateType} TemplateType
- * @property {string} TemplateName
+ * @property {string} SourceType The source type of the transform.
+ * @property {TemplateType} TemplateType The template type of the transform.
+ * @property {string} TemplateName The template name of the transform.
  */
 export default interface BaseTransformConfigEntry{
   /**
    * The type of data source for which transformations needs to happen
    */
   SourceType: string;
-
 
   /**
    * The type of template definition. For Example- HandleBars, Liquid, etc

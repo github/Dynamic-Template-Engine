@@ -49,8 +49,8 @@ export default class LiquidTemplateEngine implements ITemplateEngine {
   /**
    * Register custom helper functions with template engine.
    *
-   * @param helperName name of the helper to register
-   * @param helperFunc the implementation of helper function
+   * @param {string} helperName name of the helper to register
+   * @param {FilterImplOptions} helperFunc the implementation of helper function
    */
   // eslint-disable-next-line class-methods-use-this
   public registerHelper(helperName: string, helperFunc: FilterImplOptions): void {
@@ -64,8 +64,8 @@ export default class LiquidTemplateEngine implements ITemplateEngine {
   /**
    * Register custom tag with template engine.
    *
-   * @param tagName name of the tag to register
-   * @param tagOptions tagOptions specific to the template engine
+   * @param {string} tagName name of the tag to register
+   * @param {TagImplOptions} tagOptions tagOptions specific to the template engine
    */
   // eslint-disable-next-line class-methods-use-this
   public registerTag(tagName: string, tagOptions: TagImplOptions): void {
@@ -77,5 +77,6 @@ export default class LiquidTemplateEngine implements ITemplateEngine {
   }
 
   private engine: Liquid;
+
   private preCompiledTemplateMap: Map<string, Template[]>;
 }

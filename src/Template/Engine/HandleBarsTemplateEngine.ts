@@ -46,8 +46,8 @@ export default class HandleBarsTemplateEngine implements ITemplateEngine {
   /**
    * Register custom helper functions with template engine.
    *
-   * @param helperName name of the helper to register
-   * @param helperFunc the implementation of helper function
+   * @param {string} helperName name of the helper to register
+   * @param {Handlebars.HelperDelegate} helperFunc the implementation of helper function
    */
   // eslint-disable-next-line class-methods-use-this
   public registerHelper(helperName: string, helperFunc: Handlebars.HelperDelegate): void {

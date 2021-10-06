@@ -89,6 +89,7 @@ export default class TemplateManager {
       ${filePath}, original error message: ${error.message}`);
     }
   }
+
   /**
    * Register all templates provided in the transformerConfig
    *

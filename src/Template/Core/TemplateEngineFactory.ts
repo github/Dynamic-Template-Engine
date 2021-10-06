@@ -12,6 +12,7 @@ import { TemplateEngineNotFound } from '../../Error/TemplateError';
 export default class TemplateEngineFactory {
   private templateEngineMap: Map<TemplateType,
   ITemplateEngine> = new Map<TemplateType, ITemplateEngine>();
+
   private static instance: TemplateEngineFactory = new TemplateEngineFactory();
 
   /**
