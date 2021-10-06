@@ -111,7 +111,8 @@ describe('TemplateManager Unit Tests', () => {
   });
 
   // to know more about usage of each https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
-  it.each`ErrorToThrow | ErrorExpected
+  it.each`
+  ErrorToThrow | ErrorExpected
   ${TemplateParseError} | ${TemplateParseError}
   ${FileReadError} | ${Error}`('setupTemplateConfigurationFromRepo fails if any register template fails', async ({ ErrorToThrow, ErrorExpected }) => {
     Utility.fetchFile = jest.fn()
