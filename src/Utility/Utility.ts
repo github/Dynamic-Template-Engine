@@ -20,6 +20,7 @@ export default class Utility {
         if (statusCode !== 200) {
           reject(new Error(`Http Call failed. Status Code: ${statusCode}`));
         }
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         const chunks_of_data: Buffer[] = [];
 
         response.on('data', (fragments) => {
@@ -27,6 +28,7 @@ export default class Utility {
         });
 
         response.on('end', () => {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           const response_body = Buffer.concat(chunks_of_data);
           resolve(response_body.toString());
         });
