@@ -1,6 +1,6 @@
 {
   "name": "dynamic-template-engine",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.2",
   "description": "A typescript library to transform event payloads (in json format) to standard jsons or chat client platform specific jsons (e.g. Slack and Teams) using templates (e.g. handlebars)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -43,5 +43,8 @@
   "dependencies": {
     "handlebars": "^4.7.6",
     "liquidjs": "^10.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   }
 }
