@@ -1,7 +1,8 @@
 /** @copyright Copyright (c) 2020 GitHub. This code is licensed under MIT license (see LICENSE(https://github.com/github/dynamic-template-engine/blob/master/LICENSE) for details) */
 import {
-  Liquid, Template, FilterImplOptions, TagImplOptions,
+  Liquid, Template, FilterImplOptions,
 } from 'liquidjs';
+import { TagImplOptions } from 'liquidjs/dist/template';
 import { CustomHelperRegisterError, CustomTagRegisterError } from '../../Error/FunctionalityError';
 import ITemplateEngine from '../Core/ITemplateEngine';
 import { TemplateNotFound, TemplateParseError } from '../../Error/TemplateError';

@@ -42,6 +42,6 @@
   },
   "dependencies": {
     "handlebars": "^4.7.6",
-    "liquidjs": "^9.11.10"
+    "liquidjs": "^10.0.0"
   }
 }
