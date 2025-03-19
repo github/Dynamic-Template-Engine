@@ -3,7 +3,7 @@
 
 A typescript library to transform event payloads (in json format) to standard jsons or chat client platform specific jsons (e.g. Slack and Teams) using templates (e.g. handlebars, liquid)
 
-> :warning: **NOTE**: this module is currently in active development and no stable build has been released as of now, any api may be changed without notice.
+> :warning: **NOTE**: this module is no longer supported.
 
 ## About
 This node module enables you to convert any data payload into any other form using templates. This module currently supports two templating languages: Handlebars and liquid. 
